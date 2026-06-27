@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<script>(function(){try{var p=localStorage.getItem("theme-pref")||"system";var d=p==="dark"||(p==="system"&&matchMedia("(prefers-color-scheme: dark)").matches);document.documentElement.setAttribute("data-theme",d?"dark":"light");}catch(e){document.documentElement.setAttribute("data-theme","dark");}})();</script>
+<title>Google 크리덴셜 설정 가이드</title>
+<style>
+  /* ── theme tokens (dark default + light override) ── */
+  :root{
+    color-scheme:dark;
+    --bg:#0b0f17; --fg:#e6edf3; --card-bg:#121826;
+    --topbar-bg:rgba(11,15,23,.92); --line:#233047; --line2:#1f2a3c; --cell:#2a3850;
+    --accent:#60a5fa; --h2:#dbeafe; --h3:#bfdbfe; --h4:#93c5fd;
+    --code-bg:#111827; --pre-bg:#0e1420; --quote-bg:#101826; --quote-fg:#cbd5e1; --quote-bd:#3b82f6;
+    --th-bg:#152032; --th-fg:#dbeafe; --tr-even:#0f1827; --strong:#fde68a;
+  }
+  :root[data-theme="light"]{
+    color-scheme:light;
+    --bg:#f7f8fa; --fg:#1f2533; --card-bg:#ffffff;
+    --topbar-bg:rgba(247,248,250,.92); --line:#d7dce6; --line2:#e3e7ef; --cell:#cfd6e2;
+    --accent:#2563eb; --h2:#1e3a8a; --h3:#2456b8; --h4:#3b6fd4;
+    --code-bg:#eef1f6; --pre-bg:#f1f4f9; --quote-bg:#eef3fb; --quote-fg:#44506a; --quote-bd:#2563eb;
+    --th-bg:#e9eef6; --th-fg:#1e3a8a; --tr-even:#f3f6fb; --strong:#b45309;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body { background:var(--bg); color:var(--fg); line-height:1.75; word-break:keep-all; overflow-wrap:anywhere;
+    transition:background-color .25s,color .25s;
+    font-family:-apple-system,BlinkMacSystemFont,"Pretendard","Apple SD Gothic Neo","Segoe UI",Roboto,sans-serif; }
+  /* ── theme toggle (system/light/dark) ── */
+  .theme-toggle{position:fixed;top:10px;right:14px;z-index:2000;display:inline-flex;align-items:center;gap:6px;
+    padding:7px 11px;border-radius:999px;border:1px solid var(--line);background:var(--card-bg);color:var(--fg);
+    font:600 12px/1 inherit;cursor:pointer;opacity:.85;transition:opacity .2s,border-color .2s,background-color .25s,color .25s}
+  .theme-toggle:hover{opacity:1;border-color:var(--accent)}
+  .theme-toggle .tt-ico{font-size:14px;line-height:1}
+  @media print{.theme-toggle{display:none!important}}
+  @media(max-width:760px){.theme-toggle .tt-label{display:none}}
+  .topbar { position:sticky; top:0; z-index:10; background:var(--topbar-bg); backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line2); padding:12px 64px 12px 20px; display:flex; gap:10px; align-items:center; }
+  .topbar .badge { font-size:11px; color:var(--accent); border:1px solid var(--line); border-radius:999px; padding:3px 9px; }
+  .topbar .t { font-size:14px; font-weight:700; }
+  main.doc { max-width:880px; margin:0 auto; padding:32px 22px 96px; }
+  h1,h2,h3,h4 { line-height:1.35; font-weight:800; margin:1.6em 0 .6em; }
+  h1 { font-size:26px; border-bottom:2px solid var(--line); padding-bottom:.3em; }
+  h2 { font-size:21px; color:var(--h2); border-bottom:1px solid var(--line2); padding-bottom:.25em; }
+  h3 { font-size:17px; color:var(--h3); }
+  h4 { font-size:15px; color:var(--h4); }
+  p, li { font-size:15px; }
+  a { color:var(--accent); }
+  hr { border:0; border-top:1px solid var(--line); margin:2em 0; }
+  blockquote { margin:1em 0; padding:.6em 1em; border-left:3px solid var(--quote-bd); background:var(--quote-bg);
+    border-radius:0 8px 8px 0; color:var(--quote-fg); }
+  blockquote p { margin:.3em 0; }
+  code { background:var(--code-bg); border:1px solid var(--line); border-radius:5px; padding:.1em .4em; font-size:.9em;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; }
+  pre { background:var(--pre-bg); border:1px solid var(--line); border-radius:10px; padding:14px 16px; overflow:auto; }
+  pre code { background:none; border:0; padding:0; font-size:13px; line-height:1.6; }
+  table { border-collapse:collapse; width:100%; margin:1.1em 0; font-size:14px; display:block; overflow-x:auto; }
+  th, td { border:1px solid var(--cell); padding:8px 10px; text-align:left; vertical-align:top; }
+  th { background:var(--th-bg); font-weight:700; color:var(--th-fg); }
+  tr:nth-child(even) td { background:var(--tr-even); }
+  ul, ol { padding-left:1.4em; }
+  li { margin:.3em 0; }
+  li input[type=checkbox] { transform:scale(1.15); margin-right:.5em; accent-color:var(--accent); }
+  ul:has(li input[type=checkbox]) { list-style:none; padding-left:.2em; }
+  strong { color:var(--strong); }
+  img { max-width:100%; }
+</style>
+</head>
+<body>
+<button id="themeToggle" class="theme-toggle" type="button" aria-label="테마 전환" title="테마: 시스템"><span class="tt-ico" aria-hidden="true">🖥</span><span class="tt-label">시스템</span></button>
+<div class="topbar"><span class="badge">n8n 자동화 강의</span><span class="t">Google 크리덴셜 설정 가이드</span></div>
+<main class="doc">
+<h1>Google 크리덴셜(OAuth) 설정 — self-host n8n</h1>
+<blockquote>
+<p>Lab2~5에서 구글 <strong>Sheets·Gmail</strong>을 n8n에 연결하려면 Google <strong>OAuth 자격증명</strong>이 필요해요. 이게 <strong>비개발자에게 가장 어려운 관문</strong>이라, ★강의에선 <strong>강사 공용 데모 계정</strong>을 먼저 권장하고, 본인 계정 연결은 선택/심화로 둡니다.</p>
+</blockquote>
+<h2>★핵심 1 — self-host redirect URI (Cloud와 다름!)</h2>
+<p>n8n Credential 화면(예: <em>Google Sheets account</em>)에 뜨는 <strong>OAuth Redirect URL</strong>:</p>
+<pre><code>http://localhost:5678/rest/oauth2-credential/callback
+</code></pre>
+<ul>
+<li>★<strong>self-host = <code>localhost:5678</code>.</strong> (n8n Cloud는 <code>https://&lt;계정&gt;.app.n8n.cloud/...</code> 라 다름)</li>
+<li>이 URL을 <strong>Google Cloud Console의 Authorized redirect URIs에 그대로</strong> 등록해야 연결됨.</li>
+<li>포트를 바꿨으면(<code>N8N_PORT=8080</code>) URI도 그 포트로.</li>
+</ul>
+<h2>단계 — 본인 구글 계정으로 연결할 때</h2>
+<ol>
+<li><strong>console.cloud.google.com</strong> 접속 → 프로젝트 <strong>생성/선택</strong>.</li>
+<li><strong>APIs &amp; Services → Library</strong> → <strong>Google Sheets API</strong>·<strong>Google Drive API</strong>(Gmail도 쓰면 <strong>Gmail API</strong>) 검색 → 각각 <strong>Enable</strong>.</li>
+<li><strong>APIs &amp; Services → OAuth consent screen</strong> → <strong>External</strong> → 앱 이름·지원 이메일 입력 → <strong>테스트 사용자에 본인 이메일 추가</strong>.</li>
+<li><strong>APIs &amp; Services → Credentials → Create Credentials → OAuth client ID</strong>.</li>
+<li>Application type = <strong>Web application</strong>.</li>
+<li><strong>Authorized redirect URIs</strong> 에 위 URL 붙여넣기:
+<code>http://localhost:5678/rest/oauth2-credential/callback</code></li>
+<li>생성된 <strong>Client ID · Client Secret</strong> 복사.</li>
+<li>n8n Credential 화면에 <strong>Client ID·Secret 붙여넣기 → Sign in with Google → 동의</strong>.</li>
+<li>Gmail도 같은 방식(같은 OAuth 클라이언트 재사용 가능 — Gmail API Enable 필요).</li>
+</ol>
+<h2>★핵심 2 — 강의 운영 권장(공용 계정)</h2>
+<ul>
+<li>비개발자 각자 OAuth 설정은 <strong>10~20분+</strong> 걸리고 막히기 쉬워요. → <strong>강사가 OAuth 완료한 공용 데모 계정</strong> 1개를 준비하고, 수강생은 그 자격증명을 공유받아 쓰는 게 현실적(런북 §1.3 대체 핸즈온).</li>
+<li>본인 계정 연결은 <strong>심화/숙제</strong>로 돌려 강의 흐름이 막히지 않게.</li>
+</ul>
+<h2>흔한 막힘</h2>
+<table>
+<thead>
+<tr>
+<th>증상</th>
+<th>원인</th>
+<th>해결</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>redirect_uri_mismatch</code></td>
+<td>Cloud Console URI ≠ n8n 화면 URL</td>
+<td>끝 슬래시·포트까지 <strong>정확히 일치</strong></td>
+</tr>
+<tr>
+<td><code>API not enabled</code> / 403</td>
+<td>Sheets·Drive·Gmail API 미활성화</td>
+<td>Library에서 해당 API Enable</td>
+</tr>
+<tr>
+<td><code>access_blocked</code> (테스트 앱)</td>
+<td>consent screen 테스트모드</td>
+<td>본인 이메일을 <strong>테스트 사용자</strong>에 추가</td>
+</tr>
+<tr>
+<td>사내 계정 동의 막힘</td>
+<td>회사 Google Workspace 정책</td>
+<td>사내 IT에 외부 OAuth 앱 허용 확인(또는 공용 계정)</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>⚠️ Google Cloud Console 메뉴·화면은 자주 바뀝니다 → <strong>강의 전 본인 화면에서 1회 dry-run</strong> 으로 경로를 확인하세요. (이 문서는 절차 안내용, 화면 라벨은 당일 기준)</p>
+</blockquote>
+
+</main>
+<script>
+(function(){
+  var root=document.documentElement, btn=document.getElementById("themeToggle");
+  var mq=window.matchMedia("(prefers-color-scheme: dark)");
+  var ICON={system:"🖥",light:"☀️",dark:"🌙"}, LABEL={system:"시스템",light:"라이트",dark:"다크"};
+  var cur="system"; try{cur=localStorage.getItem("theme-pref")||"system";}catch(e){}
+  function apply(){
+    var d=cur==="dark"||(cur==="system"&&mq.matches);
+    root.setAttribute("data-theme",d?"dark":"light");
+    if(btn){var i=btn.querySelector(".tt-ico"),l=btn.querySelector(".tt-label");
+      if(i)i.textContent=ICON[cur]; if(l)l.textContent=LABEL[cur]; btn.title="테마: "+LABEL[cur];}
+  }
+  apply();
+  if(btn)btn.addEventListener("click",function(){
+    var o=["system","light","dark"]; cur=o[(o.indexOf(cur)+1)%o.length];
+    try{localStorage.setItem("theme-pref",cur);}catch(e){}
+    apply();
+  });
+  if(mq.addEventListener)mq.addEventListener("change",function(){if(cur==="system")apply();});
+})();
+</script>
+</body>
+</html>

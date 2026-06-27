@@ -1316,6 +1316,50 @@ html.icons-ok i[data-lucide] .ico-fb { display: none; }
     <aside class="kit-notes" hidden>후반 게이트 중간 자가판정(낙오자 합류 타이밍): ①다중발송 녹색 ②에러 핸들링 녹색이면 통과 → 바로 AI 노드(Step8~)로. 미통과자는 강사 검수 후 import②(lab4-checkpoint2-발송까지.json)로 발송까지 완성된 상태로 합류시켜 AI 노드만 마무리하게 한다(시트 ID·Credential 교체). 여기서 손 든 사람 먼저 합류시켜야 AI 구간에서 혼자 뒤처지지 않음. 최종 자가판정은 Step11 뒤.</aside>
   </div>
 
+  <!-- 11.5 (day1에서 이동) Anthropic 노드 ≠ Claude Pro -->
+  <div class="slide" data-title="Anthropic 노드 ≠ Pro" data-chapter="M8 주간 리포트 본실습">
+    <div class="slide-label"><i data-lucide="alert-octagon"><span class="ico-fb">🚫</span></i> M8 · AI 노드 추가 직전 · 가장 자주 깨지는 가정</div>
+    <h1>워크플로 <span class="hl2">Anthropic 노드</span> ≠ <span class="hl">Claude Pro 구독</span></h1>
+    <div class="grid-2">
+      <div class="card highlight">
+        <div class="card-icon"><i data-lucide="message-circle"><span class="ico-fb">💬</span></i></div>
+        <div class="card-title">Claude Pro 챗 구독</div>
+        <div class="card-body">
+          claude.ai <strong>채팅</strong>. 회사 제공.<br>
+          용도: <strong>설계·디버깅 보조</strong> — 아이디어·표현식·에러 로그 해석.<br>
+          <span style="color:var(--danger)">워크플로 안 AI 노드는 구동 못 함.</span>
+        </div>
+      </div>
+      <div class="card warn-card">
+        <div class="card-icon" style="color:var(--warn)"><i data-lucide="plug"><span class="ico-fb">🔌</span></i></div>
+        <div class="card-title">워크플로 Anthropic 노드</div>
+        <div class="card-body">
+          n8n Credentials에 <strong>Anthropic API 키</strong>(종량과금).<br>
+          용도: <strong>워크플로 안 AI 노드</strong>(Anthropic Chat Model)를 실제 실행.<br>
+          <strong>바로 다음 Step에서 회사 키로 직접 핸즈온</strong>.
+        </div>
+      </div>
+    </div>
+    <div class="danger-box">
+      <i data-lucide="alert-octagon"><span class="ico-fb">🚫</span></i>
+      <p><span class="t">가장 자주 깨지는 가정:</span> "Claude Pro 구독이 있으니 워크플로에서 그대로 쓰면 되겠지" → <b>아니요.</b> n8n의 Anthropic 노드는 <b>API 키로만</b> 동작합니다. (출처: n8n 공식 credentials docs + Anthropic 헬프센터)</p>
+    </div>
+    <div class="kit-mcq" data-group="m8" data-id="mcq-anthropic" data-question="Anthropic 노드 vs Pro">
+      <p class="kit-mcq-q">n8n 워크플로 안의 Anthropic 노드를 실제로 구동하려면 무엇이 필요할까요?</p>
+      <div class="kit-mcq-opts" role="group" aria-label="객관식 보기">
+        <button type="button" class="kit-mcq-opt">A. 개인 Claude Pro 챗 구독만 있으면 된다</button>
+        <button type="button" class="kit-mcq-opt" data-correct>B. 별도 Anthropic API 키(종량과금) — 보통 회사가 제공</button>
+        <button type="button" class="kit-mcq-opt">C. n8n self-host면 자동으로 포함된다</button>
+        <button type="button" class="kit-mcq-opt">D. 아무것도 필요 없다</button>
+      </div>
+      <p class="kit-mcq-live" aria-live="polite"></p>
+      <div class="kit-mcq-explain" hidden>
+        <strong>정답: B.</strong> 워크플로 안 Anthropic 노드는 <b>API 키로만</b> 동작합니다. Claude Pro 챗 구독은 설계·디버깅 보조용일 뿐, 워크플로 AI 노드를 구동하지 못합니다.
+      </div>
+    </div>
+      <aside class="kit-notes" hidden>AI 노드를 실제로 붙이기 직전 마지막 못 박기. Pro 구독(챗)과 워크플로 Anthropic 노드(API 키)는 완전히 다르다. 구독이 있어도 워크플로 AI 노드는 안 돈다. 다수가 "된다"로 오답 → "안 됩니다"로 정정. 바로 다음 슬라이드(AI 노드 구조)→Step9에서 회사 키를 Credential에 등록·입력한다.</aside>
+  </div>
+
   <!-- 12 -->
   <div class="slide" data-title="AI 노드 구조" data-chapter="M8 주간 리포트 본실습">
     <div class="slide-label"><i data-lucide="network"><span class="ico-fb">🕸️</span></i> 후반 3/3 · AI 노드 준비</div>
@@ -1506,13 +1550,13 @@ flowchart LR
       <li><span class="priority-badge p5">✓</span><span><span class="pl-title">AI 노드 전부 녹색</span> — Basic LLM Chain + Anthropic Chat Model(회사 API 키) 실행됨</span></li>
       <li><span class="priority-badge p5">✓</span><span><span class="pl-title">CS 분류/요약 기록</span> — <span class="kbd2">분류결과</span> 시트(또는 메일)에 결과가 들어감</span></li>
     </ul>
-    <section class="kit-checkpoint" data-group="m8" data-pass="0.6" data-review-anchor="#slide-23">
+    <section class="kit-checkpoint" data-group="m8" data-pass="0.6" data-review-anchor="#slide-24">
       <h3 class="kit-cp-title">체크포인트 ② · 주간 리포트 본실습</h3>
       <p style="color:var(--text-dim);font-size:14px;margin:0 0 .4rem">AI 노드가 녹색으로 실행되고 분류·요약 결과가 시트/메일에 기록되면 통과. 막히면 강사 import <span class="kbd2">complete-AI포함.json</span>으로 합류.</p>
       <button type="button" class="kit-cp-check">단원 통과 확인</button>
       <p class="kit-cp-result" aria-live="polite"></p>
       <div class="kit-cp-review" hidden>
-        아직 부족해요. <a href="#slide-23" class="kit-cp-anchor">AI 노드 구조 슬라이드로 돌아가기 ↑</a>
+        아직 부족해요. <a href="#slide-24" class="kit-cp-anchor">AI 노드 구조 슬라이드로 돌아가기 ↑</a>
       </div>
     </section>
     <div class="warn-box">

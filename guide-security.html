@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<script>(function(){try{var p=localStorage.getItem("theme-pref")||"system";var d=p==="dark"||(p==="system"&&matchMedia("(prefers-color-scheme: dark)").matches);document.documentElement.setAttribute("data-theme",d?"dark":"light");}catch(e){document.documentElement.setAttribute("data-theme","dark");}})();</script>
+<title>self-host 보안·버전 고정 가이드</title>
+<style>
+  /* ── theme tokens (dark default + light override) ── */
+  :root{
+    color-scheme:dark;
+    --bg:#0b0f17; --fg:#e6edf3; --card-bg:#121826;
+    --topbar-bg:rgba(11,15,23,.92); --line:#233047; --line2:#1f2a3c; --cell:#2a3850;
+    --accent:#60a5fa; --h2:#dbeafe; --h3:#bfdbfe; --h4:#93c5fd;
+    --code-bg:#111827; --pre-bg:#0e1420; --quote-bg:#101826; --quote-fg:#cbd5e1; --quote-bd:#3b82f6;
+    --th-bg:#152032; --th-fg:#dbeafe; --tr-even:#0f1827; --strong:#fde68a;
+  }
+  :root[data-theme="light"]{
+    color-scheme:light;
+    --bg:#f7f8fa; --fg:#1f2533; --card-bg:#ffffff;
+    --topbar-bg:rgba(247,248,250,.92); --line:#d7dce6; --line2:#e3e7ef; --cell:#cfd6e2;
+    --accent:#2563eb; --h2:#1e3a8a; --h3:#2456b8; --h4:#3b6fd4;
+    --code-bg:#eef1f6; --pre-bg:#f1f4f9; --quote-bg:#eef3fb; --quote-fg:#44506a; --quote-bd:#2563eb;
+    --th-bg:#e9eef6; --th-fg:#1e3a8a; --tr-even:#f3f6fb; --strong:#b45309;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body { background:var(--bg); color:var(--fg); line-height:1.75; word-break:keep-all; overflow-wrap:anywhere;
+    transition:background-color .25s,color .25s;
+    font-family:-apple-system,BlinkMacSystemFont,"Pretendard","Apple SD Gothic Neo","Segoe UI",Roboto,sans-serif; }
+  /* ── theme toggle (system/light/dark) ── */
+  .theme-toggle{position:fixed;top:10px;right:14px;z-index:2000;display:inline-flex;align-items:center;gap:6px;
+    padding:7px 11px;border-radius:999px;border:1px solid var(--line);background:var(--card-bg);color:var(--fg);
+    font:600 12px/1 inherit;cursor:pointer;opacity:.85;transition:opacity .2s,border-color .2s,background-color .25s,color .25s}
+  .theme-toggle:hover{opacity:1;border-color:var(--accent)}
+  .theme-toggle .tt-ico{font-size:14px;line-height:1}
+  @media print{.theme-toggle{display:none!important}}
+  @media(max-width:760px){.theme-toggle .tt-label{display:none}}
+  .topbar { position:sticky; top:0; z-index:10; background:var(--topbar-bg); backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line2); padding:12px 64px 12px 20px; display:flex; gap:10px; align-items:center; }
+  .topbar .badge { font-size:11px; color:var(--accent); border:1px solid var(--line); border-radius:999px; padding:3px 9px; }
+  .topbar .t { font-size:14px; font-weight:700; }
+  main.doc { max-width:880px; margin:0 auto; padding:32px 22px 96px; }
+  h1,h2,h3,h4 { line-height:1.35; font-weight:800; margin:1.6em 0 .6em; }
+  h1 { font-size:26px; border-bottom:2px solid var(--line); padding-bottom:.3em; }
+  h2 { font-size:21px; color:var(--h2); border-bottom:1px solid var(--line2); padding-bottom:.25em; }
+  h3 { font-size:17px; color:var(--h3); }
+  h4 { font-size:15px; color:var(--h4); }
+  p, li { font-size:15px; }
+  a { color:var(--accent); }
+  hr { border:0; border-top:1px solid var(--line); margin:2em 0; }
+  blockquote { margin:1em 0; padding:.6em 1em; border-left:3px solid var(--quote-bd); background:var(--quote-bg);
+    border-radius:0 8px 8px 0; color:var(--quote-fg); }
+  blockquote p { margin:.3em 0; }
+  code { background:var(--code-bg); border:1px solid var(--line); border-radius:5px; padding:.1em .4em; font-size:.9em;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; }
+  pre { background:var(--pre-bg); border:1px solid var(--line); border-radius:10px; padding:14px 16px; overflow:auto; }
+  pre code { background:none; border:0; padding:0; font-size:13px; line-height:1.6; }
+  table { border-collapse:collapse; width:100%; margin:1.1em 0; font-size:14px; display:block; overflow-x:auto; }
+  th, td { border:1px solid var(--cell); padding:8px 10px; text-align:left; vertical-align:top; }
+  th { background:var(--th-bg); font-weight:700; color:var(--th-fg); }
+  tr:nth-child(even) td { background:var(--tr-even); }
+  ul, ol { padding-left:1.4em; }
+  li { margin:.3em 0; }
+  li input[type=checkbox] { transform:scale(1.15); margin-right:.5em; accent-color:var(--accent); }
+  ul:has(li input[type=checkbox]) { list-style:none; padding-left:.2em; }
+  strong { color:var(--strong); }
+  img { max-width:100%; }
+</style>
+</head>
+<body>
+<button id="themeToggle" class="theme-toggle" type="button" aria-label="테마 전환" title="테마: 시스템"><span class="tt-ico" aria-hidden="true">🖥</span><span class="tt-label">시스템</span></button>
+<div class="topbar"><span class="badge">n8n 자동화 강의</span><span class="t">self-host 보안·버전 고정 가이드</span></div>
+<main class="doc">
+<h1>self-host n8n 보안 · 버전 고정 가이드</h1>
+<blockquote>
+<p>self-host는 &quot;내 서버&quot;인 만큼 <strong>보안·버전 관리도 내 책임</strong>입니다. 이 강의는 npx로 <strong>쉽게 시작</strong>하되, &quot;사내 24시간 운영&quot;으로 가면 아래를 챙깁니다. 비개발자는 <strong>★ 표시만</strong> 알면 충분하고, 나머지는 <strong>사내 IT와 함께</strong>.</p>
+</blockquote>
+<h2>1. ★버전 고정 (재현성 · 공급망)</h2>
+<ul>
+<li><code>npx n8n</code> 은 <strong>매번 최신 버전</strong>을 받아 버전이 흔들릴 수 있어요 → <strong>버전 고정</strong>으로 모두 같은 버전:<pre><code class="language-bash">GENERIC_TIMEZONE=Asia/Seoul npx n8n@1.xx.x     # 검증된 특정 버전 (최신 자동 아님)
+</code></pre>
+</li>
+<li>팀·강의에선 <strong>버전 1개를 지정</strong>해 전원 동일하게.</li>
+<li>Docker(사내 서버)면 이미지 tag 고정: <code>docker.n8n.io/n8nio/n8n:1.xx.x</code></li>
+<li>⚠️ 정확한 안정 버전 번호는 강의 전 <code>npmjs.com/package/n8n</code> · <code>n8n.io</code> 에서 확인(변동).</li>
+</ul>
+<h2>2. ★공급망(의존성) 보안 — &quot;소스 zip이 더 안전&quot;은 오해</h2>
+<ul>
+<li>npx든 소스 빌드든 <strong>결국 같은 npm 레지스트리에서 의존성을 받습니다.</strong> 소스 zip으로 설치해도 공급망 신뢰는 동일하고 빌드만 복잡해져요. → <strong>버전 고정 + lockfile</strong>이 1차 방어.</li>
+<li>사내 강화: <strong>사내 npm 미러/프록시</strong>(Verdaccio·Artifactory 등)로 외부 패키지를 사내에서 검증·캐시.</li>
+</ul>
+<h2>3. self-host 운영 보안 (사내 서버 전환 시)</h2>
+<ul>
+<li><strong>네트워크</strong>: 로컬 체험은 <code>localhost</code>(외부 노출 없음). 사내 노출 시 <strong>HTTPS(역방향 프록시)·접근 인증·방화벽</strong> 필수.</li>
+<li><strong>인증</strong>: Owner 계정 강력한 비밀번호. (가능하면 SSO·2FA)</li>
+<li><strong>★자격증명 암호화 키</strong>: <code>~/.n8n/config</code> 의 <code>N8N_ENCRYPTION_KEY</code> 는 <strong>저장된 자격증명을 푸는 열쇠</strong>예요 — 유출 금지, 백업은 데이터와 <strong>분리 보관</strong>.</li>
+<li><strong>업데이트</strong>: 보안 패치 위해 주기적으로 버전 올리되 <strong>테스트 후</strong> 적용(<code>npx --yes n8n@latest</code> 또는 tag 상향).</li>
+<li><strong>백업</strong>: <code>~/.n8n</code>(<code>database.sqlite</code>+<code>config</code>) 정기 백업 — <strong>암호화 키와 세트로</strong>.</li>
+<li><strong>모니터링</strong>: 접근·실행 로그 점검.</li>
+</ul>
+<h2>4. ★비개발자 한 줄 요약</h2>
+<ul>
+<li><strong>로컬 체험(npx)은 안전</strong>합니다. <strong>사내 24시간 운영</strong>으로 가는 순간 위 항목은 <strong>사내 IT와 함께</strong> — &quot;내 노트북 체험&quot;과 &quot;운영&quot;은 다른 일이에요.</li>
+</ul>
+<h2>흔한 오해</h2>
+<table>
+<thead>
+<tr>
+<th>오해</th>
+<th>사실</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>&quot;소스 zip으로 설치하면 더 안전&quot;</td>
+<td>✗ 같은 npm 의존성·빌드만 복잡. <strong>버전 고정이 답</strong></td>
+</tr>
+<tr>
+<td>&quot;self-host면 무조건 안전&quot;</td>
+<td>✗ 네트워크 노출·인증·업데이트 방치하면 오히려 위험</td>
+</tr>
+<tr>
+<td>&quot;최신으로 자동 업데이트가 좋다&quot;</td>
+<td>✗ 운영은 <strong>버전 고정 후 테스트 → 의도적 업데이트</strong></td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>⚠️ 버전 번호·도구는 변동 → 강의 전 본인 환경에서 확인.</p>
+</blockquote>
+
+</main>
+<script>
+(function(){
+  var root=document.documentElement, btn=document.getElementById("themeToggle");
+  var mq=window.matchMedia("(prefers-color-scheme: dark)");
+  var ICON={system:"🖥",light:"☀️",dark:"🌙"}, LABEL={system:"시스템",light:"라이트",dark:"다크"};
+  var cur="system"; try{cur=localStorage.getItem("theme-pref")||"system";}catch(e){}
+  function apply(){
+    var d=cur==="dark"||(cur==="system"&&mq.matches);
+    root.setAttribute("data-theme",d?"dark":"light");
+    if(btn){var i=btn.querySelector(".tt-ico"),l=btn.querySelector(".tt-label");
+      if(i)i.textContent=ICON[cur]; if(l)l.textContent=LABEL[cur]; btn.title="테마: "+LABEL[cur];}
+  }
+  apply();
+  if(btn)btn.addEventListener("click",function(){
+    var o=["system","light","dark"]; cur=o[(o.indexOf(cur)+1)%o.length];
+    try{localStorage.setItem("theme-pref",cur);}catch(e){}
+    apply();
+  });
+  if(mq.addEventListener)mq.addEventListener("change",function(){if(cur==="system")apply();});
+})();
+</script>
+</body>
+</html>

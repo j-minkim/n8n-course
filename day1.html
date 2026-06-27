@@ -986,50 +986,6 @@ html.icons-ok i[data-lucide] .ico-fb { display: none; }
       <aside class="kit-notes" hidden>오늘 가장 중요한 슬라이드. ①Claude Code(터미널 파트너) ②n8n-MCP(노드 두뇌) ③Claude 챗 구독(설계 보조) ④워크플로 Anthropic 노드(API 키로 실행). ④만 종량과금 API 키이고 ③ 구독으로는 절대 안 돈다. 절대 빨리 넘기지 말 것. ①Claude Code는 Pro/Max 구독으로 쓰되 ANTHROPIC_API_KEY가 잡혀 있으면 구독 대신 API 과금으로 빠질 수 있으니 키 환경변수 확인(당일 확인).</aside>
   </div>
 
-  <!-- 8 Anthropic 노드 ≠ Claude Pro -->
-  <div class="slide" data-title="Anthropic 노드 ≠ Pro" data-chapter="M1 · 자동화+AI-native">
-    <div class="slide-label"><i data-lucide="alert-octagon"><span class="ico-fb">🚫</span></i> M1 · 가장 자주 깨지는 가정</div>
-    <h1>워크플로 <span class="hl2">Anthropic 노드</span> ≠ <span class="hl">Claude Pro 구독</span></h1>
-    <div class="grid-2">
-      <div class="card highlight">
-        <div class="card-icon"><i data-lucide="message-circle"><span class="ico-fb">💬</span></i></div>
-        <div class="card-title">Claude Pro 챗 구독</div>
-        <div class="card-body">
-          claude.ai <strong>채팅</strong>. 회사 제공.<br>
-          용도: <strong>설계·디버깅 보조</strong> — 아이디어·표현식·에러 로그 해석.<br>
-          <span style="color:var(--danger)">워크플로 안 AI 노드는 구동 못 함.</span>
-        </div>
-      </div>
-      <div class="card warn-card">
-        <div class="card-icon" style="color:var(--warn)"><i data-lucide="plug"><span class="ico-fb">🔌</span></i></div>
-        <div class="card-title">워크플로 Anthropic 노드</div>
-        <div class="card-body">
-          n8n Credentials에 <strong>Anthropic API 키</strong>(종량과금).<br>
-          용도: <strong>워크플로 안 AI 노드</strong>(Anthropic Chat Model)를 실제 실행.<br>
-          2일차에 <strong>회사 키로 직접 핸즈온</strong>.
-        </div>
-      </div>
-    </div>
-    <div class="danger-box">
-      <i data-lucide="alert-octagon"><span class="ico-fb">🚫</span></i>
-      <p><span class="t">가장 자주 깨지는 가정:</span> "Claude Pro 구독이 있으니 워크플로에서 그대로 쓰면 되겠지" → <b>아니요.</b> n8n의 Anthropic 노드는 <b>API 키로만</b> 동작합니다. (출처: n8n 공식 credentials docs + Anthropic 헬프센터)</p>
-    </div>
-    <div class="kit-mcq" data-group="m1" data-id="mcq-anthropic" data-question="Anthropic 노드 vs Pro">
-      <p class="kit-mcq-q">n8n 워크플로 안의 Anthropic 노드를 실제로 구동하려면 무엇이 필요할까요?</p>
-      <div class="kit-mcq-opts" role="group" aria-label="객관식 보기">
-        <button type="button" class="kit-mcq-opt">A. 개인 Claude Pro 챗 구독만 있으면 된다</button>
-        <button type="button" class="kit-mcq-opt" data-correct>B. 별도 Anthropic API 키(종량과금) — 보통 회사가 제공</button>
-        <button type="button" class="kit-mcq-opt">C. n8n self-host면 자동으로 포함된다</button>
-        <button type="button" class="kit-mcq-opt">D. 아무것도 필요 없다</button>
-      </div>
-      <p class="kit-mcq-live" aria-live="polite"></p>
-      <div class="kit-mcq-explain" hidden>
-        <strong>정답: B.</strong> 워크플로 안 Anthropic 노드는 <b>API 키로만</b> 동작합니다. Claude Pro 챗 구독은 설계·디버깅 보조용일 뿐, 워크플로 AI 노드를 구동하지 못합니다.
-      </div>
-    </div>
-      <aside class="kit-notes" hidden>도구지도의 핵심 한 줄을 다시. Pro 구독(③ 챗)과 워크플로 Anthropic 노드(④ API 키)는 완전히 다르다. 구독이 있어도 워크플로 AI 노드는 안 돈다. 다수가 "된다"로 오답 → "안 됩니다"로 정정.</aside>
-  </div>
-
   <!-- ===================== CH3: M2 self-host 설치 ===================== -->
 
   <!-- 9 왜 self-host -->
