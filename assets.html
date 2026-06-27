@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<title>실습 파일 · n8n + Claude Code 자동화 강의</title>
+<style>
+  :root{ color-scheme:dark; }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; }
+  body{ background:#0b0f17; color:#e6edf3; line-height:1.7; word-break:keep-all;
+    font-family:-apple-system,BlinkMacSystemFont,"Pretendard","Apple SD Gothic Neo","Segoe UI",Roboto,sans-serif; }
+  main{ max-width:760px; margin:0 auto; padding:32px 22px 90px; }
+  a.back{ color:#60a5fa; text-decoration:none; font-size:13px; }
+  h1{ font-size:24px; margin:.4em 0 .2em; }
+  p.sub{ color:#94a3b8; font-size:14px; margin:0 0 22px; }
+  h2{ font-size:17px; color:#dbeafe; margin:1.8em 0 .5em; border-bottom:1px solid #1f2a3c; padding-bottom:.3em; }
+  .row{ display:flex; align-items:center; gap:12px; background:#121826; border:1px solid #233047;
+    border-radius:12px; padding:13px 16px; margin:9px 0; text-decoration:none; color:inherit; transition:border-color .15s; }
+  .row:hover{ border-color:#3b82f6; }
+  .row .name{ font-weight:700; font-size:14px; }
+  .row .desc{ font-size:12px; color:#94a3b8; }
+  .row .dl{ margin-left:auto; font-size:12px; color:#60a5fa; white-space:nowrap; }
+  .note{ font-size:12px; color:#64748b; margin-top:8px; line-height:1.6; }
+  code{ background:#111827; border:1px solid #233047; border-radius:5px; padding:1px 6px; font-size:12px; }
+</style>
+</head>
+<body>
+<main>
+  <a class="back" href="index.html">← 강의 자료 홈</a>
+  <h1>실습 파일 (import · 데모 데이터)</h1>
+  <p class="sub">n8n 에디터 우측 상단 <code>⋮ → Import from File</code> 로 워크플로 JSON을 불러오고, CSV는 구글시트에 업로드해 실습 데이터로 씁니다. ★워크플로 안 Anthropic 노드는 별도 API 키 필요(Claude 구독과 별개).</p>
+
+  <a class="row" href="n8n-claude-lab-files.zip" download style="border-color:#3a3320;background:#16130c;">
+    <span><span class="name" style="color:#fbbf24;">📦 실습 파일 전체 — zip 한 번에 받기</span><br><span class="desc">워크플로 JSON 6 + 데모 CSV 5 + CS 프롬프트 + README를 한 파일로. 압축 풀면 <code>assets/</code> 구조 그대로.</span></span><span class="dl" style="color:#fbbf24;">⬇ ZIP</span>
+  </a>
+
+  <h2>워크플로 JSON — 막히면 import해서 합류</h2>
+  <a class="row" href="assets/import/lab1-편성표메일.json" download><span><span class="name">lab1 · 편성표→메일</span><br><span class="desc">Lab2 첫 워크플로(스케줄→시트→메일) 완성본</span></span><span class="dl">⬇ JSON</span></a>
+  <a class="row" href="assets/import/lab2-조건분기.json" download><span><span class="name">lab2 · 조건분기</span><br><span class="desc">Lab4 IF/Filter 분기</span></span><span class="dl">⬇ JSON</span></a>
+  <a class="row" href="assets/import/lab3-다중출력.json" download><span><span class="name">lab3 · 다중출력</span><br><span class="desc">Lab4 집계→다중 발송</span></span><span class="dl">⬇ JSON</span></a>
+  <a class="row" href="assets/import/lab4-checkpoint1-집계까지.json" download><span><span class="name">lab4 · 체크포인트① (집계까지)</span><br><span class="desc">Lab5 전반 게이트 미통과 시 여기서 합류</span></span><span class="dl">⬇ JSON</span></a>
+  <a class="row" href="assets/import/lab4-checkpoint2-발송까지.json" download><span><span class="name">lab4 · 체크포인트② (발송까지)</span><br><span class="desc">Lab5 후반 미통과 시 합류 → AI 노드만 마무리</span></span><span class="dl">⬇ JSON</span></a>
+  <a class="row" href="assets/import/lab4-complete-AI포함.json" download><span><span class="name">lab4 · 완성본 (AI 노드 포함)</span><br><span class="desc">주간 리포트 최종 완성 워크플로</span></span><span class="dl">⬇ JSON</span></a>
+
+  <h2>데모 데이터 (CSV) — 구글시트에 업로드</h2>
+  <a class="row" href="assets/data/편성표.csv" download><span><span class="name">편성표.csv</span><br><span class="desc">Lab2 — 날짜·방송·담당자 메일</span></span><span class="dl">⬇ CSV</span></a>
+  <a class="row" href="assets/data/일일매출.csv" download><span><span class="name">일일매출.csv</span><br><span class="desc">Lab4 — 상품군·매출</span></span><span class="dl">⬇ CSV</span></a>
+  <a class="row" href="assets/data/일일매출_콤마.csv" download><span><span class="name">일일매출_콤마.csv</span><br><span class="desc">Lab4 — 천단위 콤마 변형(파싱 연습)</span></span><span class="dl">⬇ CSV</span></a>
+  <a class="row" href="assets/data/주간매출.csv" download><span><span class="name">주간매출.csv</span><br><span class="desc">Lab5 — 주간 리포트 본실습</span></span><span class="dl">⬇ CSV</span></a>
+  <a class="row" href="assets/data/CS문의.csv" download><span><span class="name">CS문의.csv</span><br><span class="desc">Lab5 — AI 노드 CS 분류/요약</span></span><span class="dl">⬇ CSV</span></a>
+
+  <h2>AI 프롬프트</h2>
+  <a class="row" href="assets/prompts/cs-분류요약.md" download><span><span class="name">cs-분류요약.md</span><br><span class="desc">Lab5 — Anthropic 노드(회사 API 키)에 넣는 CS 분류/요약 프롬프트</span></span><span class="dl">⬇ MD</span></a>
+
+  <p class="note">한글 파일명이라 일부 브라우저는 다운로드 시 이름이 바뀔 수 있어요 — 우클릭 "다른 이름으로 저장"을 쓰면 됩니다. 모든 파일은 <code>assets/</code> 폴더에 있고, README는 <a class="back" href="assets/README.md">assets/README.md</a>.</p>
+</main>
+</body>
+</html>

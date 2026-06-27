@@ -1,0 +1,97 @@
+{
+  "name": "Lab1 - 편성표 메일 (완성본/강사시연)",
+  "nodes": [
+    {
+      "parameters": {
+        "notes": "Import 후: 구글/Gmail 자격증명 + 시트ID(documentId)·시트명(sheetName)을 본인 것으로 설정하세요. typeVersion·UI 경로는 강의 전 본인 로컬 npx n8n에서 dry-run 1회 확인. 스케줄 타임존은 GENERIC_TIMEZONE=Asia/Seoul npx n8n으로 맞추세요(미설정 시 America/New_York).",
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "triggerAtHour": 9,
+              "triggerAtMinute": 0
+            }
+          ]
+        }
+      },
+      "id": "n-schedule",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "",
+          "mode": "name"
+        },
+        "operation": "read",
+        "options": {}
+      },
+      "id": "n-sheets-read",
+      "name": "편성표 읽기",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        500,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "send",
+        "sendTo": "={{ $json.담당자메일 }}",
+        "subject": "=오늘 편성표 - {{ $json.방송명 }}",
+        "message": "={{ $json.시간 }} {{ $json.방송명 }} / 담당 {{ $json.담당자 }}",
+        "options": {}
+      },
+      "id": "n-gmail-send",
+      "name": "담당자 메일",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        760,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "편성표 읽기",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "편성표 읽기": {
+      "main": [
+        [
+          {
+            "node": "담당자 메일",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {}
+}

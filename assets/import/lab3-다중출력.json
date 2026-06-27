@@ -1,0 +1,127 @@
+{
+  "name": "Lab3 - 다중출력 (Summarize→기록+메일)",
+  "nodes": [
+    {
+      "parameters": {
+        "notes": "Import 후: 구글/Gmail 자격증명 + 시트ID(documentId)·시트명(sheetName, 일일매출/요약시트)을 본인 것으로 설정하세요. 집계는 Summarize 노드로 상품군별 sum(매출)을 구합니다(Set로 흉내 금지). typeVersion·UI 경로는 강의 전 본인 로컬 npx n8n에서 dry-run 1회 확인.",
+        "documentId": {
+          "__rl": true,
+          "value": "",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "",
+          "mode": "name"
+        },
+        "operation": "read",
+        "options": {}
+      },
+      "id": "n-sheets-read",
+      "name": "일일매출 읽기",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "fieldsToSummarize": {
+          "values": [
+            {
+              "aggregation": "sum",
+              "field": "매출"
+            }
+          ]
+        },
+        "fieldsToSplitBy": "상품군",
+        "options": {}
+      },
+      "id": "n-summarize",
+      "name": "상품군 집계",
+      "type": "n8n-nodes-base.summarize",
+      "typeVersion": 1.1,
+      "position": [
+        500,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "",
+          "mode": "name"
+        },
+        "operation": "append",
+        "options": {}
+      },
+      "id": "n-sheets-append",
+      "name": "요약시트 기록",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        760,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "send",
+        "sendTo": "",
+        "subject": "=일일 상품군별 매출 요약",
+        "message": "=상품군 {{ $json.상품군 }} 합계 {{ $json.sum_매출 }}",
+        "options": {}
+      },
+      "id": "n-gmail-summary",
+      "name": "요약 메일",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        760,
+        480
+      ]
+    }
+  ],
+  "connections": {
+    "일일매출 읽기": {
+      "main": [
+        [
+          {
+            "node": "상품군 집계",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "상품군 집계": {
+      "main": [
+        [
+          {
+            "node": "요약시트 기록",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "요약 메일",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {}
+}

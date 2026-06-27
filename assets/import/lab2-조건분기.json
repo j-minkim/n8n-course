@@ -1,0 +1,114 @@
+{
+  "name": "Lab2 - 조건분기 (IF: 목표미달)",
+  "nodes": [
+    {
+      "parameters": {
+        "notes": "Import 후: 구글 자격증명 + 시트ID(documentId)·시트명(sheetName, 일일매출)을 본인 것으로 설정하세요. 매출/목표매출은 콤마 없는 정수여야 숫자 비교가 됩니다(콤마 문자열이면 비교 실패→흔한실수). typeVersion·UI 경로는 강의 전 본인 로컬 npx n8n에서 dry-run 1회 확인. Filter 대안: Filter는 통과 아이템만 남기고 분기(true/false 두 출력)가 없음 — 분기가 필요하면 IF.",
+        "documentId": {
+          "__rl": true,
+          "value": "",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "",
+          "mode": "name"
+        },
+        "operation": "read",
+        "options": {}
+      },
+      "id": "n-sheets-read",
+      "name": "일일매출 읽기",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "leftValue": "={{ $json.매출 }}",
+              "rightValue": "={{ $json.목표매출 }}",
+              "operator": {
+                "type": "number",
+                "operation": "lt"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "n-if-goal",
+      "name": "목표미달 IF",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        500,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "",
+          "mode": "name"
+        },
+        "operation": "append",
+        "options": {}
+      },
+      "id": "n-sheets-append",
+      "name": "미달 기록",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        760,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "일일매출 읽기": {
+      "main": [
+        [
+          {
+            "node": "목표미달 IF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "목표미달 IF": {
+      "main": [
+        [
+          {
+            "node": "미달 기록",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {}
+}

@@ -4,14 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
-<title>n8n 자동화 강의 · 강의 자료</title>
+<title>n8n + Claude Code 자동화 강의 · 강의 자료</title>
 <style>
   :root { color-scheme: dark; }
   * { box-sizing: border-box; }
   html, body { height: 100%; margin: 0; }
   body { display: grid; place-items: center; background: #0b0f17; color: #e6edf3;
     font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Apple SD Gothic Neo", "Segoe UI", Roboto, sans-serif; }
-  .wrap { width: min(92vw, 600px); text-align: center; padding: 28px; }
+  .wrap { width: min(92vw, 620px); text-align: center; padding: 28px; }
   .eyebrow { font-size: 12px; letter-spacing: .12em; color: #60a5fa; text-transform: uppercase; margin-bottom: 8px; }
   h1 { font-size: 25px; margin: 0 0 6px; font-weight: 800; line-height: 1.3; }
   p.sub { margin: 0 0 26px; color: #94a3b8; font-size: 14px; }
@@ -24,36 +24,42 @@
   .ttl { font-size: 16px; font-weight: 700; margin: 6px 0 4px; }
   .desc { font-size: 12px; color: #94a3b8; line-height: 1.5; }
   .note { margin-top: 24px; font-size: 12px; color: #64748b; line-height: 1.6; }
+  .tag { display:inline-block; font-size:11px; color:#fbbf24; border:1px solid #3a3320; background:#1a1710; border-radius:999px; padding:2px 9px; margin-top:4px; }
 </style>
 </head>
 <body>
   <main class="wrap">
     <div class="eyebrow">Lecture Notes</div>
-    <h1>n8n 자동화 강의</h1>
-    <p class="sub">홈쇼핑·이커머스 직장인 · 2일 16시간</p>
+    <h1>n8n + Claude Code 자동화 강의</h1>
+    <p class="sub">AI-native · self-host(npx) · 2일 16시간 — 실습 중심</p>
     <div class="grid">
       <a class="card" href="day1.html">
         <div class="day">DAY 1</div>
-        <div class="ttl">1일차 · 기초~조건분기</div>
-        <div class="desc">n8n 기초 · 노드 연결 · 조건분기 · 데이터 처리·다중출력</div>
+        <div class="ttl">1일차 · 설치~PRD~분기</div>
+        <div class="desc">self-host 설치(npx·Claude Code 주도) · n8n 기초 · 자동화 PRD(brainstorming) · 조건분기·다중출력</div>
       </a>
       <a class="card" href="day2.html">
         <div class="day">DAY 2</div>
         <div class="ttl">2일차 · 복합~AI노드~내업무</div>
-        <div class="desc">복합 워크플로 · 주간 리포트(+AI 노드) · 나만의 자동화</div>
+        <div class="desc">복합 워크플로 설계 · 주간 리포트 본실습(+AI 노드) · 나만의 자동화 프로젝트</div>
       </a>
       <a class="card" href="workbook.html">
         <div class="day">WORKBOOK</div>
-        <div class="ttl">실습 워크북</div>
-        <div class="desc">Lab 따라하며 채우는 실습 시트</div>
+        <div class="ttl">실습 워크북 (따라하며 채우기)</div>
+        <div class="desc">Lab 0~6 · 체크박스·빈칸으로 손으로 따라가는 실습 시트</div>
       </a>
       <a class="card" href="handout.html">
         <div class="day">HANDOUT</div>
-        <div class="ttl">핸드아웃</div>
-        <div class="desc">개념 요약 노트</div>
+        <div class="ttl">핸드아웃 (요약 노트)</div>
+        <div class="desc">도구 구분 · 설치 · PRD · AI-native 빌드 · 안전 핵심 요약</div>
+      </a>
+      <a class="card" href="assets.html" style="grid-column:1/-1;border-color:#3a3320;background:#16130c;">
+        <div class="day" style="color:#fbbf24;">📦 실습 파일</div>
+        <div class="ttl">워크플로 JSON · 데모 CSV · CS 프롬프트</div>
+        <div class="desc">막히면 import해서 합류하는 워크플로 6종 + 실습 데모 데이터 5종 + AI 프롬프트. n8n에서 <code style="background:#111827;border:1px solid #233047;border-radius:4px;padding:1px 5px;">⋮ → Import from File</code></div>
       </a>
     </div>
-    <p class="note">슬라이드는 화살표 키(← →)로 넘기고, <b>S</b> 키로 발표자 노트를 봅니다. 우상단 토글로 다크/라이트 전환.</p>
+    <p class="note">슬라이드는 화살표 키(← →)로 넘기고, <b>S</b> 키로 발표자 노트를 봅니다. 우상단 토글로 다크/라이트 전환.<br>워크플로 안 AI 노드는 별도 Anthropic API 키가 필요해요(Claude 구독과 별개).</p>
   </main>
 </body>
 </html>

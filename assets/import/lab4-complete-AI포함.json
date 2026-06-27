@@ -1,0 +1,347 @@
+{
+  "name": "Lab4 완성본 - AI 포함 (주간리포트 + CS 분류/요약 브랜치)",
+  "nodes": [
+    {
+      "parameters": {
+        "notes": "Import 후: 구글/Gmail/Anthropic 자격증명 + 시트ID(documentId)·시트명(sheetName, 주간매출/요약시트/CS문의/분류결과)을 본인 것으로 설정하세요. n8n 워크플로 내 AI 노드는 별도 Anthropic API 키(console.anthropic.com·종량과금, 회사 제공)가 필요하며 Claude Pro($20/월) 구독으로는 구동 불가입니다. 401/authentication 에러는 키 미입력·Pro 착각이 원인. 스케줄 타임존=Asia/Seoul(UTC+9). typeVersion·모델명·UI 경로는 강의 전 본인 로컬 npx n8n에서 dry-run 1회 확인.",
+        "rule": {
+          "interval": [
+            {
+              "field": "weeks",
+              "triggerAtDay": [
+                1
+              ],
+              "triggerAtHour": 8,
+              "triggerAtMinute": 0
+            }
+          ]
+        }
+      },
+      "id": "n-schedule-weekly",
+      "name": "주간 스케줄",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "",
+          "mode": "name"
+        },
+        "operation": "read",
+        "options": {}
+      },
+      "id": "n-sheets-read-weekly",
+      "name": "주간매출 읽기",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        500,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "fieldsToSummarize": {
+          "values": [
+            {
+              "aggregation": "sum",
+              "field": "매출"
+            }
+          ]
+        },
+        "fieldsToSplitBy": "상품군",
+        "options": {}
+      },
+      "id": "n-summarize",
+      "name": "상품군 집계",
+      "type": "n8n-nodes-base.summarize",
+      "typeVersion": 1.1,
+      "position": [
+        760,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "",
+          "mode": "name"
+        },
+        "operation": "append",
+        "options": {}
+      },
+      "id": "n-sheets-append-summary",
+      "name": "요약시트 기록",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        1020,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a-1",
+              "name": "본문",
+              "value": "={{ $json.상품군 }} 합계 {{ $json.sum_매출 }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "n-set-format",
+      "name": "요약 포맷팅",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1280,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "send",
+        "sendTo": "",
+        "subject": "=주간 상품군별 매출 요약 (팀장)",
+        "message": "={{ $json.본문 }}",
+        "options": {}
+      },
+      "id": "n-gmail-leader",
+      "name": "팀장 메일",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1540,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "send",
+        "sendTo": "",
+        "subject": "=주간 상품군별 매출 요약 (메일링리스트)",
+        "message": "={{ $json.본문 }}",
+        "options": {}
+      },
+      "id": "n-gmail-list",
+      "name": "메일링리스트 메일",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1540,
+        480
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "n-error-trigger",
+      "name": "Error Trigger",
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        240,
+        540
+      ]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "",
+          "mode": "name"
+        },
+        "operation": "read",
+        "options": {}
+      },
+      "id": "n-sheets-read-cs",
+      "name": "CS문의 읽기",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        500,
+        720
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=너는 홈쇼핑 CS 분류 도우미야. 다음 고객 문의를 [배송 / 환불 / 상품문의 / 기타] 중 정확히 하나로 분류하고, 한 줄로 요약해줘.\n반드시 아래 JSON 형식으로만 답해:\n{\"분류\":\"<배송|환불|상품문의|기타>\",\"요약\":\"<한 줄 요약>\"}\n문의: {{ $json.문의내용 }}",
+        "messages": {
+          "messageValues": []
+        }
+      },
+      "id": "n-chain-llm",
+      "name": "CS 분류요약 체인",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.5,
+      "position": [
+        760,
+        720
+      ]
+    },
+    {
+      "parameters": {
+        "notes": "모델명(예 claude-3-5-sonnet 계열)은 단정하지 말고 dry-run에서 본인 계정에서 선택하세요. Anthropic API 키(회사 제공)는 자격증명에 입력. credentials는 비워둠.",
+        "options": {}
+      },
+      "id": "n-anthropic",
+      "name": "Anthropic Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.2,
+      "position": [
+        760,
+        900
+      ]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "",
+          "mode": "name"
+        },
+        "operation": "append",
+        "options": {}
+      },
+      "id": "n-sheets-append-cs",
+      "name": "분류결과 기록",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        1020,
+        720
+      ]
+    }
+  ],
+  "connections": {
+    "주간 스케줄": {
+      "main": [
+        [
+          {
+            "node": "주간매출 읽기",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "주간매출 읽기": {
+      "main": [
+        [
+          {
+            "node": "상품군 집계",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "상품군 집계": {
+      "main": [
+        [
+          {
+            "node": "요약시트 기록",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "요약시트 기록": {
+      "main": [
+        [
+          {
+            "node": "요약 포맷팅",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "요약 포맷팅": {
+      "main": [
+        [
+          {
+            "node": "팀장 메일",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "메일링리스트 메일",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CS문의 읽기": {
+      "main": [
+        [
+          {
+            "node": "CS 분류요약 체인",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CS 분류요약 체인": {
+      "main": [
+        [
+          {
+            "node": "분류결과 기록",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Anthropic Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "CS 분류요약 체인",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {}
+}

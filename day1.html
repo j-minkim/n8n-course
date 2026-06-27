@@ -13,7 +13,7 @@
   }catch(e){ document.documentElement.setAttribute("data-theme","dark"); }
 })();
 </script>
-<title>n8n 자동화 강의 · 1일차 — 반복 업무 자동화 1/2</title>
+<title>n8n + Claude Code 자동화 · 1일차 — self-host · AI-native 1/2</title>
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
@@ -797,7 +797,7 @@ html.icons-ok i[data-lucide] .ico-fb { display: none; }
 </div>
 
 <nav class="sidebar">
-  <div class="sidebar-header">n8n 자동화 · 1일차<br>반복 업무 자동화 1/2</div>
+  <div class="sidebar-header">n8n + Claude Code · 1일차<br>self-host · AI-native 1/2</div>
   <div class="sidebar-nav" id="sidebarNav"></div>
   <div class="sidebar-footer">
     <kbd>←</kbd> <kbd>→</kbd> 방향키 이동 · <kbd>F</kbd> 인쇄/PDF
@@ -806,78 +806,100 @@ html.icons-ok i[data-lucide] .ico-fb { display: none; }
 
 <div class="stage" id="stage">
 
-  <!-- ===================== CH1: 훅 / 오리엔테이션 ===================== -->
+  <!-- ===================== CH1: 오리엔테이션 ===================== -->
 
-  <!-- 1 -->
+  <!-- 1 표지 -->
   <div class="slide" data-title="강의 표지" data-chapter="오리엔테이션">
-    <div class="slide-label"><i data-lucide="workflow"><span class="ico-fb">🔀</span></i> 생성형 AI 전문가 Track · Lv2(활용)</div>
-    <h1>반복 업무 자동화 <span class="hl">1일차</span><br>코딩 없이, <span class="hl3">n8n</span>으로 내 업무를 자동화한다</h1>
-    <p class="subtitle">홈쇼핑·이커머스 실무자를 위한 워크플로 자동화 — 편성표·매출·리포트·메일을 매주 돌려받기</p>
+    <div class="slide-label"><i data-lucide="workflow"><span class="ico-fb">🔀</span></i> AI-native 업무 자동화 · self-host</div>
+    <h1>n8n + <span class="hl">Claude Code</span> 자동화 <span class="hl3">1일차</span><br>내 노트북에, 코딩 <span class="hl2">0줄</span>로 자동화를 짓는다</h1>
+    <p class="subtitle">내 노트북에 (Docker 없이) npx로 n8n을 직접 띄우고, Claude Code를 파트너 삼아 워크플로를 설계·구축한다.</p>
     <div class="stat-row">
       <div class="stat-card"><div class="label">전체 과정</div><div class="value accent">16h</div><div class="sub">2일 × 8시간</div></div>
-      <div class="stat-card"><div class="label">오늘 (1일차)</div><div class="value">6모듈</div><div class="sub">기초기 다지기 · 8시간</div></div>
+      <div class="stat-card"><div class="label">오늘 (1일차)</div><div class="value">M1~M6</div><div class="sub">설치·기초·PRD·분기</div></div>
       <div class="stat-card"><div class="label">이론 : 실습</div><div class="value success">3 : 7</div><div class="sub">손으로 만들며 익힘</div></div>
     </div>
     <div class="success-box" style="margin-top:24px">
       <i data-lucide="hand-metal"><span class="ico-fb">✋</span></i>
-      <p><span class="t">코딩 경험은 필요 없습니다.</span> 오늘 끝에는 "스케줄 → 구글시트 → 메일"이 자동으로 도는 첫 워크플로를 직접 만들어 실행합니다.</p>
+      <p><span class="t">코딩 경험은 필요 없습니다.</span> 오늘 끝에는 "스케줄 → 구글시트 → 메일"이 도는 첫 워크플로를 <b>내 노트북에서</b> 직접 만들어 실행합니다.</p>
     </div>
-      <aside class="kit-notes" hidden>이틀 동안 코딩 없이 내 업무를 자동화하는 법을 함께 만든다고 오프닝. 매주 반복하는 업무(편성표·매출·주간 리포트·CS) 하나를 떠올리게 하고, 끝나면 하나는 무조건 켜서 간다는 효능감을 준다.</aside>
+      <aside class="kit-notes" hidden>이틀 동안 코딩 없이, 그러나 "내 노트북(self-host)"에 직접 띄워 자동화를 만든다는 점을 강조. 클라우드가 아니라 내 노트북에 npx로 가볍게 올린다(Docker 없이·Claude Code 주도)는 게 이 강의의 차별점. Claude Code는 설치·빌드를 같이 하는 파트너.</aside>
   </div>
 
-  <!-- 2 -->
-  <div class="slide" data-title="오늘의 통증" data-chapter="오리엔테이션">
-    <div class="slide-label"><i data-lucide="alarm-clock"><span class="ico-fb">⏰</span></i> 왜 자동화인가</div>
-    <h1>매주 <span class="hl2">손으로</span> 만드는 그 리포트,<br>코딩 <span class="hl3">0줄</span>로 자동화할 수 있다면?</h1>
-    <p class="subtitle">홈쇼핑 실무의 반복 업무는 패턴이 분명합니다 — 패턴이 분명하면 자동화 후보입니다.</p>
+  <!-- 2 2일 여정 지도 -->
+  <div class="slide" data-title="2일 여정 지도" data-chapter="오리엔테이션">
+    <div class="slide-label"><i data-lucide="map"><span class="ico-fb">🗺️</span></i> 2일 여정 · 16시간</div>
+    <h1>오늘은 <span class="hl">부품</span>을 쌓고, 내일은 <span class="hl3">조립</span>합니다</h1>
+    <div class="timeline">
+      <div class="tl-item"><div class="tl-dot">1</div><div class="tl-label">M1 · 1h</div><div class="tl-title">자동화+AI-native</div><div class="tl-desc">도구지도 4구분</div></div>
+      <div class="tl-item"><div class="tl-dot">2</div><div class="tl-label">M2 · 1.5h</div><div class="tl-title">self-host 설치</div><div class="tl-desc">npx로 내 노트북에</div></div>
+      <div class="tl-item"><div class="tl-dot">3</div><div class="tl-label">M3 · 1.5h</div><div class="tl-title">첫 워크플로</div><div class="tl-desc">n8n-MCP로 노드 빌드</div></div>
+      <div class="tl-item"><div class="tl-dot">4</div><div class="tl-label">M4 · 1h</div><div class="tl-title">자동화 PRD</div><div class="tl-desc">brainstorming</div></div>
+      <div class="tl-item"><div class="tl-dot">5</div><div class="tl-label">M5 · 2.5h</div><div class="tl-title">분기·집계·다중</div><div class="tl-desc">일일매출 본실습</div></div>
+    </div>
+    <div class="success-box" style="margin-top:22px">
+      <i data-lucide="package-open"><span class="ico-fb">📦</span></i>
+      <p><span class="t">2일차 예고:</span> 오늘의 부품을 <b>주간 성과 리포트</b>로 조립하고, <b>회사 API 키로 Anthropic Chat Model</b>을 직접 핸즈온합니다. (M6은 1일차 디버깅·정리)</p>
+    </div>
+      <aside class="kit-notes" hidden>1일차=부품(설치·기초·PRD·분기·다중출력·디버깅), 2일차=조립(주간 리포트+AI 노드+내 업무 프로젝트). 6개 챕터를 손으로 짚고 밀리면 이름만 읽고 넘긴다.</aside>
+  </div>
+
+  <!-- 3 오늘의 약속 -->
+  <div class="slide" data-title="오늘의 약속" data-chapter="오리엔테이션">
+    <div class="slide-label"><i data-lucide="handshake"><span class="ico-fb">🤝</span></i> 오늘의 약속</div>
+    <h1>"내 노트북에, 코딩 <span class="hl3">0줄</span>로 자동화" — <span class="hl">오늘의 목표</span></h1>
+    <p class="subtitle">홈쇼핑·이커머스 실무의 반복 업무는 패턴이 분명합니다. 패턴이 분명하면 자동화 후보입니다.</p>
     <ul class="lead-list">
-      <li data-click="1"><i data-lucide="calendar-clock"><span class="ico-fb">📅</span></i><span><b>매일 아침</b> 오늘 방송 편성표를 시트에서 확인해 담당자에게 메일</span></li>
-      <li data-click="2"><i data-lucide="bar-chart-3"><span class="ico-fb">📊</span></i><span><b>매일·매주</b> 매출 시트를 열어 상품군별로 합산하고 요약을 작성</span></li>
-      <li data-click="3"><i data-lucide="send"><span class="ico-fb">📧</span></i><span><b>주간 성과 리포트</b>를 만들어 팀장·메일링리스트에 발송</span></li>
-      <li data-click="4"><i data-lucide="messages-square"><span class="ico-fb">💬</span></i><span><b>CS 문의</b>를 읽고 배송/환불/상품문의로 분류·요약</span></li>
+      <li data-click="1"><i data-lucide="server"><span class="ico-fb">🖥️</span></i><span><b>self-host</b> — 클라우드가 아니라 <b>내 노트북에 npx로</b> n8n을 직접 띄운다(Docker 없이 · 데이터 주권)</span></li>
+      <li data-click="2"><i data-lucide="bot"><span class="ico-fb">🤖</span></i><span><b>Claude Code 파트너</b> — 설치 명령 생성·에러 해결·노드 빌드를 <b>같이</b> 한다</span></li>
+      <li data-click="3"><i data-lucide="file-text"><span class="ico-fb">📄</span></i><span><b>PRD 먼저</b> — 만들기 전에 "무엇을 자동화할지"를 brainstorming으로 명확히 한다</span></li>
+      <li data-click="4"><i data-lucide="git-branch"><span class="ico-fb">🔀</span></i><span><b>분기·집계·다중출력</b> — 일일매출을 상품군별로 모아 여러 곳에 보낸다</span></li>
     </ul>
     <div class="quote-box" data-click="5">
-      <p>오늘의 중심 목표: 이 반복 업무들을 만드는 <b>부품</b>(트리거·노드·분기·다중출력·디버깅)을 1일차에 쌓고, 2일차에 <b>주간 성과 리포트</b>로 조립합니다.</p>
+      <p>오늘의 중심 목표: 이 부품들(설치·트리거·노드·PRD·분기·다중출력·디버깅)을 1일차에 쌓고, 2일차에 <b>주간 성과 리포트</b>로 조립합니다.</p>
     </div>
-      <aside class="kit-notes" hidden>"이 반복 업무를 코딩 0줄로 자동화할 수 있다면?"이 오늘의 질문. "코딩 0줄" 문구에 잠깐 머무르고, 가능하면 완성형 주간 리포트를 1초 보여 "이틀 뒤 결과물"로 각인. 일부는 "자동화=코딩이라 나랑 무관"이라 여기니 "오늘 코드 한 줄도 안 칩니다"를 명시.</aside>
+      <aside class="kit-notes" hidden>오늘의 약속 한 줄="내 노트북에 코딩 0줄로 자동화". self-host·Claude Code 파트너·PRD 먼저·분기 네 기둥을 예고. "오늘 코드 한 줄도 안 칩니다"를 명시.</aside>
   </div>
 
-  <!-- 3 -->
-  <div class="slide" data-title="오늘의 6단계 여정" data-chapter="오리엔테이션">
-    <div class="slide-label"><i data-lucide="map"><span class="ico-fb">🗺️</span></i> 1일차 로드맵 · 8시간</div>
-    <h1>오늘은 이 <span class="hl">6개 챕터</span>를 순서대로 쌓습니다</h1>
-    <div class="timeline">
-      <div class="tl-item"><div class="tl-dot">1</div><div class="tl-label">M1 · 1.5h</div><div class="tl-title">자동화 이해</div><div class="tl-desc">좋은 일 vs 어려운 일 · 도구 지도</div></div>
-      <div class="tl-item"><div class="tl-dot">2</div><div class="tl-label">M2 · M3과 공유</div><div class="tl-title">n8n 기초</div><div class="tl-desc">트리거·액션·노드·분기 구조</div></div>
-      <div class="tl-item"><div class="tl-dot">3</div><div class="tl-label">M3</div><div class="tl-title">노드 연결</div><div class="tl-desc">편성표 → 담당자 메일</div></div>
-      <div class="tl-item"><div class="tl-dot">4</div><div class="tl-label">M4 · 2h</div><div class="tl-title">조건분기</div><div class="tl-desc">IF · Filter</div></div>
-      <div class="tl-item"><div class="tl-dot">5</div><div class="tl-label">M5 · 2h</div><div class="tl-title">다중출력</div><div class="tl-desc">집계 → 여러 곳 발송</div></div>
+  <!-- 3b 시작 전 5분 — 사전 준비 체크 -->
+  <div class="slide" data-title="시작 전 5분 — 사전 준비 체크" data-chapter="오리엔테이션">
+    <div class="slide-label"><i data-lucide="list-checks"><span class="ico-fb">✅</span></i> 오리엔테이션 · 사전 준비 체크리스트</div>
+    <h1>시작 전 <span class="hl3">5분</span> — 여섯 가지만 <span class="hl">미리</span> 맞춥시다</h1>
+    <p class="subtitle">비개발 수강생이 많으면 설치·다운로드에서 시간이 녹습니다. 본 실습 전에 아래를 미리 확인해 두면 막힘이 줄어듭니다.</p>
+    <ul class="priority-list">
+      <li data-click="1"><span class="priority-badge p4">①</span><div><b>Claude Code 로그인 확인</b> — 터미널에서 <code>/status</code>로 로그인 상태 점검.<span class="sub">로그인이 안 돼 있으면 여기서부터 막힙니다.</span></div></li>
+      <li data-click="2"><span class="priority-badge p4">②</span><div><b>Node 버전 확인</b> — <code>node -v</code> → <b>20.19~24.x</b> 범위인지.<span class="sub">없거나 범위 밖이면 nvm으로 설치/전환(<code>nvm install 20</code>, ★<code>sudo npm</code> 금지).</span></div></li>
+      <li data-click="3"><span class="priority-badge p3">③</span><div><b><code>npx n8n</code> 1회 미리 실행</b> — 첫 실행은 <b>다운로드로 1~5분</b>.<span class="sub">강의 전에 한 번 받아두면 본 실습에서 기다리지 않습니다.</span></div></li>
+      <li data-click="4"><span class="priority-badge p3">④</span><div><b><code>localhost:5678</code> 접속 확인</b> — 브라우저로 열어 Setup 화면이 뜨는지.<span class="sub">포트 점유 시 <code>N8N_PORT=8080 npx n8n</code> → <code>localhost:8080</code>.</span></div></li>
+      <li data-click="5"><span class="priority-badge p2">⑤</span><div><b>Google 계정 · OAuth 준비</b> — Sheets/Gmail 연결용 계정 로그인.<span class="sub">사내 정책상 외부앱 허용이 필요할 수 있음(IT에 미리 문의).</span></div></li>
+      <li data-click="6"><span class="priority-badge p2">⑥</span><div><b>회사 Anthropic API 키 수령</b> — 2일차 워크플로 AI 노드용(<code>sk-ant-...</code>).<span class="sub">개인 Claude 구독과 별개 — 회사가 제공하는 종량과금 키.</span></div></li>
+    </ul>
+    <div class="warn-box">
+      <i data-lucide="info"><span class="ico-fb">ℹ️</span></i>
+      <p><span class="t">⚠️ 미리:</span> 비개발 수강생이 다수면 <b>여기서 시간이 녹습니다</b>. <code>node -v</code>·<code>npx n8n</code> 1회 실행·<code>localhost:5678</code> 접속은 강의 시작 전에 끝내두세요.</p>
     </div>
-    <div class="success-box" style="margin-top:26px">
-      <i data-lucide="bug"><span class="ico-fb">🐞</span></i>
-      <p><span class="t">M6 · 1h — 1일차 정리/디버깅:</span> 워크플로가 실패할 때 에러 핸들링·실행 로그로 원인을 찾는 법까지 익히고 하루를 마칩니다.</p>
-    </div>
-      <aside class="kit-notes" hidden>이틀 여정: 1일차엔 부품(트리거·노드·조건분기·다중출력·디버깅)을 쌓고, 2일차엔 조립해 주간 리포트를 완성한 뒤 "내 업무" 버전으로 직접 만든다. 6개 챕터를 손으로 짚으며 읽고, 밀리면 챕터 이름만 읽고 넘긴다.</aside>
+      <aside class="kit-notes" hidden>본 실습 전에 6가지 사전 점검: ①Claude Code /status 로그인 ②node -v 20.19~24.x(없으면 nvm) ③npx n8n 1회 미리 실행(첫 다운로드 1~5분) ④localhost:5678 접속 ⑤Google 계정·OAuth ⑥회사 Anthropic API 키 수령. 비개발 다수면 여기서 시간 녹으니 미리 맞추라고 강조.</aside>
   </div>
 
-  <!-- ===================== CH2: M1 반복 업무 자동화 이해 ===================== -->
+  <!-- ===================== CH2: M1 자동화 + AI-native 이해 ===================== -->
 
-  <!-- 4 -->
-  <div class="slide" data-title="자동화 전문가란" data-chapter="M1 · 자동화 이해">
-    <div class="slide-label"><i data-lucide="user-cog"><span class="ico-fb">🧑‍💻</span></i> M1 · 반복 업무 자동화 이해하기</div>
-    <h1>"AI 업무 자동화 전문가" =<br><span class="hl">반복 프로세스를 발견</span>하고 <span class="hl3">워크플로로 설계</span>하는 사람</h1>
-    <p class="subtitle">도구를 아는 사람이 아니라, 내 업무에서 자동화할 곳을 찾아 설계·구축·유지보수하는 사람입니다.</p>
-    <div class="grid-2">
-      <div class="card"><div class="card-icon"><i data-lucide="search"><span class="ico-fb">🔍</span></i></div><div class="card-title">① 프로세스 분석</div><div class="card-body">내 업무 중 <strong>반복되고 규칙이 분명한</strong> 작업을 찾아낸다.</div></div>
-      <div class="card"><div class="card-icon"><i data-lucide="pen-tool"><span class="ico-fb">✏️</span></i></div><div class="card-title">② 자동화 설계</div><div class="card-body">트리거→액션 흐름과 조건·데이터 처리를 <strong>그림으로 설계</strong>한다.</div></div>
-      <div class="card"><div class="card-icon"><i data-lucide="hammer"><span class="ico-fb">🔨</span></i></div><div class="card-title">③ 구축</div><div class="card-body">n8n에서 노드를 연결해 <strong>실제 동작하는 워크플로</strong>로 만든다.</div></div>
-      <div class="card"><div class="card-icon"><i data-lucide="wrench"><span class="ico-fb">🔧</span></i></div><div class="card-title">④ 유지보수</div><div class="card-body">에러 핸들링·로그 확인으로 <strong>실패에 대비</strong>하고 고친다.</div></div>
+  <!-- 4 반복업무 자동화란 -->
+  <div class="slide" data-title="반복업무 자동화란" data-chapter="M1 · 자동화+AI-native">
+    <div class="slide-label"><i data-lucide="repeat"><span class="ico-fb">🔁</span></i> M1 · 반복 업무 자동화란</div>
+    <h1>매주 <span class="hl2">손으로</span> 만드는 그 리포트,<br>이제 <span class="hl3">자동으로</span> 돌릴 수 있습니다</h1>
+    <p class="subtitle">사람이 매번 같은 순서로 데이터를 옮기고·합치고·보내는 일은 워크플로로 묶을 수 있습니다.</p>
+    <div class="quote-box">
+      <p>핵심 비유 🧩 — 자동화 워크플로는 <b>컨베이어 벨트</b>입니다. <b>트리거</b>가 벨트를 켜고, 데이터가 <b>노드</b>를 하나씩 거치며 가공되어, 마지막 <b>액션</b>에서 시트·메일로 나갑니다.</p>
     </div>
-      <aside class="kit-notes" hidden>"AI 업무 자동화 전문가"는 반복 프로세스를 발견→설계→구축→유지보수하는 사람. 오늘 연습하는 것이 정확히 이것이라고 연결.</aside>
+    <ul class="lead-list">
+      <li><i data-lucide="calendar-clock"><span class="ico-fb">📅</span></i><span><b>매일 아침</b> 편성표를 시트에서 확인해 담당자에게 메일</span></li>
+      <li><i data-lucide="bar-chart-3"><span class="ico-fb">📊</span></i><span><b>매일·매주</b> 매출 시트를 열어 상품군별로 합산·요약</span></li>
+      <li><i data-lucide="send"><span class="ico-fb">📧</span></i><span><b>주간 리포트</b>를 만들어 팀장·메일링리스트에 발송</span></li>
+    </ul>
+      <aside class="kit-notes" hidden>반복업무 자동화=사람이 매번 같은 순서로 하던 데이터 이동·집계·발송을 워크플로로 묶는 것. 컨베이어 벨트 비유로 트리거→노드→액션을 각인.</aside>
   </div>
 
-  <!-- 5 -->
-  <div class="slide" data-title="좋은 일 vs 어려운 일" data-chapter="M1 · 자동화 이해">
+  <!-- 5 좋은 일 vs 어려운 일 -->
+  <div class="slide" data-title="좋은 일 vs 어려운 일" data-chapter="M1 · 자동화+AI-native">
     <div class="slide-label"><i data-lucide="scale"><span class="ico-fb">⚖️</span></i> M1 · 분류 활동</div>
     <h1>자동화하기 <span class="hl3">좋은 일</span> vs <span class="hl2">어려운 일</span></h1>
     <p class="subtitle">자동화는 "반복 + 규칙이 명확"할 때 빛납니다. 매번 다른 판단이 필요하면 어려운 일입니다.</p>
@@ -905,114 +927,433 @@ html.icons-ok i[data-lucide] .ico-fb { display: none; }
     </div>
     <div class="success-box">
       <i data-lucide="lightbulb"><span class="ico-fb">💡</span></i>
-      <p><span class="t">팁:</span> "규칙이 분명한 자연어 분류"(예: CS 문의를 배송/환불로 나누기)는 <b>AI 노드</b>로 자동화 가능 — 2일차에 직접 다룹니다.</p>
+      <p><span class="t">팁:</span> "규칙이 분명한 자연어 분류"(예: CS 문의를 배송/환불로 나누기)는 <b>AI 노드</b>로 자동화 가능 — 2일차에 회사 API 키로 직접 다룹니다.</p>
     </div>
-      <aside class="kit-notes" hidden>자동화하기 좋은 일=규칙이 분명하고 반복되는 일(매일 9시 편성표 메일), 어려운 일=매번 사람 판단이 달라지는 일(클레임 보상 여부). 업무를 불러주고 손들기로 분류 활동(시간 절약). 밀리면 분류를 3개로 줄인다.</aside>
+      <aside class="kit-notes" hidden>좋은 일=반복+규칙 분명(매일 9시 편성표 메일), 어려운 일=매번 사람 판단(보상 여부). 업무를 불러주고 손들기로 분류 활동. AI 노드로 "규칙 있는 자연어 분류"는 가능하다고 다리 놓기.</aside>
   </div>
 
-  <!-- 6 -->
-  <div class="slide" data-title="오개념 깨기" data-chapter="M1 · 자동화 이해">
-    <div class="slide-label"><i data-lucide="alert-triangle"><span class="ico-fb">⚠️</span></i> M1 · 흔한 오개념 교정</div>
-    <h1>시작 전에 내려놓을 <span class="hl2">3가지 오해</span></h1>
-    <div class="warn-box">
-      <i data-lucide="x-circle"><span class="ico-fb">❌</span></i>
-      <p><span class="t">"자동화 = 코딩이라 나는 못 한다"</span> → n8n은 <b>노드를 화면에서 연결</b>하는 방식. 오늘 코딩 0줄로 첫 워크플로를 만듭니다.</p>
+  <!-- 6 AI 업무자동화 전문가 -->
+  <div class="slide" data-title="AI 업무자동화 전문가" data-chapter="M1 · 자동화+AI-native">
+    <div class="slide-label"><i data-lucide="user-cog"><span class="ico-fb">🧑‍💻</span></i> M1 · "AI 업무 자동화 전문가"란</div>
+    <h1>도구를 아는 사람이 아니라<br><span class="hl">발견 → 설계 → 구축 → 유지</span>하는 사람</h1>
+    <p class="subtitle">내 업무에서 자동화할 곳을 찾아 워크플로로 만들고 고쳐 나가는 사람입니다.</p>
+    <div class="grid-2">
+      <div class="card"><div class="card-icon"><i data-lucide="search"><span class="ico-fb">🔍</span></i></div><div class="card-title">① 발견</div><div class="card-body">내 업무 중 <strong>반복되고 규칙이 분명한</strong> 작업을 찾아낸다.</div></div>
+      <div class="card"><div class="card-icon"><i data-lucide="pen-tool"><span class="ico-fb">✏️</span></i></div><div class="card-title">② 설계</div><div class="card-body"><strong>자동화 PRD</strong>(트리거·입력·처리·출력·예외)로 흐름을 먼저 그린다.</div></div>
+      <div class="card"><div class="card-icon"><i data-lucide="hammer"><span class="ico-fb">🔨</span></i></div><div class="card-title">③ 구축</div><div class="card-body">Claude Code+n8n-MCP로 노드를 <strong>순차 빌드·검증</strong>해 동작시킨다.</div></div>
+      <div class="card"><div class="card-icon"><i data-lucide="wrench"><span class="ico-fb">🔧</span></i></div><div class="card-title">④ 유지</div><div class="card-body">에러 핸들링·로그 확인으로 <strong>실패에 대비</strong>하고 고친다.</div></div>
     </div>
-    <div class="warn-box">
-      <i data-lucide="x-circle"><span class="ico-fb">❌</span></i>
-      <p><span class="t">"한 번 만들면 끝이다"</span> → 데이터·계정·정책은 바뀝니다. <b>에러 핸들링과 로그 확인</b>이 필수(M6에서 연습).</p>
-    </div>
-    <div class="warn-box">
-      <i data-lucide="x-circle"><span class="ico-fb">❌</span></i>
-      <p><span class="t">"툴이 알아서 다 해준다"</span> → 무엇을 언제 시작하고(트리거) 어디로 보낼지(매핑)는 <b>내가 설계</b>해야 합니다. 엑셀 매크로와도 다릅니다.</p>
-    </div>
-    <div class="kit-tf" data-group="m1" data-id="tf-coding" data-answer="false">
-      <p class="kit-tf-claim">"n8n으로 자동화하려면 결국 코딩을 할 줄 알아야 한다."</p>
-      <div class="kit-tf-btns" role="group" aria-label="참 또는 거짓">
-        <button type="button" class="kit-tf-btn" data-val="true">참</button>
-        <button type="button" class="kit-tf-btn" data-val="false">거짓</button>
-      </div>
-      <p class="kit-tf-live" aria-live="polite"></p>
-      <div class="kit-tf-why" hidden>
-        <strong>거짓.</strong> n8n은 노드를 화면에서 드래그·연결하는 방식이라 코딩 0줄로 첫 워크플로를 만들 수 있습니다. (값을 꺼내는 <span class="mono">{{ }}</span> 표현식만 약간 익히면 됩니다.)
-      </div>
-    </div>
-      <aside class="kit-notes" hidden>내려놓을 오해 3가지: ①자동화=코딩이라 어렵다(오늘 코드 안 침) ②한 번 만들면 끝(에러처리·유지보수 필요→디버깅 배움) ③엑셀 매크로와 같다(n8n은 시트뿐 아니라 메일·외부 서비스·AI까지 묶음).</aside>
+      <aside class="kit-notes" hidden>전문가=발견→설계→구축→유지. 오늘 연습하는 게 정확히 이 4단계라고 연결. 설계 단계가 곧 M4 PRD, 구축이 Claude Code+MCP.</aside>
   </div>
 
-  <!-- 7 -->
-  <div class="slide" data-title="도구 지도 (핵심)" data-chapter="M1 · 자동화 이해">
-    <div class="slide-label"><i data-lucide="key-round"><span class="ico-fb">🔑</span></i> M1 · 도구 지도 — 오늘의 가장 중요한 구분</div>
-    <h1><span class="hl">Claude 구독</span> ≠ <span class="hl2">Anthropic API 키</span><br>같은 'Claude'지만 용도가 다릅니다</h1>
+  <!-- 7 도구지도 4구분 (IMG-01 SVG) -->
+  <div class="slide" data-title="도구 지도 4구분 (핵심)" data-chapter="M1 · 자동화+AI-native">
+    <div class="slide-label"><i data-lucide="key-round"><span class="ico-fb">🔑</span></i> M1 · IMG-01 도구 지도 — 오늘 가장 중요한 구분</div>
+    <h1>같은 'Claude'·'AI'라도 <span class="hl">용도가 4가지</span>로 다릅니다</h1>
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 920 360" width="100%" role="img" aria-label="AI 도구 지도 4구분: Claude Code, n8n-MCP, Claude 챗 구독, 워크플로 Anthropic 노드(API 키)" style="max-width:920px;font-family:inherit">
+        <!-- Claude Code -->
+        <rect x="20" y="20" rx="14" ry="14" width="420" height="150" fill="#16261f" stroke="#34d399" stroke-width="1.5"/>
+        <text x="40" y="52" fill="#e4e6ef" font-size="16" font-weight="700">① Claude Code <tspan fill="#34d399">(터미널 AI)</tspan></text>
+        <text x="40" y="80" fill="#aeb6cc" font-size="12.5">설치 명령 생성 · 에러 해결 · 워크플로 빌드</text>
+        <text x="40" y="100" fill="#aeb6cc" font-size="12.5">파트너. n8n-MCP를 붙여 정확한 노드를 부른다.</text>
+        <text x="40" y="150" fill="#8b8fa7" font-size="11.5" font-style="italic">결제: Claude 구독(Pro 등)으로 구동</text>
+        <!-- n8n-MCP -->
+        <rect x="480" y="20" rx="14" ry="14" width="420" height="150" fill="#1a2740" stroke="#4f8cff" stroke-width="1.5"/>
+        <text x="500" y="52" fill="#e4e6ef" font-size="16" font-weight="700">② n8n-MCP <tspan fill="#4f8cff">(n8n 노드 두뇌)</tspan></text>
+        <text x="500" y="80" fill="#aeb6cc" font-size="12.5">Claude Code에 붙이는 도구 — 정확한 노드명·</text>
+        <text x="500" y="100" fill="#aeb6cc" font-size="12.5">파라미터 조회·워크플로 검증(환각↓).</text>
+        <text x="500" y="150" fill="#8b8fa7" font-size="11.5" font-style="italic">결제: 무료 한도/자체호스팅 ⚠️당일 확인</text>
+        <!-- Claude 챗 구독 -->
+        <rect x="20" y="190" rx="14" ry="14" width="420" height="150" fill="#1f2438" stroke="#8b8fa7" stroke-width="1.5"/>
+        <text x="40" y="222" fill="#e4e6ef" font-size="16" font-weight="700">③ Claude 챗 구독 <tspan fill="#aeb6cc">(claude.ai)</tspan></text>
+        <text x="40" y="250" fill="#aeb6cc" font-size="12.5">채팅창 — 설계·디버깅 보조.</text>
+        <text x="40" y="270" fill="#aeb6cc" font-size="12.5">워크플로 안 AI 노드는 <tspan fill="#e66">구동 못 함</tspan>.</text>
+        <text x="40" y="320" fill="#8b8fa7" font-size="11.5" font-style="italic">결제: 월 구독(USD) ⚠️요금 당일 확인</text>
+        <!-- 워크플로 Anthropic 노드 -->
+        <rect x="480" y="190" rx="14" ry="14" width="420" height="150" fill="#2a2415" stroke="#f59e42" stroke-width="2.5"/>
+        <text x="500" y="222" fill="#e4e6ef" font-size="16" font-weight="700">④ 워크플로 Anthropic 노드 <tspan fill="#f59e42">★</tspan></text>
+        <text x="500" y="250" fill="#aeb6cc" font-size="12.5">n8n 안의 AI 노드(분류·요약)를 실제 실행.</text>
+        <text x="500" y="270" fill="#aeb6cc" font-size="12.5">2일차에 회사 키로 직접 핸즈온.</text>
+        <text x="500" y="320" fill="#f59e42" font-size="11.5" font-style="italic">결제: 별도 Anthropic API 키(종량과금)</text>
+      </svg>
+      <div class="diagram-cap">①②③은 "만드는 동안" 돕는 도구, ④는 "워크플로가 돌 때" 실행되는 노드 — 결제·정체가 모두 다릅니다.</div>
+    </div>
+    <div class="warn-box">
+      <i data-lucide="alert-triangle"><span class="ico-fb">⚠️</span></i>
+      <p><span class="t">⚠️ ① 결제 주의(당일 확인):</span> Claude Code는 <b>Pro/Max 구독으로</b> 쓰되, 환경변수에 <code>ANTHROPIC_API_KEY</code>가 설정돼 있으면 구독 대신 <b>API 종량과금</b>으로 빠질 수 있습니다 — 강의 직전 키 환경변수 설정 여부를 확인하세요.</p>
+    </div>
+      <aside class="kit-notes" hidden>오늘 가장 중요한 슬라이드. ①Claude Code(터미널 파트너) ②n8n-MCP(노드 두뇌) ③Claude 챗 구독(설계 보조) ④워크플로 Anthropic 노드(API 키로 실행). ④만 종량과금 API 키이고 ③ 구독으로는 절대 안 돈다. 절대 빨리 넘기지 말 것. ①Claude Code는 Pro/Max 구독으로 쓰되 ANTHROPIC_API_KEY가 잡혀 있으면 구독 대신 API 과금으로 빠질 수 있으니 키 환경변수 확인(당일 확인).</aside>
+  </div>
+
+  <!-- 8 Anthropic 노드 ≠ Claude Pro -->
+  <div class="slide" data-title="Anthropic 노드 ≠ Pro" data-chapter="M1 · 자동화+AI-native">
+    <div class="slide-label"><i data-lucide="alert-octagon"><span class="ico-fb">🚫</span></i> M1 · 가장 자주 깨지는 가정</div>
+    <h1>워크플로 <span class="hl2">Anthropic 노드</span> ≠ <span class="hl">Claude Pro 구독</span></h1>
     <div class="grid-2">
       <div class="card highlight">
         <div class="card-icon"><i data-lucide="message-circle"><span class="ico-fb">💬</span></i></div>
-        <div class="card-title">Claude 구독 (claude.ai 챗)</div>
+        <div class="card-title">Claude Pro 챗 구독</div>
         <div class="card-body">
-          claude.ai <strong>챗</strong>. 회사가 제공.<br>
-          용도: <strong>설계·디버깅 보조</strong> — 워크플로 아이디어, 표현식 작성, 에러 로그 해석.<br>
-          <span style="color:var(--danger)">워크플로 안의 AI 노드는 구동 못 함.</span>
+          claude.ai <strong>채팅</strong>. 회사 제공.<br>
+          용도: <strong>설계·디버깅 보조</strong> — 아이디어·표현식·에러 로그 해석.<br>
+          <span style="color:var(--danger)">워크플로 안 AI 노드는 구동 못 함.</span>
         </div>
       </div>
       <div class="card warn-card">
         <div class="card-icon" style="color:var(--warn)"><i data-lucide="plug"><span class="ico-fb">🔌</span></i></div>
-        <div class="card-title">Anthropic API 키</div>
+        <div class="card-title">워크플로 Anthropic 노드</div>
         <div class="card-body">
-          console.anthropic.com 발급. <strong>회사 제공 확정</strong>.<br>
-          용도: <strong>n8n 워크플로 안의 AI 노드</strong>(Anthropic Chat Model 등)를 실제로 실행.<br>
-          2일차에 <strong>여러분이 직접 핸즈온</strong>합니다.
+          n8n Credentials에 <strong>Anthropic API 키</strong>(종량과금).<br>
+          용도: <strong>워크플로 안 AI 노드</strong>(Anthropic Chat Model)를 실제 실행.<br>
+          2일차에 <strong>회사 키로 직접 핸즈온</strong>.
         </div>
       </div>
     </div>
     <div class="danger-box">
       <i data-lucide="alert-octagon"><span class="ico-fb">🚫</span></i>
-      <p><span class="t">가장 자주 깨지는 가정:</span> "Claude 구독이 있으니 워크플로에서 그대로 쓰면 되겠지" → <b>아니요.</b> n8n의 Anthropic 노드는 <b>API 키로만</b> 동작합니다. (출처: n8n 공식 커뮤니티 + Anthropic 헬프센터)</p>
+      <p><span class="t">가장 자주 깨지는 가정:</span> "Claude Pro 구독이 있으니 워크플로에서 그대로 쓰면 되겠지" → <b>아니요.</b> n8n의 Anthropic 노드는 <b>API 키로만</b> 동작합니다. (출처: n8n 공식 credentials docs + Anthropic 헬프센터)</p>
     </div>
-    <div class="kit-mcq" data-group="m1" data-id="mcq-claude" data-question="Claude 구독 vs API 키">
-      <p class="kit-mcq-q">n8n 워크플로 안의 AI 노드(Anthropic 노드)를 실제로 구동하려면 무엇이 필요할까요?</p>
+    <div class="kit-mcq" data-group="m1" data-id="mcq-anthropic" data-question="Anthropic 노드 vs Pro">
+      <p class="kit-mcq-q">n8n 워크플로 안의 Anthropic 노드를 실제로 구동하려면 무엇이 필요할까요?</p>
       <div class="kit-mcq-opts" role="group" aria-label="객관식 보기">
-        <button type="button" class="kit-mcq-opt">A. claude.ai 챗 구독만 있으면 된다</button>
-        <button type="button" class="kit-mcq-opt" data-correct>B. console.anthropic.com에서 발급한 Anthropic API 키</button>
-        <button type="button" class="kit-mcq-opt">C. n8n Cloud 유료 플랜이면 자동 포함</button>
+        <button type="button" class="kit-mcq-opt">A. 개인 Claude Pro 챗 구독만 있으면 된다</button>
+        <button type="button" class="kit-mcq-opt" data-correct>B. 별도 Anthropic API 키(종량과금) — 보통 회사가 제공</button>
+        <button type="button" class="kit-mcq-opt">C. n8n self-host면 자동으로 포함된다</button>
         <button type="button" class="kit-mcq-opt">D. 아무것도 필요 없다</button>
       </div>
       <p class="kit-mcq-live" aria-live="polite"></p>
       <div class="kit-mcq-explain" hidden>
-        <strong>정답: B.</strong> 워크플로 안의 Anthropic 노드는 <b>API 키로만</b> 동작합니다. claude.ai 챗 구독은 설계·디버깅 보조용일 뿐 워크플로 AI 노드는 구동하지 못합니다.
+        <strong>정답: B.</strong> 워크플로 안 Anthropic 노드는 <b>API 키로만</b> 동작합니다. Claude Pro 챗 구독은 설계·디버깅 보조용일 뿐, 워크플로 AI 노드를 구동하지 못합니다.
       </div>
     </div>
-      <aside class="kit-notes" hidden>오늘 가장 중요한 슬라이드 — 절대 빨리 넘기지 말고 두 번 반복. 개인 Claude 구독(claude.ai 챗=설계·디버깅 보조)과 Anthropic API 키(워크플로 안에서 Claude 실행)는 완전히 다르다. 구독이 있어도 워크플로 안 Claude 노드는 그냥 안 돌아간다(가장 자주 깨지는 가정). 질문 "구독으로 워크플로 Claude가 바로 돌까?"에 다수가 "된다"로 오답 → "안 됩니다"로 정정.</aside>
+      <aside class="kit-notes" hidden>도구지도의 핵심 한 줄을 다시. Pro 구독(③ 챗)과 워크플로 Anthropic 노드(④ API 키)는 완전히 다르다. 구독이 있어도 워크플로 AI 노드는 안 돈다. 다수가 "된다"로 오답 → "안 됩니다"로 정정.</aside>
   </div>
 
-  <!-- ===================== CH3: M2 n8n 기초 ===================== -->
+  <!-- ===================== CH3: M2 self-host 설치 ===================== -->
 
-  <!-- 8 -->
-  <div class="slide" data-title="n8n이란" data-chapter="M2 · n8n 기초">
-    <div class="slide-label"><i data-lucide="boxes"><span class="ico-fb">📦</span></i> M2 · n8n 기초</div>
-    <h1><span class="hl">n8n</span> = 노드를 연결해 만드는<br>워크플로 자동화 도구</h1>
-    <p class="subtitle">서비스(구글시트·Gmail·Claude…)들을 노드로 놓고 선으로 이어, "이런 일이 생기면 → 이걸 한다"를 흐름으로 그립니다.</p>
-    <div class="quote-box">
-      <p>핵심 비유 🧩 — n8n 워크플로는 <b>컨베이어 벨트</b>입니다. <b>트리거</b>가 벨트를 켜고, 데이터(아이템)가 <b>노드</b>를 하나씩 거치며 가공되어, 마지막 <b>액션</b>에서 시트·메일로 나갑니다.</p>
+  <!-- 9 왜 self-host -->
+  <div class="slide" data-title="왜 self-host" data-chapter="M2 · self-host 설치">
+    <div class="slide-label"><i data-lucide="server"><span class="ico-fb">🖥️</span></i> M2 · self-host 설치 (Claude Code와)</div>
+    <h1>왜 <span class="hl">내 노트북</span>에 직접 띄우나 — 데이터 주권</h1>
+    <p class="subtitle">클라우드 대신 내 노트북/회사 서버에 직접 올리면, 데이터와 운영을 내가 통제합니다(대신 운영 책임도 내가).</p>
+    <div class="grid-2">
+      <div class="card success-card">
+        <div class="card-icon" style="color:var(--success)"><i data-lucide="shield-check"><span class="ico-fb">🛡️</span></i></div>
+        <div class="card-title">self-host의 장점</div>
+        <div class="card-body">
+          • <strong>데이터 주권</strong> — 매출·CS·계정이 내 노트북 안에<br>
+          • 사내 시스템과 직접 연동, 외부 전송 최소화<br>
+          • 페이로드·환경변수를 자유롭게 조정
+        </div>
+      </div>
+      <div class="card warn-card">
+        <div class="card-icon" style="color:var(--warn)"><i data-lucide="alert-triangle"><span class="ico-fb">⚠️</span></i></div>
+        <div class="card-title">대신 따라오는 책임</div>
+        <div class="card-body">
+          • 설치·타임존·업데이트를 직접 관리<br>
+          • 백업(<code>~/.n8n</code> 폴더 복사)·보안(계정·HTTPS)<br>
+          • 막힐 때 스스로 진단 → <strong>Claude Code가 파트너</strong>
+        </div>
+      </div>
     </div>
-    <ul class="lead-list">
-      <li><i data-lucide="mouse-pointer-click"><span class="ico-fb">🖱️</span></i><span><b>코딩 없이</b> 노드를 드래그·연결로 구성 (표현식만 약간)</span></li>
-      <li><i data-lucide="cloud"><span class="ico-fb">☁️</span></i><span>이 강의 실습 환경 = <b>n8n Cloud</b>(매니지드). 가입하면 바로 시작</span></li>
-    </ul>
-      <aside class="kit-notes" hidden>n8n은 노드를 연결해 만드는 워크플로 자동화 도구. 블록(노드)을 선으로 이으면 자동화 흐름이 된다 — 레고 조립에 비유.</aside>
+    <div class="warn-box">
+      <i data-lucide="info"><span class="ico-fb">ℹ️</span></i>
+      <p><span class="t">오늘 실습:</span> 각자 노트북에 <strong>npx로 가볍게</strong> n8n을 띄웁니다(Docker 없이 · Claude Code 주도). "로컬 체험"과 "사내 24시간 운영"은 다릅니다 — 후자는 사내 IT와(이때는 Docker도 한 방법).</p>
+    </div>
+    <div class="success-box">
+      <i data-lucide="wand-2"><span class="ico-fb">🪄</span></i>
+      <p><span class="t">명령어 외울 필요 없음 — Claude Code가 설치를 대신 다 해줍니다:</span> <b>"내 컴퓨터에 n8n 설치해줘"</b> 한마디면 → <b>①</b> <code>node -v</code>로 Node 확인(없으면 nvm 안내) → <b>②</b> <code>GENERIC_TIMEZONE=Asia/Seoul npx n8n</code> 실행 → <b>③</b> 다운로드·기동 대기 → <b>④</b> <code>localhost:5678</code> 접속 안내 → <b>⑤</b> 에러(포트 충돌·비번 분실 등) 해결까지 <strong>설치 전 과정을 진행</strong>합니다. ★사람이 직접 할 건 셋뿐 — <b>브라우저 열기 · 계정 입력 · 시스템 설치 승인</b>(AI가 다 하지만 이 셋은 사람).</p>
+    </div>
+      <aside class="kit-notes" hidden>self-host=내 노트북에 직접. 장점은 데이터 주권·사내 연동, 비용은 운영 책임(업데이트·백업·보안). 오늘은 각자 노트북에 npx로 가볍게(Docker 없이·Claude Code 주도) 띄우는 실습. ★핵심 메시지: 명령어 외울 필요 없이 "내 컴퓨터에 n8n 설치해줘" 한마디로 Claude Code가 node -v 확인→npx n8n 실행→대기→localhost:5678 안내→에러 해결까지 설치 전 과정을 대신 진행. 사람이 할 건 브라우저 열기·계정 입력·시스템 설치 승인 셋뿐(과장 금지). 운영 책임은 M6/2일차에서 강조.</aside>
   </div>
 
-  <!-- 9 -->
-  <div class="slide" data-title="4가지 핵심 구조" data-chapter="M2 · n8n 기초">
-    <div class="slide-label"><i data-lucide="component"><span class="ico-fb">🧱</span></i> M2 · 워크플로의 4가지 구조</div>
+  <!-- 10 설치 방식: Claude Code 주도·Docker 없이 -->
+  <div class="slide" data-title="설치 방식 (Claude Code 주도·npx)" data-chapter="M2 · self-host 설치">
+    <div class="slide-label"><i data-lucide="bot"><span class="ico-fb">🤖</span></i> M2 · 설치 방식 — Claude Code에게 시킨다</div>
+    <h1>명령 외우지 말고 <span class="hl">Claude Code</span>에게,<br>Docker 없이 <span class="hl3">npx</span>로</h1>
+    <div class="quote-box">
+      <p>수강생이 Claude Code에게 그대로 부탁합니다 🗣️ — <b>"내 컴퓨터에 n8n 설치해서 띄워줘. 타임존 Asia/Seoul, Docker 말고 npx로."</b> Claude Code가 Node를 확인하고, 실행 명령을 만들어 띄워 줍니다.</p>
+    </div>
+    <div class="grid-2">
+      <div class="card highlight">
+        <div class="card-icon"><i data-lucide="list-checks"><span class="ico-fb">🧭</span></i></div>
+        <div class="card-title">Claude Code가 하는 일</div>
+        <div class="card-body"><b>①</b> <code>node -v</code>로 Node 20.19~24.x 확인(없으면 nvm 안내) → <b>②</b> <code>GENERIC_TIMEZONE=Asia/Seoul npx n8n</code> 실행(첫 실행 1~5분) → <b>③</b> <code>localhost:5678</code> 안내.</div>
+      </div>
+      <div class="card success-card">
+        <div class="card-icon" style="color:var(--success)"><i data-lucide="hard-drive"><span class="ico-fb">💾</span></i></div>
+        <div class="card-title">데이터 = <code>~/.n8n</code> 폴더</div>
+        <div class="card-body">워크플로·계정·자격증명이 <code>~/.n8n</code>에 저장되어 <strong>껐다 켜도 유지</strong>됩니다(Docker 볼륨 불필요). 백업은 폴더 복사면 끝.</div>
+      </div>
+    </div>
+    <div class="quote-box">
+      <p>핵심 비유 🧩 — <b><code>~/.n8n</code> 폴더는 "내 워크플로 금고"</b>입니다. n8n을 껐다 켜도, 다시 깔아도 금고 속 워크플로·계정은 그대로 남습니다. 이 폴더만 복사해 두면 그게 곧 백업입니다.</p>
+    </div>
+      <aside class="kit-notes" hidden>설치 방식=Claude Code 주도·Docker 없이 npx. 부탁 문장→Claude Code가 node -v 확인(없으면 nvm)→GENERIC_TIMEZONE=Asia/Seoul npx n8n(첫 실행 1~5분)→localhost:5678 안내. 데이터는 ~/.n8n에 저장(껐다 켜도 유지, 볼륨 불필요), 백업=폴더 복사. 비유는 ~/.n8n=내 워크플로 금고.</aside>
+  </div>
+
+  <!-- 11 npx 실행 명령 (code-copy + CAP-02) -->
+  <div class="slide" data-title="npx n8n 명령" data-chapter="M2 · self-host 설치">
+    <div class="slide-label"><i data-lucide="terminal"><span class="ico-fb">⌨️</span></i> M2 · 실행 명령 (타임존·npx)</div>
+    <h1>내 노트북에 n8n 띄우기 — <span class="hl">한 줄 명령</span></h1>
+    <p class="subtitle">타임존 Asia/Seoul, Docker 없이 npx로. 직접 외우지 말고 Claude Code가 만들어 실행하게 하세요 — 막히면 그대로 물어보면 됩니다.</p>
+    <div class="codeblock" style="position:relative;background:#0d1320;border:1px solid var(--border,#243049);border-radius:12px;padding:14px 16px;margin:14px 0;max-width:880px">
+      <button type="button" aria-label="명령 복사" onclick="try{navigator.clipboard.writeText(this.nextElementSibling.innerText);this.textContent='✓ 복사됨';setTimeout(()=>{this.textContent='⧉ 복사';},1500);}catch(e){this.textContent='복사 실패';}" style="position:absolute;top:10px;right:10px;font-size:12px;padding:4px 10px;border-radius:7px;border:1px solid var(--accent,#6cf);background:transparent;color:var(--accent,#6cf);cursor:pointer">⧉ 복사</button>
+      <pre class="mono" style="margin:0;white-space:pre-wrap;word-break:break-all;color:#cfe3ff;font-size:13.5px;line-height:1.65">node -v                                  # Node 20.19~24.x 확인 (없으면 nvm 안내)
+GENERIC_TIMEZONE=Asia/Seoul npx n8n      # 첫 실행은 1~5분 다운로드(정상)</pre>
+    </div>
+    <figure class="img-slot">
+      <i data-lucide="image"><span class="ico-fb">🖼️</span></i>
+      <div class="img-slot-title">[CAP-02-install · 강사 붙여넣기] 터미널 npx n8n 실행 + localhost:5678 Owner 생성 화면</div>
+      <div class="img-slot-meta">무엇: 터미널에서 <b>npx n8n</b> 실행 후 <b>http://localhost:5678 → Owner 계정 생성</b> 화면 / 시점: Lab1 dry-run / alt: "npx로 띄운 n8n self-host 첫 화면"</div>
+      <figcaption>⚠️ Node 지원 범위·npx 캐시 동작은 버전에 따라 변할 수 있음 — 강사가 당일 라이브 재확인(공식 install-with-npm).</figcaption>
+    </figure>
+      <aside class="kit-notes" hidden>node -v로 Node 20.19~24.x 확인(없으면 nvm)→GENERIC_TIMEZONE=Asia/Seoul npx n8n(첫 실행 1~5분 다운로드, 정상). "복사"로 가져가되 직접 치지 말고 Claude Code에 "Asia/Seoul, Docker 말고 npx로 n8n 띄워줘, 나는 윈도우(또는 맥)야"로 생성·실행받게 한다. Node 범위·npx 동작은 당일 재확인 각주.</aside>
+  </div>
+
+  <!-- 12 localhost → Owner -->
+  <div class="slide" data-title="localhost:5678 → Owner" data-chapter="M2 · self-host 설치">
+    <div class="slide-label"><i data-lucide="user-plus"><span class="ico-fb">👤</span></i> M2 · 첫 접속 → Owner 계정</div>
+    <h1><span class="hl">localhost:5678</span> 접속 → <span class="hl3">Owner 계정</span> 생성</h1>
+    <ul class="priority-list">
+      <li><span class="priority-badge p3">1</span><div><b>Node 확인</b> — Claude Code가 <span class="mono">node -v</span>로 20.19~24.x 확인.<span class="sub">없거나 범위 밖이면 nvm 설치를 안내(시스템 변경 승인은 내가).</span></div></li>
+      <li><span class="priority-badge p4">2</span><div><b>명령 실행</b> — 앞 슬라이드 <span class="mono">GENERIC_TIMEZONE=Asia/Seoul npx n8n</span>. 첫 실행은 다운로드로 1~5분, 이후 "n8n ready on ..." 메시지.</div></li>
+      <li><span class="priority-badge p3">3</span><div><b>브라우저</b> <span class="mono">http://localhost:5678</span> 접속 → <b>Setup Wizard</b>에서 이메일·비밀번호 입력 = <b>Owner 계정</b> → 에디터 진입.</div></li>
+      <li><span class="priority-badge p5">4</span><div><b>체크포인트</b> — New 워크플로 → Manual Trigger 1개 추가 → 실행 <b>녹색</b>이면 설치 성공.</div></li>
+    </ul>
+    <div class="success-box">
+      <i data-lucide="hard-drive"><span class="ico-fb">💾</span></i>
+      <p><span class="t">데이터는 <code>~/.n8n</code>에:</span> Owner 계정·워크플로가 이 폴더에 저장되어 껐다 켜도 유지됩니다(Docker 볼륨 불필요). 막히면 다음 슬라이드처럼 에러를 Claude Code에 붙여넣으세요.</p>
+    </div>
+      <aside class="kit-notes" hidden>Node 확인(node -v 20.19~24.x, 없으면 nvm)→GENERIC_TIMEZONE=Asia/Seoul npx n8n→localhost:5678 Setup Wizard에서 이메일·비번 입력=Owner→빈 워크플로 Manual Trigger 실행 녹색이면 설치 성공. 데이터는 ~/.n8n에 저장(껐다 켜도 유지, 볼륨 불필요). 막히면 에러를 Claude Code에.</aside>
+  </div>
+
+  <!-- 13 막힘 → npx 에러를 Claude Code에 (CAP-03) -->
+  <div class="slide" data-title="막힘 → Claude Code와 해결" data-chapter="M2 · self-host 설치">
+    <div class="slide-label"><i data-lucide="bot"><span class="ico-fb">🤖</span></i> M2 · ★막힘 시 Claude Code 파트너</div>
+    <h1>에러가 나면 <span class="hl2">터미널 출력</span>을 <span class="hl">Claude Code</span>에 붙여넣으세요</h1>
+    <p class="subtitle">혼자 헤매지 말고, npx 실행 중 뜬 에러를 그대로 붙여 "이 에러 왜 나? 어떻게 고쳐?"라고 물으면 같이 디버깅하는 파트너가 됩니다.</p>
+    <div class="codeblock" style="position:relative;background:#0d1320;border:1px solid var(--border,#243049);border-radius:12px;padding:14px 16px;margin:14px 0;max-width:880px">
+      <button type="button" aria-label="명령 복사" onclick="try{navigator.clipboard.writeText(this.nextElementSibling.innerText);this.textContent='✓ 복사됨';setTimeout(()=>{this.textContent='⧉ 복사';},1500);}catch(e){this.textContent='복사 실패';}" style="position:absolute;top:10px;right:10px;font-size:12px;padding:4px 10px;border-radius:7px;border:1px solid var(--accent,#6cf);background:transparent;color:var(--accent,#6cf);cursor:pointer">⧉ 복사</button>
+      <pre class="mono" style="margin:0;white-space:pre-wrap;word-break:break-all;color:#cfe3ff;font-size:13.5px;line-height:1.65">GENERIC_TIMEZONE=Asia/Seoul npx n8n
+# ↑ 실행 중 뜬 에러 출력 전체를 복사해서 Claude Code에 그대로 붙여넣기:
+#   "n8n을 npx로 띄우는데 이 에러가 떠. 원인이 뭐고 어떻게 고쳐?"</pre>
+    </div>
+    <figure class="img-slot">
+      <i data-lucide="image"><span class="ico-fb">🖼️</span></i>
+      <div class="img-slot-title">[CAP-03-claude-fix · 강사 붙여넣기] npx 실행 에러를 Claude Code에 붙여 해결하는 화면</div>
+      <div class="img-slot-meta">무엇: 터미널 <b>npx n8n 에러 출력 → Claude Code 채팅에 붙여넣고 해결책 받는</b> 화면 / 시점: Lab1 dry-run / alt: "에러 출력을 Claude Code에 붙여 함께 디버깅"</div>
+    </figure>
+    <div class="success-box">
+      <i data-lucide="messages-square"><span class="ico-fb">💬</span></i>
+      <p><span class="t">AI는 만능이 아니라 파트너:</span> Claude Code가 <b>초안·가설</b>을 주면, 실제로 맞는지는 <b>다시 실행해 확인</b>합니다. <b>브라우저 열기·Owner 정보 입력·Node 설치 승인</b>은 내가 합니다 — "같이 디버깅하는 파트너"이지, 대신 책임지는 존재가 아닙니다.</p>
+    </div>
+      <aside class="kit-notes" hidden>핵심 행동: 막히면 npx 실행 중 뜬 에러 출력을 통째로 Claude Code에 붙여 "원인·해결" 질문. AI는 가설/초안을 주고 검증은 다시 실행으로. Claude Code가 못 하는 것=브라우저 열기·Owner 입력·Node 설치 승인은 사용자. 과장 금지("같이 디버깅하는 파트너").</aside>
+  </div>
+
+  <!-- 14 트러블슈팅 7카드 -->
+  <div class="slide" data-title="트러블슈팅 7카드" data-chapter="M2 · self-host 설치">
+    <div class="slide-label"><i data-lucide="life-buoy"><span class="ico-fb">🛟</span></i> M2 · 흔한 막힘 7가지</div>
+    <h1>설치 중 <span class="hl2">자주 막히는 7가지</span>와 해결</h1>
+    <div class="grid-2">
+      <div class="card warn-card"><div class="card-title">① <span class="mono">npm ERR! code EACCES</span></div><div class="card-body">전역설치 권한 → ★<strong><span class="mono">sudo</span> 금지</strong>. <span class="mono">nvm install 20</span>으로 재설치.</div></div>
+      <div class="card"><div class="card-title">② Node 버전 안 맞음</div><div class="card-body"><span class="mono">Unsupported engine</span> → <span class="mono">node -v</span> 확인 후 <span class="mono">nvm use 20</span>(또는 22)로 전환.</div></div>
+      <div class="card"><div class="card-title">③ 포트 5678 점유</div><div class="card-body"><span class="mono">EADDRINUSE :::5678</span> → <span class="mono">N8N_PORT=8080 npx n8n</span> → <span class="mono">localhost:8080</span>.</div></div>
+      <div class="card warn-card"><div class="card-title">④ 한참 무반응</div><div class="card-body">npx 첫 다운로드 → <strong>1~5분은 정상</strong>. 강의 전 미리 1회 실행해 캐시해 두면 빠름.</div></div>
+      <div class="card"><div class="card-title">⑤ (Win) <span class="mono">n8n: command not found</span></div><div class="card-body">전역 PATH 누락 → <span class="mono">npm config get prefix</span>로 경로 확인·PATH 추가.</div></div>
+      <div class="card warn-card"><div class="card-title">⑥ 스케줄 시간 이상</div><div class="card-body">타임존 미설정 → <span class="mono">GENERIC_TIMEZONE=Asia/Seoul</span> 붙여 재실행.</div></div>
+    </div>
+    <div class="warn-box">
+      <i data-lucide="user-check"><span class="ico-fb">👤</span></i>
+      <p><span class="t">⑦ Owner 화면이 안 보임:</span> 이미 생성된 인스턴스(<code>~/.n8n</code> 잔존) → 기존 계정으로 로그인. <span style="color:var(--text-dim)">어느 카드든 막히면 → <b>에러 출력을 Claude Code에</b>.</span></p>
+    </div>
+      <aside class="kit-notes" hidden>7카드: EACCES(sudo 금지·nvm)/Node 버전 안 맞음(nvm 전환)/포트충돌(N8N_PORT=8080)/npx 첫 실행 느림(1~5분 정상)/Win PATH 누락/타임존 미설정/Owner 이미 생성. 빠르게 훑고, "막히면 에러 출력을 Claude Code에"로 수렴. ①⑤는 환경에서 자주 나옴.</aside>
+  </div>
+
+  <!-- ===================== LAB 1 실습 step 슬라이드 (M2 self-host 설치) ===================== -->
+
+  <!-- L1-0 지금 실습 안내 -->
+  <div class="slide" data-title="▶ 지금 실습: 워크북 Lab 1 펴기" data-chapter="M2 · self-host 설치">
+    <div class="slide-label"><i data-lucide="play-circle"><span class="ico-fb">▶️</span></i> M2 · 실습 시작 — 워크북 Lab 1</div>
+    <h1><span class="hl">▶ 지금 실습</span> — 워크북 <span class="hl3">Lab 1</span>을 펴세요</h1>
+    <p class="subtitle">지금부터 내 노트북에 <b>Docker 없이</b> n8n을 직접 띄웁니다. 명령을 외우지 말고 <b>Claude Code에게 시켜서</b> 설치하고, 막히면 함께 풉니다. 한 동작 = 한 슬라이드로 따라오세요.</p>
+    <div class="grid-2">
+      <div class="card highlight">
+        <div class="card-icon"><i data-lucide="target"><span class="ico-fb">🎯</span></i></div>
+        <div class="card-title">이번 랩에서 만드는 것</div>
+        <div class="card-body"><code>http://localhost:5678</code> 에디터 접속 + <b>Owner 계정</b> 생성 + 빈 워크플로에 <b>Manual Trigger 1개 실행이 녹색</b>.</div>
+      </div>
+      <div class="card success-card">
+        <div class="card-icon" style="color:var(--success)"><i data-lucide="check-circle"><span class="ico-fb">✅</span></i></div>
+        <div class="card-title">완성 모습</div>
+        <div class="card-body">내 Owner 계정으로 에디터 진입 → Manual Trigger 녹색 → 데이터 폴더 <code>~/.n8n</code> 생성 확인.</div>
+      </div>
+    </div>
+    <div class="warn-box">
+      <i data-lucide="book-open"><span class="ico-fb">📖</span></i>
+      <p><span class="t">손으로 채우는 자료:</span> 워크북 Lab 1의 체크박스·빈칸(<code>____</code>)을 직접 채우며 따라오세요. 막힌 에러는 <b>그대로 Claude Code에 붙여넣어</b> 함께 풉니다.</p>
+    </div>
+      <aside class="kit-notes" hidden>Lab1 실습 진입 안내. 워크북 Lab1 펴게 하고, 목표(localhost:5678 Owner + Manual Trigger 녹색)와 완성 모습을 못박는다. 이후 step 슬라이드를 한 동작씩 따라간다. UI·명령은 당일 본인 로컬 npx n8n dry-run 확인 톤.</aside>
+  </div>
+
+  <!-- L1-S1 Claude Code에 설치 부탁 (프롬프트) -->
+  <div class="slide" data-title="Lab1 · Step 1 — Claude Code에 설치 부탁" data-chapter="M2 · self-host 설치">
+    <div class="slide-label"><i data-lucide="bot"><span class="ico-fb">🤖</span></i> M2 · Lab1 Step 1</div>
+    <h1>Lab1 · Step 1 — <span class="hl">Claude Code에게 설치를 부탁</span>한다</h1>
+    <p class="subtitle">명령을 외우지 말고, 아래 문장을 Claude Code에 그대로 입력하세요.</p>
+    <div class="codeblock" style="position:relative;background:#0d1320;border:1px solid var(--border,#243049);border-radius:12px;padding:14px 16px;margin:14px 0;max-width:880px">
+      <button type="button" aria-label="명령 복사" onclick="try{navigator.clipboard.writeText(this.nextElementSibling.innerText);this.textContent='✓ 복사됨';setTimeout(()=>{this.textContent='⧉ 복사';},1500);}catch(e){this.textContent='복사 실패';}" style="position:absolute;top:10px;right:10px;font-size:12px;padding:4px 10px;border-radius:7px;border:1px solid var(--accent,#6cf);background:transparent;color:var(--accent,#6cf);cursor:pointer">⧉ 복사</button>
+      <pre class="mono" style="margin:0;white-space:pre-wrap;word-break:break-all;color:#cfe3ff;font-size:13.5px;line-height:1.65">내 컴퓨터에 n8n을 설치해서 띄워줘.
+타임존은 Asia/Seoul, Docker 말고 npx로.
+나는 윈도우(또는 맥)야.</pre>
+    </div>
+    <div class="grid-2">
+      <div class="card highlight"><div class="card-title">② 무엇을 하나</div><div class="card-body">Claude Code 터미널 채팅에 위 문장을 <b>그대로 입력</b>. Claude Code가 설치 절차를 만들어 안내합니다.</div></div>
+      <div class="card success-card"><div class="card-title">④ ✅ 확인 포인트</div><div class="card-body">Claude Code가 <b>먼저 <code>node -v</code>로 Node를 확인</b>하겠다고 응답하면 정상 진행.</div></div>
+    </div>
+    <div class="danger-box">
+      <i data-lucide="alert-triangle"><span class="ico-fb">⚠️</span></i>
+      <p><span class="t">⑤ 막히면:</span> Claude Code가 <code>sudo npm -g</code>로 설치하려 하면 <b>승인하지 마세요</b>(권한 에러 유발). "Docker 말고 npx로"를 다시 강조하세요. 시스템 변경(Node 설치)은 <b>내가 직접 승인</b>합니다.</p>
+    </div>
+      <aside class="kit-notes" hidden>Step1=Claude Code에 설치 부탁(프롬프트 복사). 핵심은 "Docker 말고 npx" "타임존 Asia/Seoul" "내 OS" 명시. Claude Code가 node -v부터 확인하면 정상. sudo -g 승인 금지. 명령·절차는 버전마다 다름 → 당일 dry-run 확인 톤.</aside>
+  </div>
+
+  <!-- L1-S2 node -v 확인 -->
+  <div class="slide" data-title="Lab1 · Step 2 — node -v로 Node 확인" data-chapter="M2 · self-host 설치">
+    <div class="slide-label"><i data-lucide="terminal"><span class="ico-fb">⌨️</span></i> M2 · Lab1 Step 2</div>
+    <h1>Lab1 · Step 2 — <span class="hl3">node -v</span> 결과를 보고 Node를 확인한다</h1>
+    <p class="subtitle">npx n8n이 돌려면 Node.js가 필요합니다. Claude Code가 버전을 확인하고, 범위 밖이면 nvm을 안내합니다.</p>
+    <div class="codeblock" style="position:relative;background:#0d1320;border:1px solid var(--border,#243049);border-radius:12px;padding:14px 16px;margin:14px 0;max-width:880px">
+      <button type="button" aria-label="명령 복사" onclick="try{navigator.clipboard.writeText(this.nextElementSibling.innerText);this.textContent='✓ 복사됨';setTimeout(()=>{this.textContent='⧉ 복사';},1500);}catch(e){this.textContent='복사 실패';}" style="position:absolute;top:10px;right:10px;font-size:12px;padding:4px 10px;border-radius:7px;border:1px solid var(--accent,#6cf);background:transparent;color:var(--accent,#6cf);cursor:pointer">⧉ 복사</button>
+      <pre class="mono" style="margin:0;white-space:pre-wrap;word-break:break-all;color:#cfe3ff;font-size:13.5px;line-height:1.65">node -v        # 내 Node 버전 출력 (예: v20.x)
+# 범위 예: 20.19~24.x (정확 범위는 당일 확인)
+# 없거나 범위 밖이면 → Claude Code가 nvm 설치/전환 안내:
+nvm install 20</pre>
+    </div>
+    <div class="grid-2">
+      <div class="card highlight"><div class="card-title">② 무엇을 하나</div><div class="card-body">터미널에 <code>node -v</code> 입력 → 출력된 버전을 워크북 빈칸에 적기. 내 Node 버전 = <code>____</code>.</div></div>
+      <div class="card success-card"><div class="card-title">④ ✅ 확인 포인트</div><div class="card-body"><code>v20</code>~<code>v24</code> 범위 안의 버전 문자열이 출력되면 통과.</div></div>
+    </div>
+    <div class="danger-box">
+      <i data-lucide="alert-triangle"><span class="ico-fb">⚠️</span></i>
+      <p><span class="t">⑤ 막히면:</span> <code>command not found: node</code> → Node 미설치. <b>★<code>sudo npm -g</code> 금지</b>, <code>nvm install 20</code>으로 설치(승인은 내가). <code>Unsupported engine</code>이 나중에 뜨면 <code>nvm use 20</code>(또는 22)로 전환.</p>
+    </div>
+      <aside class="kit-notes" hidden>Step2=node -v로 Node 확인. 범위 20.19~24.x는 당일 재확인 각주. 없거나 범위 밖이면 nvm(sudo -g 금지). 워크북 빈칸 "내 Node 버전" 채우기. command not found=미설치, Unsupported engine=버전 전환.</aside>
+  </div>
+
+  <!-- L1-S3 npx n8n 실행 -->
+  <div class="slide" data-title="Lab1 · Step 3 — npx n8n 실행·대기" data-chapter="M2 · self-host 설치">
+    <div class="slide-label"><i data-lucide="play"><span class="ico-fb">▶️</span></i> M2 · Lab1 Step 3</div>
+    <h1>Lab1 · Step 3 — <span class="hl">타임존 붙여 실행</span>하고 1~5분 기다린다</h1>
+    <p class="subtitle">타임존 Asia/Seoul을 붙여 npx로 실행합니다. 첫 실행은 다운로드 때문에 느린 게 정상입니다.</p>
+    <div class="codeblock" style="position:relative;background:#0d1320;border:1px solid var(--border,#243049);border-radius:12px;padding:14px 16px;margin:14px 0;max-width:880px">
+      <button type="button" aria-label="명령 복사" onclick="try{navigator.clipboard.writeText(this.nextElementSibling.innerText);this.textContent='✓ 복사됨';setTimeout(()=>{this.textContent='⧉ 복사';},1500);}catch(e){this.textContent='복사 실패';}" style="position:absolute;top:10px;right:10px;font-size:12px;padding:4px 10px;border-radius:7px;border:1px solid var(--accent,#6cf);background:transparent;color:var(--accent,#6cf);cursor:pointer">⧉ 복사</button>
+      <pre class="mono" style="margin:0;white-space:pre-wrap;word-break:break-all;color:#cfe3ff;font-size:13.5px;line-height:1.65">GENERIC_TIMEZONE=Asia/Seoul npx n8n
+# 첫 실행은 1~5분 다운로드(정상)
+# 직접 치기보다 Claude Code가 만들어 실행하게 하세요</pre>
+    </div>
+    <figure class="img-slot">
+      <i data-lucide="image"><span class="ico-fb">🖼️</span></i>
+      <div class="img-slot-title">[CAP-LAB1-S3 · 강사 dry-run 캡처] 터미널에서 npx n8n 실행 + "ready" 메시지</div>
+      <div class="img-slot-meta">무엇: 터미널에서 <b>GENERIC_TIMEZONE=Asia/Seoul npx n8n</b> 실행 후 n8n이 떴다는 메시지 + 접속 주소 안내 / 시점: Lab1 dry-run / alt: "npx n8n 첫 실행 터미널 화면"</div>
+      <figcaption>⚠️ npx 캐시·다운로드 동작은 버전에 따라 다를 수 있음 — 강사가 당일 라이브 재확인.</figcaption>
+    </figure>
+    <div class="grid-2">
+      <div class="card success-card"><div class="card-title">④ ✅ 확인 포인트</div><div class="card-body">터미널에 <b>n8n이 떴다는 메시지 + <code>localhost:5678</code> 접속 안내</b>가 보이면 통과.</div></div>
+      <div class="card warn-card"><div class="card-title">⑤ 막히면</div><div class="card-body"><code>EADDRINUSE :::5678</code>(포트 점유) → <code>N8N_PORT=8080 npx n8n</code> → <code>localhost:8080</code>. 한참 무반응이면 첫 다운로드라 정상(1~5분).</div></div>
+    </div>
+      <aside class="kit-notes" hidden>Step3=GENERIC_TIMEZONE=Asia/Seoul npx n8n 실행. 첫 실행 1~5분은 정상. 막힘=포트충돌(N8N_PORT=8080)·무반응(다운로드). 직접 치기보다 Claude Code가 생성·실행. 명령은 고정 사실, UI 메시지는 당일 확인.</aside>
+  </div>
+
+  <!-- L1-S4 localhost 열기 -->
+  <div class="slide" data-title="Lab1 · Step 4 — localhost:5678 열기" data-chapter="M2 · self-host 설치">
+    <div class="slide-label"><i data-lucide="globe"><span class="ico-fb">🌐</span></i> M2 · Lab1 Step 4</div>
+    <h1>Lab1 · Step 4 — 브라우저에서 <span class="hl3">localhost:5678</span>을 연다</h1>
+    <p class="subtitle">터미널이 안내한 주소를 브라우저 주소창에 입력합니다. (브라우저 열기는 Claude Code가 못 하는 영역 — 내가 직접)</p>
+    <div class="grid-2">
+      <div class="card highlight">
+        <div class="card-icon"><i data-lucide="mouse-pointer-click"><span class="ico-fb">🖱️</span></i></div>
+        <div class="card-title">② 클릭경로</div>
+        <div class="card-body">브라우저 새 탭 → 주소창에 <code>http://localhost:5678</code> 입력 → Enter. <span class="sub">포트를 바꿨다면 그 포트(예: <code>localhost:8080</code>).</span></div>
+      </div>
+      <div class="card success-card">
+        <div class="card-icon" style="color:var(--success)"><i data-lucide="check-circle"><span class="ico-fb">✅</span></i></div>
+        <div class="card-title">④ ✅ 확인 포인트</div>
+        <div class="card-body">n8n <b>Setup Wizard(또는 로그인) 화면</b>이 뜨면 통과. 워크북 빈칸: 접속 포트 = <code>____</code>.</div>
+      </div>
+    </div>
+    <figure class="img-slot">
+      <i data-lucide="image"><span class="ico-fb">🖼️</span></i>
+      <div class="img-slot-title">[CAP-LAB1-S4 · 강사 dry-run 캡처] 브라우저 localhost:5678 첫 접속 화면</div>
+      <div class="img-slot-meta">무엇: 브라우저 주소창 <b>http://localhost:5678</b> + n8n 첫 화면(Setup Wizard/로그인) / 시점: Lab1 dry-run / alt: "localhost:5678 n8n 첫 접속 화면"</div>
+    </figure>
+    <div class="danger-box">
+      <i data-lucide="alert-triangle"><span class="ico-fb">⚠️</span></i>
+      <p><span class="t">⑤ 막히면:</span> 화면이 안 뜨면 → 터미널에서 n8n이 아직 떠 있는지 확인(꺼졌으면 Step 3 재실행). 사내망 http 접속이 로그인에서 막히면 강사에게 손(보안 쿠키 설정은 당일 확인).</p>
+    </div>
+      <aside class="kit-notes" hidden>Step4=브라우저로 localhost:5678 열기. 브라우저 열기는 사용자 몫(Claude Code 불가). Setup Wizard/로그인 화면 뜨면 통과. 안 뜨면 n8n이 살아있는지·포트 확인. 보안쿠키 막힘은 당일 확인 톤.</aside>
+  </div>
+
+  <!-- L1-S5 Setup Wizard Owner -->
+  <div class="slide" data-title="Lab1 · Step 5 — Setup Wizard로 Owner 생성" data-chapter="M2 · self-host 설치">
+    <div class="slide-label"><i data-lucide="user-plus"><span class="ico-fb">👤</span></i> M2 · Lab1 Step 5</div>
+    <h1>Lab1 · Step 5 — <span class="hl">Setup Wizard</span>로 <span class="hl3">Owner 계정</span>을 만든다</h1>
+    <p class="subtitle">첫 화면에서 이메일·비밀번호를 입력하면 그게 이 인스턴스의 첫 계정 = Owner입니다.</p>
+    <ul class="priority-list">
+      <li><span class="priority-badge p3">1</span><div><b>② 클릭경로</b> — Setup Wizard 화면 → 이메일·이름·비밀번호 입력 → <b>Next/Finish</b>.<span class="sub">UI 라벨은 버전마다 다를 수 있음 — 당일 본인 화면 기준.</span></div></li>
+      <li><span class="priority-badge p4">2</span><div><b>첫 계정 = Owner</b> — 이 계정이 인스턴스 관리자(Owner)입니다. 워크북 빈칸: <code>____</code> 계정.</div></li>
+      <li><span class="priority-badge p5">3</span><div><b>에디터 진입</b> — 계정 생성 후 빈 워크플로 캔버스가 나오면 성공.</div></li>
+    </ul>
+    <div class="success-box">
+      <i data-lucide="hard-drive"><span class="ico-fb">💾</span></i>
+      <p><span class="t">④ ✅ 확인 포인트:</span> Owner 계정으로 <b>에디터에 진입</b>하면 통과. 이 계정·워크플로는 <code>~/.n8n</code> 폴더에 저장됩니다. 워크북 빈칸: 데이터 폴더 = <code>~/.____</code>.</p>
+    </div>
+    <div class="warn-box">
+      <i data-lucide="info"><span class="ico-fb">ℹ️</span></i>
+      <p><span class="t">⑤ 막히면:</span> Setup Wizard가 안 보이고 로그인만 뜨면 → 이미 Owner가 생성된 인스턴스(<code>~/.n8n</code> 잔존). 기존 계정으로 로그인하세요.</p>
+    </div>
+      <aside class="kit-notes" hidden>Step5=Setup Wizard에서 이메일·비번 입력=첫 계정 Owner→에디터 진입. Owner·데이터는 ~/.n8n 저장. 워크북 빈칸(Owner·~/.n8n) 채우기. 막힘=이미 생성됨→로그인. UI 라벨은 당일 확인 톤(브라우저 열기·Owner 입력은 사용자 몫).</aside>
+  </div>
+
+  <!-- L1-S6 Manual Trigger 실행 녹색 -->
+  <div class="slide" data-title="Lab1 · Step 6 — Manual Trigger 실행 녹색" data-chapter="M2 · self-host 설치">
+    <div class="slide-label"><i data-lucide="check-check"><span class="ico-fb">✅</span></i> M2 · Lab1 Step 6 (완료)</div>
+    <h1>Lab1 · Step 6 — <span class="hl">Manual Trigger</span> 1개를 <span class="hl3">실행해 녹색</span> 확인</h1>
+    <p class="subtitle">설치가 끝났는지 가장 빠르게 확인하는 방법 — 빈 워크플로에 트리거 하나 넣고 실행해 봅니다.</p>
+    <ul class="priority-list">
+      <li><span class="priority-badge p3">1</span><div><b>② 클릭경로</b> — 좌측/상단 <b>New</b> 워크플로 → 캔버스 <b>+</b>(Add node) → <b>Manual Trigger</b> 검색·추가.</div></li>
+      <li><span class="priority-badge p4">2</span><div><b>실행</b> — 우하단(또는 상단) <b>Execute Workflow</b>(또는 노드의 <b>Test step</b>) 클릭.<span class="sub">버튼 위치·라벨은 버전마다 다름 — 당일 본인 화면 기준.</span></div></li>
+    </ul>
+    <figure style="margin:14px 0;text-align:center;">
+      <img src="captures/cap-lab1-s6.png" alt="Manual Trigger 실행 성공 — 노드에 녹색 체크" style="max-width:100%;border-radius:10px;border:1px solid var(--line,#233047);" loading="lazy">
+      <figcaption class="img-slot-meta">[CAP-LAB1-S6] Manual Trigger 실행 → 노드 녹색 체크 + "Workflow executed successfully" 토스트</figcaption>
+    </figure>
+    <div class="success-box">
+      <i data-lucide="party-popper"><span class="ico-fb">🎉</span></i>
+      <p><span class="t">④ ✅ 확인 포인트(Lab1 통과):</span> 실행 후 노드에 <b>녹색 체크</b>가 뜨고, <code>~/.n8n</code> 폴더가 생긴 걸 확인하면 <b>Lab1 완료</b>입니다.</p>
+    </div>
+    <div class="danger-box">
+      <i data-lucide="alert-triangle"><span class="ico-fb">⚠️</span></i>
+      <p><span class="t">⑤ 막히면:</span> 실행이 빨강이면 에러 메시지를 <b>그대로 Claude Code에 붙여</b> "왜 났고 어떻게 고쳐?"라고 묻습니다. 노드 추가 버튼이 안 보이면 캔버스 빈 곳을 클릭해 보세요.</p>
+    </div>
+      <aside class="kit-notes" hidden>Step6=Manual Trigger 추가→실행→녹색 체크면 Lab1 통과. New→+(Add node)→Manual Trigger→Execute(버튼 위치는 당일 확인). ~/.n8n 생성 확인. 빨강이면 에러를 Claude Code에. 여기까지가 Lab1 완료.</aside>
+  </div>
+
+  <!-- ===================== CH4: M3 n8n 기초 + 첫 워크플로 ===================== -->
+
+  <!-- 15 트리거·액션·노드·분기 개념 -->
+  <div class="slide" data-title="4가지 핵심 구조" data-chapter="M3 · 기초+첫 워크플로">
+    <div class="slide-label"><i data-lucide="component"><span class="ico-fb">🧱</span></i> M3 · 워크플로의 4가지 구조</div>
     <h1>이 <span class="hl">4개 단어</span>만 알면 워크플로를 읽을 수 있습니다</h1>
     <ul class="priority-list">
-      <li data-click="1"><span class="priority-badge p3">트</span><div><b>트리거 (Trigger)</b> — 흐름을 <b>시작</b>시키는 사건.<span class="sub">예: 매일 09:00에 실행(Schedule Trigger), 외부 호출 수신(<span class="kit-term">Webhook<button type="button" class="kit-term-btn" popovertarget="def-webhook" aria-label="Webhook 용어 설명" aria-expanded="false">ⓘ</button><span class="kit-term-pop" id="def-webhook" popover role="tooltip"><strong>Webhook</strong> — 외부 서비스가 특정 사건이 생겼을 때 미리 약속한 URL로 데이터를 "밀어 보내" 워크플로를 즉시 시작시키는 방식입니다.</span></span>). "언제 켜지나 = 트리거"</span></div></li>
+      <li data-click="1"><span class="priority-badge p3">트</span><div><b>트리거 (Trigger)</b> — 흐름을 <b>시작</b>시키는 사건.<span class="sub">예: 매일 09:00 실행(Schedule), 외부 호출 수신(Webhook). "언제 켜지나 = 트리거"</span></div></li>
       <li data-click="2"><span class="priority-badge p5">액</span><div><b>액션 (Action)</b> — 실제로 <b>일을 수행</b>하는 노드.<span class="sub">예: 구글시트에 행 추가, Gmail로 메일 발송.</span></div></li>
-      <li data-click="3"><span class="priority-badge p4">노</span><div><b>노드 (Node)</b> — 하나의 <b>블록</b>. 트리거도 액션도 모두 노드.<span class="sub">노드 하나 = 한 가지 일. 노드들을 선으로 이으면 워크플로.</span></div></li>
-      <li data-click="4"><span class="priority-badge p2">분</span><div><b>조건분기 (Branch)</b> — 조건에 따라 <b>갈라짐</b>.<span class="sub">예: 매출이 목표 미달이면 이쪽, 아니면 저쪽(IF 노드). M4에서 본격 학습.</span></div></li>
+      <li data-click="3"><span class="priority-badge p4">노</span><div><b>노드 (Node)</b> — 하나의 <b>블록</b>. 트리거도 액션도 모두 노드.<span class="sub">노드 하나 = 한 가지 일. 선으로 이으면 워크플로.</span></div></li>
+      <li data-click="4"><span class="priority-badge p2">분</span><div><b>조건분기 (Branch)</b> — 조건에 따라 <b>갈라짐</b>.<span class="sub">예: 매출 목표 미달이면 이쪽, 아니면 저쪽(IF). M5에서 본격.</span></div></li>
     </ul>
-    <div class="kit-mcq" data-group="m2" data-id="mcq-trigaction" data-question="트리거 vs 액션">
-      <p class="kit-mcq-q">"매일 09:00에 워크플로를 자동으로 시작"하는 것은 무엇에 해당하나요?</p>
+    <div class="kit-mcq" data-group="m3" data-id="mcq-trigaction" data-question="트리거 vs 액션">
+      <p class="kit-mcq-q">"매일 09:00에 워크플로를 자동으로 시작"하는 것은 무엇인가요?</p>
       <div class="kit-mcq-opts" role="group" aria-label="객관식 보기">
         <button type="button" class="kit-mcq-opt" data-correct>A. 트리거 — 흐름을 시작시키는 사건</button>
         <button type="button" class="kit-mcq-opt">B. 액션 — 실제로 일을 수행하는 노드</button>
@@ -1024,171 +1365,90 @@ html.icons-ok i[data-lucide] .ico-fb { display: none; }
         <strong>정답: A.</strong> 정해진 시각에 흐름을 <b>시작</b>시키는 것은 트리거(Schedule Trigger)입니다. 메일 발송·시트 쓰기처럼 일을 <b>수행</b>하는 것이 액션입니다.
       </div>
     </div>
-      <aside class="kit-notes" hidden>흐름을 읽는 네 단어: 트리거(흐름을 시작시키는 사건, 매일 9시), 액션(실제 일 수행, 메일·시트 쓰기), 노드(블록 하나), 조건분기(길을 가르기). 신규 개념 4개가 인지부하 상한이라 더 얹지 않는다.</aside>
+      <aside class="kit-notes" hidden>흐름을 읽는 네 단어: 트리거(시작)·액션(수행)·노드(블록)·조건분기(갈림길). 신규 4개가 인지부하 상한이라 더 얹지 않는다.</aside>
   </div>
 
-  <!-- 9b -->
-  <div class="slide" data-title="트리거 & 액션" data-chapter="M2 · n8n 기초">
-    <div class="slide-label"><i data-lucide="power"><span class="ico-fb">⏻</span></i> M2 · 트리거 & 액션 — 시작과 실행</div>
-    <h1><span class="hl">트리거</span>가 흐름을 켜고<br><span class="hl3">액션</span>이 실제 일을 합니다</h1>
-    <p class="subtitle">워크플로의 두 기둥 — 무엇이 흐름을 <b>시작</b>시키는가(트리거), 그리고 무엇이 실제 <b>일을 수행</b>하는가(액션).</p>
+  <!-- 16 n8n-MCP 연결 (CAP-04) -->
+  <div class="slide" data-title="n8n-MCP 연결" data-chapter="M3 · 기초+첫 워크플로">
+    <div class="slide-label"><i data-lucide="brain"><span class="ico-fb">🧠</span></i> M3 · n8n-MCP — Claude Code의 노드 두뇌</div>
+    <h1><span class="hl">n8n-MCP</span>를 붙이면 노드를 <span class="hl3">정확히</span> 조회합니다</h1>
+    <p class="subtitle">Claude Code가 노드명·파라미터를 "기억"에 의존해 지어내면 환각이 납니다. n8n-MCP는 실제 노드 정보를 조회해 그 환각을 줄입니다.</p>
     <div class="grid-2">
-      <div class="card highlight">
-        <div class="card-icon"><i data-lucide="power"><span class="ico-fb">⏻</span></i></div>
-        <div class="card-title">트리거 — 흐름을 시작시키는 사건</div>
-        <div class="card-body">
-          "<strong>언제 켜지나</strong>"를 정한다.<br>
-          • <strong>Schedule Trigger</strong> — 매일 09:00에 실행<br>
-          • <strong>Webhook</strong> — 외부 호출이 오면 즉시 실행
-        </div>
+      <div class="card warn-card">
+        <div class="card-icon" style="color:var(--warn)"><i data-lucide="cloud-off"><span class="ico-fb">🌫️</span></i></div>
+        <div class="card-title">MCP 없이</div>
+        <div class="card-body">"Google Sheets 노드 파라미터가 아마 이럴 거야" → <strong>지어낸 노드명·필드</strong>로 에디터에서 에러.</div>
       </div>
       <div class="card success-card">
-        <div class="card-icon" style="color:var(--success)"><i data-lucide="zap"><span class="ico-fb">⚡</span></i></div>
-        <div class="card-title">액션 — 실제 일을 수행하는 노드</div>
-        <div class="card-body">
-          "<strong>무엇을 하나</strong>"를 수행한다.<br>
-          • <strong>Google Sheets</strong> — 편성표 읽기 / 행 추가<br>
-          • <strong>Gmail</strong> — 담당자에게 메일 발송
-        </div>
+        <div class="card-icon" style="color:var(--success)"><i data-lucide="check-circle"><span class="ico-fb">✅</span></i></div>
+        <div class="card-title">n8n-MCP 연결</div>
+        <div class="card-body">"Google Sheets 트리거 노드의 정확한 파라미터 알려줘" → <strong>실제 노드 정보 조회</strong> → 에디터에서 그대로 동작.</div>
       </div>
     </div>
-    <div class="success-box">
-      <i data-lucide="calendar-clock"><span class="ico-fb">📅</span></i>
-      <p><span class="t">홈쇼핑 예시:</span> "매일 09:00에(<b>트리거</b>) 편성표 시트를 읽어(<b>액션</b>) 담당자에게 메일을 보낸다(<b>액션</b>)" — 트리거 1개가 켜면 액션들이 차례로 일합니다.</p>
-    </div>
-      <aside class="kit-notes" hidden>트리거=언제 시작하나, 액션=무엇을 하나. 트리거가 스케줄이면 정해진 시각, 웹훅이면 외부 신호 시 시작. 트리거 하나에 액션 여러 개가 줄줄이 붙는다. S9의 확장이라 빠르게 짚는다.</aside>
-  </div>
-
-  <!-- 9c -->
-  <div class="slide" data-title="노드 & 워크플로" data-chapter="M2 · n8n 기초">
-    <div class="slide-label"><i data-lucide="boxes"><span class="ico-fb">📦</span></i> M2 · 노드 & 워크플로 — 블록과 연결</div>
-    <h1><span class="hl">노드</span>는 블록,<br>이은 전체가 <span class="hl3">워크플로</span>입니다</h1>
-    <p class="subtitle">노드 하나가 한 가지 일을 하고, 노드들을 선으로 이으면 하나의 자동화(워크플로)가 됩니다 — <b>코딩 0줄</b>.</p>
-    <ul class="priority-list">
-      <li><span class="priority-badge p4">노</span><div><b>노드 (Node)</b> — 하나의 <b>블록</b>. 트리거도 액션도 모두 노드.<span class="sub">노드 하나 = 한 가지 일(시트 읽기, 메일 보내기 …).</span></div></li>
-      <li><span class="priority-badge p3">워</span><div><b>워크플로 (Workflow)</b> — 노드들을 선으로 <b>연결한 전체</b> 자동화.<span class="sub">트리거에서 시작해 액션들로 데이터가 흐릅니다.</span></div></li>
-      <li><span class="priority-badge p2">분</span><div><b>조건분기 (Branch)</b> — 흐름의 <b>갈림길</b>(IF).<span class="sub">조건에 따라 다른 길로 보냅니다. M4에서 본격 학습.</span></div></li>
-    </ul>
-    <div class="success-box">
-      <i data-lucide="mouse-pointer-click"><span class="ico-fb">🖱️</span></i>
-      <p><span class="t">캔버스에서 드래그·연결, 코딩 0줄:</span> 노드를 화면에 끌어다 놓고 선으로 이으면 끝. 값을 꺼내는 <span class="mono">{{ }}</span> 표현식만 약간 익히면 됩니다.</p>
-    </div>
-      <aside class="kit-notes" hidden>노드=일 하나를 맡는 부품 블록, 워크플로=블록들을 선으로 이은 완성품. 캔버스에서 블록을 놓고 잇는 게 곧 워크플로를 짓는 것. S9 확장이라 빠르게.</aside>
-  </div>
-
-  <!-- 10 -->
-  <div class="slide" data-title="Cloud 가입 화면" data-chapter="M2 · n8n 기초">
-    <div class="slide-label"><i data-lucide="cloud"><span class="ico-fb">☁️</span></i> M2 · 실습 환경 둘러보기</div>
-    <h1>실습은 <span class="hl">n8n Cloud</span>에서 — 설치 없이 바로</h1>
     <figure class="img-slot">
       <i data-lucide="image"><span class="ico-fb">🖼️</span></i>
-      <div class="img-slot-title">[캡처 자리 — 강사 붙여넣기] n8n Cloud 워크플로 캔버스 초기 화면</div>
-      <div class="img-slot-meta">무엇: 로그인 후 <b>빈 워크플로 캔버스 + "Add first step"(트리거 추가)</b> 화면 / 어디: app.n8n.cloud / alt: "n8n Cloud 빈 캔버스와 첫 트리거 추가 버튼"</div>
-      <figcaption>※ UI는 버전에 따라 달라질 수 있어 실제 화면 캡처로 대체합니다. 강의 직전 라이브 1회 확인.</figcaption>
+      <div class="img-slot-title">[CAP-04-mcp-node · 강사 붙여넣기] Claude Code+n8n-MCP가 노드 정보 조회/JSON 초안 화면</div>
+      <div class="img-slot-meta">무엇: <b>n8n-MCP로 노드 파라미터를 조회하고 JSON 초안을 만드는</b> 화면 / 시점: Lab2 dry-run / alt: "Claude Code가 n8n-MCP로 정확한 노드 정보 조회"</div>
     </figure>
-    <div class="success-box">
-      <i data-lucide="check"><span class="ico-fb">✔️</span></i>
-      <p><span class="t">왜 Cloud인가:</span> 초보가 Docker 셋업 없이 <b>가입 → 바로 워크플로 시작</b> → 첫날 환경 사고 회피. (Docker self-host는 실습이 아니라 <b>참고 문서</b>로만 제공합니다.)</p>
+    <div class="codeblock" style="position:relative;background:#0d1320;border:1px solid var(--border,#243049);border-radius:12px;padding:14px 16px;margin:14px 0;max-width:880px">
+      <button type="button" aria-label="명령 복사" onclick="try{navigator.clipboard.writeText(this.nextElementSibling.innerText);this.textContent='✓ 복사됨';setTimeout(()=>{this.textContent='⧉ 복사';},1500);}catch(e){this.textContent='복사 실패';}" style="position:absolute;top:10px;right:10px;font-size:12px;padding:4px 10px;border-radius:7px;border:1px solid var(--accent,#6cf);background:transparent;color:var(--accent,#6cf);cursor:pointer">⧉ 복사</button>
+      <pre class="mono" style="margin:0;white-space:pre-wrap;word-break:break-all;color:#cfe3ff;font-size:13.5px;line-height:1.65">claude mcp add n8n-mcp -e MCP_MODE=stdio -e LOG_LEVEL=error -e DISABLE_CONSOLE_OUTPUT=true -- npx n8n-mcp</pre>
     </div>
-    <section class="kit-checkpoint" data-group="m2" data-pass="0.7" data-review-anchor="#slide-8">
-      <h3 class="kit-cp-title">체크포인트 · M2 n8n 기초</h3>
-      <p style="color:var(--text-dim);font-size:14px;margin:0 0 .4rem">앞의 트리거/액션 문항을 먼저 풀고 눌러 보세요.</p>
-      <button type="button" class="kit-cp-check">단원 통과 확인</button>
-      <p class="kit-cp-result" aria-live="polite"></p>
-      <div class="kit-cp-review" hidden>
-        아직 부족해요. <a href="#slide-8" class="kit-cp-anchor">M2 기초 첫 슬라이드로 돌아가기 ↑</a>
-      </div>
-    </section>
-      <aside class="kit-notes" hidden>실습은 전부 n8n Cloud — 설치 없이 브라우저 가입하면 바로 캔버스. 도커·서버(self-host)는 문서로만 안내하고 실습은 Cloud. 질문 "Cloud는 도커를 직접 설치하는 방식?"→틀림(self-host). 가입 화면 투어는 짧게.</aside>
-  </div>
-
-  <!-- ===================== CH4: M3 노드 연결하기 ===================== -->
-
-  <!-- 11 -->
-  <div class="slide" data-title="Cloud vs self-host" data-chapter="M3 · 노드 연결">
-    <div class="slide-label"><i data-lucide="server"><span class="ico-fb">🖥️</span></i> M3 · 환경: 클라우드 vs 내부서버</div>
-    <h1><span class="hl">n8n Cloud</span>(매니지드) vs <span class="hl2">self-host</span>(내부서버)</h1>
-    <div class="grid-2">
-      <div class="card highlight">
-        <div class="card-icon"><i data-lucide="cloud"><span class="ico-fb">☁️</span></i></div>
-        <div class="card-title">n8n Cloud (오늘 실습)</div>
-        <div class="card-body">
-          n8n이 호스팅. 가입 → 바로 사용.<br>
-          실습 플랜 = <strong>Starter / Pro</strong>(Hosted by n8n).<br>
-          타임존·업데이트·인프라를 n8n이 관리.
-        </div>
-      </div>
-      <div class="card warn-card">
-        <div class="card-icon" style="color:var(--warn)"><i data-lucide="hard-drive"><span class="ico-fb">🗄️</span></i></div>
-        <div class="card-title"><span class="kit-term">self-host<button type="button" class="kit-term-btn" popovertarget="def-selfhost" aria-label="self-host 용어 설명" aria-expanded="false">ⓘ</button><span class="kit-term-pop" id="def-selfhost" popover role="tooltip"><strong>self-host(셀프 호스팅)</strong> — n8n을 Docker 등으로 우리 회사 서버에 직접 설치·운영하는 방식입니다. 설치·타임존·업데이트를 우리가 직접 관리해야 합니다(이 강의는 Cloud로 실습).</span></span> (개념만 · 문서 제공)</div>
-        <div class="card-body">
-          Docker 등으로 <strong>우리 서버에 직접</strong> 띄움.<br>
-          설치·타임존·페이로드 설정을 직접 관리.<br>
-          <span style="color:var(--text-dim)">→ 이 강의는 실습 X, 핸드아웃으로 안내.</span>
-        </div>
-      </div>
+    <p class="subtitle" style="margin-top:8px">터미널에서 한 번만 등록 → Claude Code 재시작 → <span class="mono">claude mcp list</span> 에서 <span class="mono">n8n-mcp ✔ Connected</span> 확인. 윈도우 PowerShell은 각 <span class="mono">-e ...</span>를 따옴표로.</p>
+    <div class="success-box">
+      <i data-lucide="key-round"><span class="ico-fb">🔑</span></i>
+      <p><span class="t">작은 노트:</span> <b>API 키 없이도</b> 노드 조회·검증 툴이 작동합니다(이 실습엔 충분). 워크플로를 MCP가 직접 생성/실행까지 하게 하려면 <code>N8N_API_URL</code>·<code>N8N_API_KEY</code>를 추가하세요.</p>
     </div>
     <div class="warn-box">
       <i data-lucide="info"><span class="ico-fb">ℹ️</span></i>
-      <p><span class="t">기억할 점:</span> 오늘 실습은 n8n Cloud에서만 합니다. self-host는 같은 n8n이지만 우리가 직접 운영해야 하는 별개 방식이라 핸드아웃으로만 안내합니다.</p>
+      <p><span class="t">⚠️ 당일 확인:</span> n8n-MCP의 문서 동기화·무료 한도는 변동 도메인 — 강의 직전 라이브 1회 조회로 최신 동작을 확인합니다.</p>
     </div>
-      <aside class="kit-notes" hidden>Cloud=신경 쓸 게 없는 매니지드, self-host=회사 서버에 직접 띄우는 방식. 둘 다 같은 n8n이지만 오늘 실습은 Cloud. self-host 셋업은 핸드아웃 문서.</aside>
+      <aside class="kit-notes" hidden>n8n-MCP=Claude Code에 붙이는 노드 두뇌. 없으면 노드명·파라미터를 지어내 환각, 붙이면 실제 조회로 정확. 등록 명령=claude mcp add n8n-mcp -e MCP_MODE=stdio -e LOG_LEVEL=error -e DISABLE_CONSOLE_OUTPUT=true -- npx n8n-mcp(한 번만)→재시작→claude mcp list에서 ✔ Connected. 윈도우 PowerShell은 -e를 따옴표로. API 키 없이도 조회·검증 작동(실습 충분), 직접 생성/실행까지면 N8N_API_URL·N8N_API_KEY 추가. 동기화·한도는 당일 확인 각주. 노드 1개 라이브 조회로 신뢰 보여주기.</aside>
   </div>
 
-  <!-- 맛보기 예제 ① (Daily Summary Email) -->
-  <div class="slide" data-title="맛보기: 매일 아침 메모 메일" data-chapter="M3 · 노드 연결">
-    <div class="slide-label"><i data-lucide="sparkles"><span class="ico-fb">✨</span></i> M3 · 맛보기 예제 (첫 워크플로 통째로)</div>
-    <h1>도메인 들어가기 전, <span class="hl">가장 단순한 워크플로</span> 하나</h1>
-    <p class="subtitle">"매일 아침 나에게 메모 메일 보내기" — Cloud든 self-host든 에디터 화면은 같습니다. 노드 3개로 통째로 만들어 봅니다.</p>
-    <div class="diagram-wrap">
-      <div class="mermaid">
-flowchart LR
-  A["⏰ Schedule Trigger<br/>Every day · 오전 9시"] --> B["✏️ Edit Fields (Set)<br/>message = 오늘도 화이팅입니다!"]
-  B --> C["📧 Gmail<br/>Send · 내 메일로"]
-  classDef trig fill:#1a2740,stroke:#4f8cff,color:#e4e6ef;
-  classDef act fill:#16261f,stroke:#34d399,color:#e4e6ef;
-  class A trig;
-  class B,C act;
-      </div>
-      <div class="diagram-cap">트리거(시작) → 데이터 준비 → 외부 서비스 호출 — n8n 기본 패턴</div>
-    </div>
+  <!-- 16b MCP 3종 구분 -->
+  <div class="slide" data-title="n8n에서 'MCP'는 세 가지" data-chapter="M3 · 기초+첫 워크플로">
+    <div class="slide-label"><i data-lucide="git-fork"><span class="ico-fb">🍴</span></i> M3 · 헷갈리지 말 것 — 같은 'MCP' 세 가지</div>
+    <h1>n8n에서 <span class="hl2">'MCP'</span>는 세 가지 — <span class="hl">헷갈리지 말 것</span></h1>
+    <p class="subtitle">검색하면 셋 다 나옵니다. 오늘 우리가 쓰는 건 <b>①뿐</b>입니다. 나머지 둘은 "있다"만 알고 넘어갑니다.</p>
     <div class="grid-2">
-      <div class="card highlight"><div class="card-title">① 새 워크플로</div><div class="card-body">New Workflow 생성 → 이름 <strong>"Daily Summary Email"</strong>.</div></div>
-      <div class="card"><div class="card-title">② Schedule Trigger</div><div class="card-body"><strong>Every day</strong>, 오전 9시. "매일 아침 9시에 시작하는 버튼"이라고 생각하면 됩니다.</div></div>
-      <div class="card"><div class="card-title">③ Edit Fields (Set)</div><div class="card-body"><code>message</code> 필드에 <strong>"오늘도 화이팅입니다!"</strong>. 다음 노드에서 쓸 데이터를 미리 준비합니다.</div></div>
-      <div class="card"><div class="card-title">④ Gmail</div><div class="card-body">Google 계정 OAuth 연동 → To=내 메일, Subject=<strong>"오늘의 요약"</strong>, 본문은 표현식으로 <code>message</code>를 끌어옵니다.</div></div>
-    </div>
-      <aside class="kit-notes" hidden>홈쇼핑 도메인 전에 가장 단순한 워크플로를 통째로 시연: Schedule(매일 9시)→Set(message=오늘도 화이팅)→Gmail. 트리거+데이터 준비+외부 호출, 딱 세 노드의 기본 패턴. M3 기존 시간 안에서 소화(추가 시간 없음).</aside>
-  </div>
-
-  <!-- 맛보기 예제 ② (실행·활성화·패턴) -->
-  <div class="slide" data-title="맛보기: 실행 → 활성화" data-chapter="M3 · 노드 연결">
-    <div class="slide-label"><i data-lucide="play-circle"><span class="ico-fb">▶️</span></i> M3 · 맛보기 예제 (실행·기본 패턴)</div>
-    <h1>수동 실행으로 <span class="hl">테스트</span> → 잘 되면 <span class="hl3">활성화</span></h1>
-    <div class="grid-2">
-      <div class="card highlight">
-        <div class="card-icon"><i data-lucide="play"><span class="ico-fb">▶️</span></i></div>
-        <div class="card-title">Execute Workflow (수동 실행)</div>
-        <div class="card-body">상단 <strong>Execute Workflow</strong> 클릭 → 모든 노드에 <strong>초록 체크</strong> + 실제 메일이 도착하면 성공. <span style="color:var(--text-dim)">Schedule은 실제 시각에만 자동 실행되지만, 수동 실행 시 다음 노드가 바로 순차 실행됩니다.</span></div>
+      <div class="card success-card" style="grid-column:1 / -1">
+        <div class="card-icon" style="color:var(--success)"><i data-lucide="brain"><span class="ico-fb">🧠</span></i></div>
+        <div class="card-title">① 이 강의의 n8n-MCP <span class="hl3">★ 우리가 쓰는 것</span></div>
+        <div class="card-body">
+          커뮤니티 <code>czlonkowski/n8n-mcp</code> — <strong>Claude Code에 붙이는 도구</strong>.<br>
+          역할: <strong>노드 정보 조회 · 워크플로 검증</strong>(환각↓). 만드는 동안 돕는 두뇌.
+        </div>
       </div>
       <div class="card">
-        <div class="card-icon"><i data-lucide="toggle-right"><span class="ico-fb">🔛</span></i></div>
-        <div class="card-title">Active 토글 ON</div>
-        <div class="card-body">테스트가 되면 상단 <strong>활성화 토글</strong>을 켭니다. 이제부터 매일 지정 시각에 스케줄이 자동으로 실행해 메일을 보냅니다.</div>
+        <div class="card-icon"><i data-lucide="server"><span class="ico-fb">🖥️</span></i></div>
+        <div class="card-title">② n8n 공식 instance-level MCP</div>
+        <div class="card-body">
+          <strong>n8n 자체를 MCP 서버로 노출</strong>해, 외부 AI가 내 n8n을 도구처럼 호출.<br>
+          오늘 범위 밖. <span style="color:var(--muted,#8b8fa7)">(출처·동작 당일 확인)</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-icon"><i data-lucide="zap"><span class="ico-fb">⚡</span></i></div>
+        <div class="card-title">③ MCP Server Trigger 노드</div>
+        <div class="card-body">
+          <strong>워크플로 안</strong>에 두는 MCP 트리거 노드 — 워크플로를 MCP 도구로 띄움.<br>
+          오늘 범위 밖. <span style="color:var(--muted,#8b8fa7)">(출처·동작 당일 확인)</span>
+        </div>
       </div>
     </div>
     <div class="success-box">
-      <i data-lucide="check-circle"><span class="ico-fb">✅</span></i>
-      <p><span class="t">방금 경험한 n8n 기본 패턴:</span> <strong>트리거 + 데이터 준비 + 외부 서비스 호출</strong> — 이 3박자가 모든 워크플로의 뼈대입니다. 이후엔 스케줄 → <strong>웹훅</strong>, Gmail → <strong>Slack·Notion·Google Sheets</strong>로 바꿔 더 복잡한 자동화로 확장합니다. <span style="color:var(--text-dim)">오늘 본실습 Lab1이 바로 이 패턴의 홈쇼핑 버전 — 편성표를 읽어 담당자에게 발송합니다.</span></p>
+      <i data-lucide="target"><span class="ico-fb">🎯</span></i>
+      <p><span class="t">기억할 한 줄:</span> 검색하면 셋 다 나오니, <b>오늘 쓰는 건 ①</b>(커뮤니티 n8n-MCP = Claude Code의 노드 두뇌)입니다. ②③은 "있다"만 알면 충분합니다.</p>
     </div>
-      <aside class="kit-notes" hidden>Execute로 수동 실행하면 노드마다 초록 체크가 뜨고 받은편지함에 메일 도착, 확인 후 Active로 켜면 매일 자동 발송. 방금 흐름이 "트리거+데이터 준비+외부 호출" 기본 패턴이고 Lab1은 그 홈쇼핑 버전(편성표→메일)일 뿐.</aside>
+      <aside class="kit-notes" hidden>같은 'MCP'가 셋이라 혼동 차단용. ①커뮤니티 czlonkowski/n8n-mcp=Claude Code에 붙여 노드 조회·워크플로 검증(★오늘 쓰는 것) ②n8n 공식 instance-level MCP=n8n을 MCP 서버로 노출 ③MCP Server Trigger 노드=워크플로 안 MCP 트리거. ②③은 출처·동작 당일 확인 톤, 깊이 안 들어감. "검색하면 셋 다 나오니 오늘은 ①"만 각인.</aside>
   </div>
 
-  <!-- 12 -->
-  <div class="slide" data-title="첫 워크플로 구조" data-chapter="M3 · 노드 연결">
-    <div class="slide-label"><i data-lucide="git-branch"><span class="ico-fb">🔀</span></i> M3 · 본실습 설계도</div>
-    <h1>본실습: 오늘 <span class="hl">편성표</span> → 담당자에게 <span class="hl3">자동 메일</span></h1>
-    <p class="subtitle">노드 3개를 연결한 첫 워크플로 — 스케줄로 켜고, 시트를 읽고, 메일로 내보냅니다. (실습 Lab1)</p>
+  <!-- 17 worked: 편성표 → 메일 설계도 -->
+  <div class="slide" data-title="편성표 → 담당자 메일 (설계도)" data-chapter="M3 · 기초+첫 워크플로">
+    <div class="slide-label"><i data-lucide="git-branch"><span class="ico-fb">🔀</span></i> M3 · 첫 워크플로 설계도 (worked)</div>
+    <h1>스케줄 → <span class="hl">구글시트 편성표</span> → <span class="hl3">담당자 메일</span></h1>
+    <p class="subtitle">노드 3개를 연결한 첫 워크플로 — 스케줄로 켜고, 시트를 읽고, 메일로 내보냅니다. (실습 Lab2)</p>
     <div class="diagram-wrap">
       <div class="mermaid">
 flowchart LR
@@ -1201,93 +1461,501 @@ flowchart LR
       </div>
       <div class="diagram-cap">트리거(시작) → 액션(수집) → 액션(발송) — 가장 기본이 되는 3노드 패턴</div>
     </div>
-      <aside class="kit-notes" hidden>Lab1 설계도: 스케줄 트리거→구글시트에서 오늘 편성표 읽기→담당자에게 메일, 세 노드. 맛보기와 똑같은 패턴.</aside>
+    <div class="grid-2">
+      <div class="card highlight"><div class="card-title">① Schedule Trigger</div><div class="card-body">Days, 09:00. 타임존 = <strong>Asia/Seoul</strong>(설치 시 환경변수로 지정).</div></div>
+      <div class="card"><div class="card-title">② Google Sheets · Get Row(s)</div><div class="card-body">"편성표" 시트, 오늘 날짜 필터 → 담당자 메일 컬럼.</div></div>
+      <div class="card"><div class="card-title">③ Gmail · Send</div><div class="card-body">To = 담당자, Subject = "오늘 편성표", Body = <span class="mono">{{ $json.방송명 }}</span>.</div></div>
+      <div class="card success-card"><div class="card-title">④ Execute → Active</div><div class="card-body">세 노드 모두 <strong>녹색</strong> + 메일 1통이면 성공 → Active 토글.</div></div>
+    </div>
+      <aside class="kit-notes" hidden>Lab2 설계도: 스케줄→구글시트 편성표→담당자 메일 3노드. worked로 강사가 먼저 보여주고, 다음 슬라이드에서 노드별 순차 빌드 원칙으로 각자 만든다.</aside>
   </div>
 
-  <!-- 13 -->
-  <div class="slide" data-title="실습 단계 (Lab1)" data-chapter="M3 · 노드 연결">
-    <div class="slide-label"><i data-lucide="list-checks"><span class="ico-fb">📋</span></i> M3 · Lab1 단계 (워크드→페이드→독립)</div>
-    <h1>편성표 → 메일 워크플로 <span class="hl">만드는 순서</span></h1>
+  <!-- 18 노드별 순차 빌드 + 즉시 검증 -->
+  <div class="slide" data-title="노드별 순차 빌드 (거대 JSON 금지)" data-chapter="M3 · 기초+첫 워크플로">
+    <div class="slide-label"><i data-lucide="list-ordered"><span class="ico-fb">🔢</span></i> M3 · AI-native 빌드 원칙</div>
+    <h1>거대 JSON 통째 금지 — <span class="hl3">노드별 순차 빌드 + 즉시 검증</span></h1>
+    <div class="grid-2">
+      <div class="card warn-card">
+        <div class="card-icon" style="color:var(--warn)"><i data-lucide="file-warning"><span class="ico-fb">⚠️</span></i></div>
+        <div class="card-title">❌ 거대 JSON 한 번에 import</div>
+        <div class="card-body">AI가 만든 워크플로 JSON을 통째로 붙이면, 한 곳이 틀려도 <strong>어디서 깨졌는지 모릅니다</strong>(줄줄이 에러). 버전 차이로 import 실패도.</div>
+      </div>
+      <div class="card success-card">
+        <div class="card-icon" style="color:var(--success)"><i data-lucide="check-check"><span class="ico-fb">✅</span></i></div>
+        <div class="card-title">✅ 노드별 순차 빌드</div>
+        <div class="card-body">"이 3노드 JSON 초안 만들어줘" → <strong>노드 1개 붙이고 → 즉시 실행 → 녹색 확인 → 다음 노드</strong>. 깨지면 그 노드만 고침.</div>
+      </div>
+    </div>
+    <div class="success-box">
+      <i data-lucide="repeat-2"><span class="ico-fb">🔁</span></i>
+      <p><span class="t">루프:</span> n8n-MCP로 <b>정확한 노드 조회</b> → 한 노드 빌드 → <b>에디터에서 실행·검증</b> → 다음. AI 초안은 <b>가설</b>, 진실은 <b>에디터 실행 결과</b>입니다.</p>
+    </div>
+    <div class="kit-tf" data-group="m3" data-id="tf-bigjson" data-answer="false">
+      <p class="kit-tf-claim">"Claude Code가 만든 거대한 워크플로 JSON은 한 번에 통째로 import하는 것이 가장 안전하다."</p>
+      <div class="kit-tf-btns" role="group" aria-label="참 또는 거짓">
+        <button type="button" class="kit-tf-btn" data-val="true">참</button>
+        <button type="button" class="kit-tf-btn" data-val="false">거짓</button>
+      </div>
+      <p class="kit-tf-live" aria-live="polite"></p>
+      <div class="kit-tf-why" hidden>
+        <strong>거짓.</strong> 통째 import는 한 곳만 틀려도 어디서 깨졌는지 알기 어렵고 버전 차이로 실패할 수 있습니다. <b>노드별로 빌드하고 즉시 실행·검증</b>하는 것이 정석입니다.
+      </div>
+    </div>
+      <aside class="kit-notes" hidden>거대 JSON 통째 import 금지 → 노드별 순차 빌드+즉시 검증. AI 초안=가설, 진실=에디터 실행 결과. cascade 에러 회피. 2일차 본실습까지 일관되는 원칙.</aside>
+  </div>
+
+  <!-- 19 체크포인트 (M3) -->
+  <div class="slide" data-title="M3 체크포인트" data-chapter="M3 · 기초+첫 워크플로">
+    <div class="slide-label"><i data-lucide="flag-triangle-right"><span class="ico-fb">🚩</span></i> M3 · 체크포인트</div>
+    <h1>여기까지 — <span class="hl">첫 워크플로</span>가 내 노트북에서 돌았나요?</h1>
+    <ul class="mastery-list">
+      <li><i data-lucide="circle" class="check-icon"><span class="ico-fb">⭕</span></i> 트리거·액션·노드·조건분기 4개 개념을 내 말로 구분한다</li>
+      <li><i data-lucide="circle" class="check-icon"><span class="ico-fb">⭕</span></i> n8n-MCP를 붙여 노드 정보를 정확히 조회해 봤다</li>
+      <li><i data-lucide="circle" class="check-icon"><span class="ico-fb">⭕</span></i> 스케줄 → 구글시트 → 메일 워크플로를 <b>노드별로 빌드·검증</b>해 실행했다</li>
+    </ul>
+    <section class="kit-checkpoint" data-group="m3" data-pass="0.7" data-review-anchor="#slide-15">
+      <h3 class="kit-cp-title">체크포인트 · M3 기초+첫 워크플로</h3>
+      <p style="color:var(--text-dim);font-size:14px;margin:0 0 .4rem">앞의 트리거/노드 문항을 먼저 풀고 눌러 보세요.</p>
+      <button type="button" class="kit-cp-check">단원 통과 확인</button>
+      <p class="kit-cp-result" aria-live="polite"></p>
+      <div class="kit-cp-review" hidden>
+        아직 부족해요. <a href="#slide-15" class="kit-cp-anchor">M3 4가지 구조로 돌아가기 ↑</a>
+      </div>
+    </section>
+      <aside class="kit-notes" hidden>M3 마무리 체크포인트: 4개 개념 구분·MCP 조회·첫 워크플로 노드별 실행. 미통과면 assets의 lab1-편성표메일.json import로 합류시키되 노드는 직접 만지게.</aside>
+  </div>
+
+  <!-- ===================== LAB 2 실습 step 슬라이드 (M3 첫 워크플로 + n8n-MCP) ===================== -->
+
+  <!-- L2-0 지금 실습 안내 -->
+  <div class="slide" data-title="▶ 지금 실습: 워크북 Lab 2 펴기" data-chapter="M3 · 기초+첫 워크플로">
+    <div class="slide-label"><i data-lucide="play-circle"><span class="ico-fb">▶️</span></i> M3 · 실습 시작 — 워크북 Lab 2</div>
+    <h1><span class="hl">▶ 지금 실습</span> — 워크북 <span class="hl3">Lab 2</span>를 펴세요</h1>
+    <p class="subtitle"><b>스케줄 → 구글시트 편성표 읽기 → 담당자 메일</b>. n8n-MCP를 붙여 정확한 노드 정보로 초안을 만들고, <b>에디터에서 노드별로 import·실행</b>합니다(혼합 방식). 거대 JSON을 한 번에 넣지 않습니다.</p>
+    <div class="grid-2">
+      <div class="card highlight">
+        <div class="card-icon"><i data-lucide="target"><span class="ico-fb">🎯</span></i></div>
+        <div class="card-title">이번 랩에서 만드는 것</div>
+        <div class="card-body">3노드 워크플로(Schedule → Sheets → Gmail). n8n-MCP 연결 + 노드별 검증.</div>
+      </div>
+      <div class="card success-card">
+        <div class="card-icon" style="color:var(--success)"><i data-lucide="check-circle"><span class="ico-fb">✅</span></i></div>
+        <div class="card-title">완성 모습</div>
+        <div class="card-body">3노드가 전부 <b>녹색</b> + 받은편지함에 "오늘 편성표 …" 메일 1통.</div>
+      </div>
+    </div>
+    <div class="warn-box">
+      <i data-lucide="book-open"><span class="ico-fb">📖</span></i>
+      <p><span class="t">손으로 채우는 자료:</span> 워크북 Lab 2의 표현식 빈칸(<code>{{ $json.____ }}</code>)을 직접 채우며 따라오세요. 막히면 에러를 Claude Code에.</p>
+    </div>
+      <aside class="kit-notes" hidden>Lab2 진입 안내. 스케줄→편성표→담당자 메일 3노드. n8n-MCP로 정확 조회+노드별 import·실행(혼합). 목표=3노드 녹색+메일 1통. 워크북 표현식 빈칸 채우기. 거대 JSON 통째 금지 원칙 유지.</aside>
+  </div>
+
+  <!-- L2-S1 n8n-MCP 연결 확인 -->
+  <div class="slide" data-title="Lab2 · Step 1 — n8n-MCP 연결 확인" data-chapter="M3 · 기초+첫 워크플로">
+    <div class="slide-label"><i data-lucide="brain"><span class="ico-fb">🧠</span></i> M3 · Lab2 Step 1</div>
+    <h1>Lab2 · Step 1 — <span class="hl">n8n-MCP</span>가 붙었는지 <span class="hl3">조회로 확인</span></h1>
+    <p class="subtitle">Claude Code에 n8n-MCP가 연결됐는지, 노드 정보가 실제로 조회되는지 1건으로 확인합니다.</p>
+    <div class="codeblock" style="position:relative;background:#0d1320;border:1px solid var(--border,#243049);border-radius:12px;padding:14px 16px;margin:14px 0;max-width:880px">
+      <button type="button" aria-label="명령 복사" onclick="try{navigator.clipboard.writeText(this.nextElementSibling.innerText);this.textContent='✓ 복사됨';setTimeout(()=>{this.textContent='⧉ 복사';},1500);}catch(e){this.textContent='복사 실패';}" style="position:absolute;top:10px;right:10px;font-size:12px;padding:4px 10px;border-radius:7px;border:1px solid var(--accent,#6cf);background:transparent;color:var(--accent,#6cf);cursor:pointer">⧉ 복사</button>
+      <pre class="mono" style="margin:0;white-space:pre-wrap;word-break:break-all;color:#cfe3ff;font-size:13.5px;line-height:1.65">Schedule Trigger 노드의 정확한 파라미터 알려줘.
+그리고 Google Sheets 읽기 노드 파라미터도 알려줘.</pre>
+    </div>
+    <div class="grid-2">
+      <div class="card highlight"><div class="card-title">② 무엇을 하나</div><div class="card-body">위 질문을 Claude Code에 입력 → n8n-MCP가 <b>실제 노드명·파라미터</b>를 조회해 답하는지 본다. <span class="sub">오늘 쓰는 건 커뮤니티 <code>n8n-mcp</code>.</span></div></div>
+      <div class="card success-card"><div class="card-title">④ ✅ 확인 포인트</div><div class="card-body">"기억으로 추정"이 아니라 <b>조회된 정확한 노드명·필드</b>가 돌아오면 연결 정상.</div></div>
+    </div>
+    <div class="danger-box">
+      <i data-lucide="alert-triangle"><span class="ico-fb">⚠️</span></i>
+      <p><span class="t">⑤ 막히면:</span> 조회 없이 일반 설명만 나오면 n8n-MCP 미연결일 수 있음 → 강사에게 손. (동기화·무료 한도는 변동 도메인 — 당일 확인.)</p>
+    </div>
+      <aside class="kit-notes" hidden>Step1=n8n-MCP 연결 확인. "Schedule Trigger/Google Sheets 파라미터 알려줘" 1건으로 실제 조회 여부 판별. 조회된 정확 노드명이 오면 정상. 미연결=일반 설명만. 동기화·한도는 당일 확인 톤. 커뮤니티 n8n-mcp.</aside>
+  </div>
+
+  <!-- L2-S2 3노드 워크플로 요청 (프롬프트) -->
+  <div class="slide" data-title="Lab2 · Step 2 — 3노드 워크플로 초안 요청" data-chapter="M3 · 기초+첫 워크플로">
+    <div class="slide-label"><i data-lucide="bot"><span class="ico-fb">🤖</span></i> M3 · Lab2 Step 2</div>
+    <h1>Lab2 · Step 2 — Claude Code에 <span class="hl">3노드 워크플로 초안</span>을 부탁</h1>
+    <p class="subtitle">정확한 노드 정보를 가진 상태에서, 3노드 JSON 초안을 요청합니다.</p>
+    <div class="codeblock" style="position:relative;background:#0d1320;border:1px solid var(--border,#243049);border-radius:12px;padding:14px 16px;margin:14px 0;max-width:880px">
+      <button type="button" aria-label="명령 복사" onclick="try{navigator.clipboard.writeText(this.nextElementSibling.innerText);this.textContent='✓ 복사됨';setTimeout(()=>{this.textContent='⧉ 복사';},1500);}catch(e){this.textContent='복사 실패';}" style="position:absolute;top:10px;right:10px;font-size:12px;padding:4px 10px;border-radius:7px;border:1px solid var(--accent,#6cf);background:transparent;color:var(--accent,#6cf);cursor:pointer">⧉ 복사</button>
+      <pre class="mono" style="margin:0;white-space:pre-wrap;word-break:break-all;color:#cfe3ff;font-size:13.5px;line-height:1.65">스케줄 트리거로 매일 9시(Asia/Seoul)에 구글시트 편성표를
+읽어 담당자에게 메일 보내는 워크플로 JSON을 만들어줘.
+노드는 Schedule Trigger → Google Sheets → Gmail 3개로.</pre>
+    </div>
+    <figure class="img-slot">
+      <i data-lucide="image"><span class="ico-fb">🖼️</span></i>
+      <div class="img-slot-title">[CAP-LAB2-S2 · 강사 dry-run 캡처] Claude Code+n8n-MCP가 3노드 JSON 초안을 만든 화면</div>
+      <div class="img-slot-meta">무엇: <b>위 프롬프트로 3노드 워크플로 JSON 초안</b>이 생성된 화면 / 시점: Lab2 dry-run / alt: "Claude Code가 3노드 워크플로 JSON 초안 생성"</div>
+    </figure>
+    <div class="grid-2">
+      <div class="card success-card"><div class="card-title">④ ✅ 확인 포인트</div><div class="card-body">3개 노드가 포함된 <b>JSON 초안</b>(또는 노드별 안내)이 나오면 통과.</div></div>
+      <div class="card warn-card"><div class="card-title">⑤ 막히면</div><div class="card-body">AI 초안은 <b>가설</b>입니다 — 통째로 믿지 말고 <b>다음 Step부터 노드별로 import·실행 검증</b>합니다.</div></div>
+    </div>
+      <aside class="kit-notes" hidden>Step2=3노드 워크플로 JSON 초안 요청(프롬프트 복사). 매일 9시 Asia/Seoul·편성표·담당자 메일·3노드 명시. 초안=가설, 검증은 다음 step의 노드별 import·실행. 거대 JSON 통째 신뢰 금지.</aside>
+  </div>
+
+  <!-- L2-S3 에디터에 import -->
+  <div class="slide" data-title="Lab2 · Step 3 — 에디터에 import" data-chapter="M3 · 기초+첫 워크플로">
+    <div class="slide-label"><i data-lucide="upload"><span class="ico-fb">📥</span></i> M3 · Lab2 Step 3</div>
+    <h1>Lab2 · Step 3 — 에디터에 <span class="hl3">import</span>한다</h1>
+    <p class="subtitle">초안을 에디터로 가져옵니다. (import 후에도 노드별로 실행·검증하는 혼합 방식을 유지)</p>
+    <div class="grid-2">
+      <div class="card highlight">
+        <div class="card-icon"><i data-lucide="mouse-pointer-click"><span class="ico-fb">🖱️</span></i></div>
+        <div class="card-title">② 클릭경로</div>
+        <div class="card-body">에디터 <b>우측 상단 ⋮</b>(더보기) → <b>Import from File</b>(또는 Import from URL) → 파일 선택.<span class="sub">메뉴 라벨·위치는 버전마다 다름 — 당일 본인 화면 기준.</span></div>
+      </div>
+      <div class="card success-card">
+        <div class="card-icon" style="color:var(--success)"><i data-lucide="check-circle"><span class="ico-fb">✅</span></i></div>
+        <div class="card-title">④ ✅ 확인 포인트</div>
+        <div class="card-body">캔버스에 <b>노드 3개가 선으로 연결</b>되어 나타나면 통과.</div>
+      </div>
+    </div>
+    <figure class="img-slot">
+      <i data-lucide="image"><span class="ico-fb">🖼️</span></i>
+      <div class="img-slot-title">[CAP-LAB2-S3 · 강사 dry-run 캡처] ⋮ → Import from File로 3노드를 불러온 캔버스</div>
+      <div class="img-slot-meta">무엇: <b>우측 상단 ⋮ → Import from File</b> → 캔버스에 3노드가 import된 화면 / 시점: Lab2 dry-run / alt: "Import from File로 3노드 워크플로 불러오기"</div>
+    </figure>
+    <div class="danger-box">
+      <i data-lucide="alert-triangle"><span class="ico-fb">⚠️</span></i>
+      <p><span class="t">⑤ 막히면:</span> import가 버전 차이로 실패하면 → <b>노드를 직접 하나씩 추가</b>(Add node)해도 됩니다. 자격증명·시트ID는 본인 것으로 교체.</p>
+    </div>
+      <aside class="kit-notes" hidden>Step3=⋮→Import from File로 초안 import. 메뉴 위치는 당일 확인. 캔버스에 3노드 연결되면 통과. import 실패=버전 차이→노드 직접 추가로 우회. 이후에도 노드별 실행 검증 유지.</aside>
+  </div>
+
+  <!-- L2-S4 Schedule Trigger 파라미터 -->
+  <div class="slide" data-title="Lab2 · Step 4 — Schedule Trigger 파라미터" data-chapter="M3 · 기초+첫 워크플로">
+    <div class="slide-label"><i data-lucide="clock"><span class="ico-fb">⏰</span></i> M3 · Lab2 Step 4</div>
+    <h1>Lab2 · Step 4 — <span class="hl">Schedule Trigger</span>를 매일 9시로 설정</h1>
+    <p class="subtitle">트리거 노드를 열어 매일 09:00 실행으로 맞춥니다. 타임존은 설치 때 지정한 Asia/Seoul.</p>
     <ul class="priority-list">
-      <li><span class="priority-badge p3">1</span><div><b>Schedule Trigger 추가</b> — Trigger Interval = Days, 시각 09:00.<span class="sub">타임존은 Cloud Manage → Timezone = <b>Asia/Seoul (UTC+9)</b>로 미리 설정(미설정 시 GMT).</span></div></li>
-      <li><span class="priority-badge p3">2</span><div><b>Google Sheets · Get Row(s)</b> — 인증 = "Sign in with Google", 시트 = "편성표" 선택.<span class="sub">실행하면 오늘 편성표 행들이 테이블로 보입니다.</span></div></li>
-      <li><span class="priority-badge p3">3</span><div><b>Gmail · Send</b> — To = 담당자, Subject = "오늘 편성표", Body = <span class="mono">{{ $json.방송명 }}</span> 등으로 매핑.</div></li>
-      <li><span class="priority-badge p5">4</span><div><b>연결 후 Execute Workflow</b> — 세 노드가 모두 <b>녹색</b>이고 받은편지함에 메일 1통이면 성공 → Active로 토글.</div></li>
+      <li><span class="priority-badge p3">1</span><div><b>② 클릭경로</b> — <b>Schedule Trigger 노드 더블클릭</b> → 파라미터 패널.</div></li>
+      <li><span class="priority-badge p4">2</span><div><b>반복 설정</b> — Trigger Interval = <b>Days</b>, 시각 = <b>09:00</b>.<span class="sub">파라미터 라벨은 버전마다 다름 — 당일 본인 화면 기준.</span></div></li>
+      <li><span class="priority-badge p5">3</span><div><b>타임존</b> — 설치 시 <code>GENERIC_TIMEZONE=Asia/Seoul</code>로 지정한 값이 기준.</div></li>
+    </ul>
+    <div class="success-box">
+      <i data-lucide="check-circle"><span class="ico-fb">✅</span></i>
+      <p><span class="t">④ ✅ 확인 포인트:</span> 노드를 <b>실행(Test step)</b>했을 때 녹색이고, 다음 실행 시각이 <b>09:00(한국시간)</b>으로 보이면 통과. 워크북 빈칸: 트리거 노드명 = <code>____</code>.</p>
+    </div>
+    <div class="danger-box">
+      <i data-lucide="alert-triangle"><span class="ico-fb">⚠️</span></i>
+      <p><span class="t">⑤ 막히면:</span> 실행 시각이 이상하면 → 타임존 미설정. 터미널을 <code>GENERIC_TIMEZONE=Asia/Seoul npx n8n</code>으로 재실행했는지 확인.</p>
+    </div>
+      <aside class="kit-notes" hidden>Step4=Schedule Trigger 더블클릭→Days·09:00·Asia/Seoul. 파라미터 라벨은 당일 확인. Test step 녹색+다음 실행 09:00이면 통과. 시각 이상=타임존 미설정. 타임존은 설치 환경변수가 기준.</aside>
+  </div>
+
+  <!-- L2-S5 Google Sheets 노드 -->
+  <div class="slide" data-title="Lab2 · Step 5 — Google Sheets 노드 연결" data-chapter="M3 · 기초+첫 워크플로">
+    <div class="slide-label"><i data-lucide="table-2"><span class="ico-fb">📄</span></i> M3 · Lab2 Step 5</div>
+    <h1>Lab2 · Step 5 — <span class="hl3">Google Sheets</span>로 편성표를 읽는다</h1>
+    <p class="subtitle">Get Row(s)로 데모 시트 "편성표"를 읽어, 행이 테이블로 보이는지 확인합니다.</p>
+    <ul class="priority-list">
+      <li><span class="priority-badge p3">1</span><div><b>② 클릭경로</b> — <b>Google Sheets 노드 더블클릭</b> → Operation = <b>Get Row(s)</b> → 시트 선택.</div></li>
+      <li><span class="priority-badge p4">2</span><div><b>자격증명</b> — Credential = <b>Sign in with Google</b>(OAuth2) 연결 → 문서/탭에서 <b>편성표</b> 선택.</div></li>
+      <li><span class="priority-badge p5">3</span><div><b>실행해 확인</b> — 노드 <b>Test step</b> → 오늘 편성표 행(시간·방송명·담당자·담당자메일)이 테이블로 보이는지.</div></li>
     </ul>
     <figure class="img-slot">
       <i data-lucide="image"><span class="ico-fb">🖼️</span></i>
-      <div class="img-slot-title">[캡처 자리 — 강사 붙여넣기] Lab1 실행 성공 화면</div>
-      <div class="img-slot-meta">무엇: <b>3노드 모두 녹색 체크 + 받은편지함의 편성표 메일</b> / alt: "Schedule→Sheets→Gmail 워크플로 실행 성공, 편성표 메일 수신"</div>
+      <div class="img-slot-title">[CAP-LAB2-S5 · 강사 dry-run 캡처] Google Sheets Get Row(s) 실행 결과 테이블</div>
+      <div class="img-slot-meta">무엇: <b>편성표 시트를 읽어 행이 테이블로 출력</b>된 화면 / 시점: Lab2 dry-run / alt: "Google Sheets 편성표 읽기 결과"</div>
     </figure>
-      <aside class="kit-notes" hidden>진행 순서: 처음 두 노드는 강사 시연(워크드)→메일 노드는 빈칸 채우며 함께(페이드)→연결·실행은 각자(독립). 첫 실습이라 Sign in with Google 인증에서 막히는 사람 많음 — 사내 OAuth 막히면 공용 데모 시트·수신함·강사 공유 Credential로 전환하되 노드는 직접 만지게.</aside>
+    <div class="danger-box">
+      <i data-lucide="alert-triangle"><span class="ico-fb">⚠️</span></i>
+      <p><span class="t">⑤ 막히면:</span> "credential not found" → 구글 인증 미연결. <b>Sign in with Google</b>로 연결(사내 OAuth가 막히면 공용 데모 시트/수신함으로). 시트가 안 보이면 문서 공유·탭 이름 확인.</p>
+    </div>
+      <aside class="kit-notes" hidden>Step5=Google Sheets Get Row(s)로 편성표 읽기. 더블클릭→Operation→Credential(Sign in with Google)→시트 선택→Test step. 행이 테이블로 보이면 통과. credential not found=OAuth 미연결(사내 막히면 공용 데모). 시트 미표시=공유·탭 확인.</aside>
   </div>
 
-  <!-- 14 -->
-  <div class="slide" data-title="데모: 흐름 따라가기" data-chapter="M3 · 노드 연결">
-    <div class="slide-label"><i data-lucide="play-circle"><span class="ico-fb">▶️</span></i> M3 · 인터랙티브 데모</div>
-    <h1>데이터가 노드를 <span class="hl">하나씩</span> 거쳐 나가는 흐름</h1>
-    <p class="subtitle">"실행"을 눌러 아이템이 트리거 → 시트 → 메일로 흐르는 순서를 따라가 보세요.</p>
-    <div class="kit-predict" data-id="predict-seq">
-      <p class="kit-predict-prompt">시뮬레이터를 돌리기 전에 예측해 보세요 — 세 번째(마지막) 노드까지 실행되면 무슨 일이 일어날까요?</p>
-      <label class="kit-predict-guess">
-        <span>내 예측 (선택):</span>
-        <input type="text" inputmode="text" placeholder="예: 담당자에게 편성표 메일이 발송된다" />
-      </label>
-      <button type="button" class="kit-predict-btn">결과 공개</button>
-      <div class="kit-predict-answer" hidden>
-        <strong>결과:</strong> Gmail · Send 노드가 담당자에게 편성표 내용을 <b>메일로 발송</b>하며 흐름이 완료됩니다. (트리거가 시작 → 시트가 읽어 전달 → 메일이 발송)
+  <!-- L2-S6 Gmail 노드 표현식 -->
+  <div class="slide" data-title="Lab2 · Step 6 — Gmail 노드·표현식" data-chapter="M3 · 기초+첫 워크플로">
+    <div class="slide-label"><i data-lucide="mail"><span class="ico-fb">📧</span></i> M3 · Lab2 Step 6</div>
+    <h1>Lab2 · Step 6 — <span class="hl">Gmail</span> 노드에 <span class="hl3">표현식</span>을 채운다</h1>
+    <p class="subtitle">받는 사람·제목·본문을 앞 노드의 데이터로 채웁니다. 표현식 빈칸은 직접 채워 보세요.</p>
+    <div class="grid-2">
+      <div class="card highlight">
+        <div class="card-icon"><i data-lucide="mouse-pointer-click"><span class="ico-fb">🖱️</span></i></div>
+        <div class="card-title">② 클릭경로</div>
+        <div class="card-body"><b>Gmail 노드 더블클릭</b> → Operation = <b>Send</b> → To/Subject/본문 칸에서 <b>표현식 토글(=)</b> 켜고 입력.</div>
+      </div>
+      <div class="card success-card">
+        <div class="card-icon" style="color:var(--success)"><i data-lucide="braces"><span class="ico-fb">{}</span></i></div>
+        <div class="card-title">① 표현식 (빈칸 채우기)</div>
+        <div class="card-body">To = <code>={{ $json.담당자메일 }}</code><br>Subject = <code>=오늘 편성표 - {{ $json.방송명 }}</code><br>본문 = 시간·방송명·담당을 <code>{{ $json.____ }}</code>로 조합.</div>
       </div>
     </div>
-    <div class="demo-box">
-      <div class="demo-header"><i data-lucide="workflow"><span class="ico-fb">🔀</span></i> 편성표 → 메일 시뮬레이터</div>
-      <div class="demo-body">
-        <div class="seq-stage" id="seqStage">
-          <div class="seq-node" data-step="0"><div class="seq-ico"><i data-lucide="clock"><span class="ico-fb">⏰</span></i></div><div class="seq-txt"><b>Schedule Trigger</b><span>매일 09:00 (Asia/Seoul)에 흐름 시작</span></div><span class="seq-kind">트리거</span></div>
-          <div class="seq-node" data-step="1"><div class="seq-ico"><i data-lucide="table"><span class="ico-fb">📄</span></i></div><div class="seq-txt"><b>Google Sheets · Get Row(s)</b><span>오늘 편성표 행을 읽어 아이템으로 전달</span></div><span class="seq-kind">액션</span></div>
-          <div class="seq-node" data-step="2"><div class="seq-ico"><i data-lucide="mail"><span class="ico-fb">📧</span></i></div><div class="seq-txt"><b>Gmail · Send</b><span>담당자에게 편성표 내용을 메일로 발송</span></div><span class="seq-kind">액션</span></div>
-        </div>
-        <div class="seq-controls">
-          <button class="btn btn-primary" id="seqRun"><i data-lucide="play"><span class="ico-fb">▶</span></i> 한 단계 실행</button>
-          <button class="btn btn-reset" id="seqReset"><i data-lucide="rotate-ccw"><span class="ico-fb">↺</span></i> 리셋</button>
-          <span class="seq-status" id="seqStatus">대기 중 — "한 단계 실행"을 누르세요.</span>
-        </div>
-      </div>
+    <div class="danger-box">
+      <i data-lucide="alert-triangle"><span class="ico-fb">⚠️</span></i>
+      <p><span class="t">⑤ 막히면:</span> 본문에 <code>{{ $json.방송명 }}</code> 글자 그대로 나오면 → <b>표현식 토글이 꺼졌거나</b> 필드명 오타. 한글/공백 필드가 점표기로 안 잡히면 <b>대괄호 표기</b> <code>{{ $json["담당자메일"] }}</code>. AI가 준 표현식은 대소문자·<code>$json.</code> 접두사를 슬쩍 틀릴 수 있으니 실행으로 검증.</p>
     </div>
-      <aside class="kit-notes" hidden>데이터가 노드를 거치는 흐름을 인터랙티브 데모로: 트리거 켜짐→시트에서 행 읽기→메일 노드로 전달→발송. 이후 Schedule Trigger(Days, 09시, 타임존 Asia/Seoul 확인)→Sheets Get Row(s)→Gmail Send 순으로 실습. 타임존 안 맞으면 엉뚱한 시각에 실행. 질문: 본문에 {{ }}가 그대로 찍히면 표현식 미평가(중괄호/필드명 확인).</aside>
+      <aside class="kit-notes" hidden>Step6=Gmail Send 노드 표현식. To={{ $json.담당자메일 }}, Subject=오늘 편성표 - {{ $json.방송명 }}, 본문 조합. 표현식 토글(=) 켜기. 글자 그대로 나옴=토글 꺼짐/오타. 한글·공백 필드=대괄호 표기. AI 표현식은 실행 검증.</aside>
   </div>
 
-  <!-- ===================== CH5: M4 조건분기 ===================== -->
+  <!-- L2-S7 실행 → 녹색·메일 도착 -->
+  <div class="slide" data-title="Lab2 · Step 7 — 실행·메일 도착 확인" data-chapter="M3 · 기초+첫 워크플로">
+    <div class="slide-label"><i data-lucide="check-check"><span class="ico-fb">✅</span></i> M3 · Lab2 Step 7 (완료)</div>
+    <h1>Lab2 · Step 7 — <span class="hl">실행해 녹색</span> + <span class="hl3">메일 도착</span> 확인</h1>
+    <p class="subtitle">세 노드를 Schedule → Sheets → Gmail 순서로 연결하고, 수동 실행해 메일이 오는지 봅니다.</p>
+    <ul class="priority-list">
+      <li><span class="priority-badge p3">1</span><div><b>② 클릭경로</b> — 세 노드를 <b>선으로 연결</b> → 상단 <b>Execute Workflow</b>로 전체 수동 실행.</div></li>
+      <li><span class="priority-badge p4">2</span><div><b>메일 확인</b> — 받은편지함에서 "오늘 편성표 …" 메일 1통 확인.</div></li>
+    </ul>
+    <figure class="img-slot">
+      <i data-lucide="image"><span class="ico-fb">🖼️</span></i>
+      <div class="img-slot-title">[CAP-LAB2-S7 · 강사 dry-run 캡처] 3노드 전부 녹색 + 받은편지함 메일 1통</div>
+      <div class="img-slot-meta">무엇: <b>Schedule→Sheets→Gmail 3노드 녹색 + 받은편지함 "오늘 편성표" 메일</b> / 시점: Lab2 dry-run / alt: "편성표 메일 발송 성공"</div>
+    </figure>
+    <div class="success-box">
+      <i data-lucide="party-popper"><span class="ico-fb">🎉</span></i>
+      <p><span class="t">④ ✅ 확인 포인트(Lab2 통과):</span> 노드 3개 전부 <b>녹색</b> + 메일 본문에 <code>{{ }}</code> 글자가 아니라 <b>실제 값</b>이 들어가고 + 메일 1통이 도착하면 <b>Lab2 완료</b>.</p>
+    </div>
+    <div class="danger-box">
+      <i data-lucide="alert-triangle"><span class="ico-fb">⚠️</span></i>
+      <p><span class="t">⑤ 막히면:</span> n8n-MCP가 준 노드명을 <b>대소문자 틀리게</b> 받아썼으면 에디터 실행으로 잡아 정확 노드명으로 교체. 막히면 <code>assets/import/lab1-편성표메일.json</code> import로 합류(자격증명·시트ID 교체).</p>
+    </div>
+      <aside class="kit-notes" hidden>Step7=세 노드 연결→Execute Workflow→메일 도착. 3노드 녹색+실제 값 메일 1통이면 Lab2 완료. 노드명 대소문자 오류=에디터 실행으로 교체. 막히면 assets lab1-편성표메일.json import 합류(자격증명·시트ID 교체).</aside>
+  </div>
 
-  <!-- 15 -->
-  <div class="slide" data-title="조건분기란" data-chapter="M4 · 조건분기">
-    <div class="slide-label"><i data-lucide="split"><span class="ico-fb">🔀</span></i> M4 · 조건분기 이해하기</div>
-    <h1>조건에 따라 <span class="hl">길을 가르는</span> IF · Filter</h1>
-    <p class="subtitle">"매출이 목표 미달인 방송만 따로 처리하자" — 이럴 때 조건분기 노드를 씁니다.</p>
+  <!-- ===================== CH5: M4 자동화 PRD (brainstorming) ===================== -->
+
+  <!-- 20 무엇을 자동화? 먼저 -->
+  <div class="slide" data-title="무엇을 자동화? 먼저" data-chapter="M4 · 자동화 PRD">
+    <div class="slide-label"><i data-lucide="help-circle"><span class="ico-fb">❓</span></i> M4 · 자동화 PRD 설계</div>
+    <h1>만들기 전에 — <span class="hl">"무엇을 자동화할지"</span>를 먼저 정합니다</h1>
+    <p class="subtitle">노드부터 붙이면 엉뚱한 걸 만들기 쉽습니다. 말로 명확히 한 다음에 빌드해야 AI도 맞는 노드를 만듭니다.</p>
+    <div class="quote-box">
+      <p>핵심 비유 🧩 — PRD 없이 AI에게 맡기는 건 <b>목적지 없이 택시를 타는 것</b>입니다. "알아서 좋은 데로" 하면 엉뚱한 곳에 내립니다. 자동화 PRD = 목적지·경유지를 적은 <b>운행 지시서</b>.</p>
+    </div>
+    <div class="danger-box">
+      <i data-lucide="x-octagon"><span class="ico-fb">🚫</span></i>
+      <p><span class="t">오개념 교정:</span> "AI가 알아서 해주니 PRD는 불필요" → <b>아니요.</b> PRD가 없으면 AI도 엉뚱한 노드를 만듭니다(가비지 인·가비지 아웃).</p>
+    </div>
+      <aside class="kit-notes" hidden>빌드 전에 "무엇을 자동화?"를 말로 명확히. PRD 없는 AI 위임=목적지 없는 택시. "AI가 알아서"는 오개념(가비지 인 가비지 아웃). 다음 슬라이드에서 brainstorming으로 PRD를 끌어낸다.</aside>
+  </div>
+
+  <!-- 21 brainstorming 질문 하나씩 + HARD-GATE (CAP-05, code-copy) -->
+  <div class="slide" data-title="brainstorming · HARD-GATE" data-chapter="M4 · 자동화 PRD">
+    <div class="slide-label"><i data-lucide="messages-square"><span class="ico-fb">💬</span></i> M4 · /superpowers:brainstorming</div>
+    <h1><span class="hl">질문 하나씩</span> 답하며 설계, <span class="hl2">승인 전엔 빌드 금지</span></h1>
+    <p class="subtitle">brainstorming은 한 번에 하나씩 물어보며 설계를 끌어냅니다. 설계가 승인되기 전에는 워크플로를 만들지 않습니다(HARD-GATE).</p>
+    <div class="codeblock" style="position:relative;background:#0d1320;border:1px solid var(--border,#243049);border-radius:12px;padding:14px 16px;margin:14px 0;max-width:880px">
+      <button type="button" aria-label="명령 복사" onclick="try{navigator.clipboard.writeText(this.nextElementSibling.innerText);this.textContent='✓ 복사됨';setTimeout(()=>{this.textContent='⧉ 복사';},1500);}catch(e){this.textContent='복사 실패';}" style="position:absolute;top:10px;right:10px;font-size:12px;padding:4px 10px;border-radius:7px;border:1px solid var(--accent,#6cf);background:transparent;color:var(--accent,#6cf);cursor:pointer">⧉ 복사</button>
+      <pre class="mono" style="margin:0;white-space:pre-wrap;word-break:break-all;color:#cfe3ff;font-size:13.5px;line-height:1.65">/superpowers:brainstorming
+# 주제: "내 반복 업무 하나를 자동화"
+# → Claude Code가 한 번에 한 가지씩 질문 → 답하며 PRD 완성
+# → ★PRD가 승인되기 전에는 워크플로를 만들지 않는다 (HARD-GATE)</pre>
+    </div>
+    <figure class="img-slot">
+      <i data-lucide="image"><span class="ico-fb">🖼️</span></i>
+      <div class="img-slot-title">[CAP-05-brainstorm-prd · 강사 붙여넣기] brainstorming 질문 하나씩 → PRD 5섹션 화면</div>
+      <div class="img-slot-meta">무엇: <b>한 번에 하나씩 질문하고, 답을 모아 PRD 5섹션</b>이 만들어지는 화면 / 시점: Lab3 dry-run / alt: "brainstorming으로 자동화 PRD 도출"</div>
+    </figure>
+    <div class="warn-box">
+      <i data-lucide="shield-alert"><span class="ico-fb">🛡️</span></i>
+      <p><span class="t">HARD-GATE 이유:</span> 설계가 흐릿한 채로 빌드하면 잘못된 워크플로를 빠르게 만들 뿐입니다. <b>먼저 합의하고, 그다음에 짓는다.</b></p>
+    </div>
+      <aside class="kit-notes" hidden>/superpowers:brainstorming은 한 번에 하나씩 질문. HARD-GATE=PRD 승인 전 워크플로 빌드 금지. 흐릿한 설계로 빨리 만들면 빨리 틀린다. PRD는 docs/superpowers/specs/에 저장됨.</aside>
+  </div>
+
+  <!-- 22 자동화 PRD 5섹션 -->
+  <div class="slide" data-title="자동화 PRD 5섹션" data-chapter="M4 · 자동화 PRD">
+    <div class="slide-label"><i data-lucide="clipboard-list"><span class="ico-fb">📋</span></i> M4 · 자동화 PRD 5섹션</div>
+    <h1>모든 자동화는 이 <span class="hl">5칸</span>으로 적힙니다</h1>
+    <ul class="priority-list">
+      <li><span class="priority-badge p3">트</span><div><b>① 트리거 (언제)</b><span class="sub">스케줄? 외부 호출? 폼 제출? — 무엇이 흐름을 켜는가.</span></div></li>
+      <li><span class="priority-badge p4">입</span><div><b>② 입력 (무엇을 받나·형식)</b><span class="sub">시트/메일/HTTP 등 어디서 어떤 데이터를 가져오나.</span></div></li>
+      <li><span class="priority-badge p4">처</span><div><b>③ 처리 (변환·판단·AI)</b><span class="sub">필터·집계·매핑, 그리고 필요하면 AI 판단(분류·요약).</span></div></li>
+      <li><span class="priority-badge p5">출</span><div><b>④ 출력 (어디로)</b><span class="sub">시트 쓰기/메일/Slack 등 결과를 어디로 보내나.</span></div></li>
+      <li><span class="priority-badge p2">예</span><div><b>⑤ 예외·한도 (실패·재시도·비용·개인정보)</b><span class="sub">실패하면? 발송 한도·API 비용·민감정보는?</span></div></li>
+    </ul>
+    <div class="warn-box">
+      <i data-lucide="users"><span class="ico-fb">👥</span></i>
+      <p><span class="t">짝 리뷰:</span> 옆 사람 PRD에서 가장 자주 비는 칸은 <b>⑤ 예외·한도</b>입니다. 서로 1개씩 비었는지 지적해 주세요.</p>
+    </div>
+      <aside class="kit-notes" hidden>PRD 5섹션: 트리거·입력·처리(변환/AI)·출력·예외/한도. ⑤가 가장 자주 빈다 → 짝 리뷰로 보완. 이 5칸이 다음 슬라이드에서 n8n 6레이어로 매핑된다.</aside>
+  </div>
+
+  <!-- 23 PRD → n8n 6레이어 (IMG-06 SVG) -->
+  <div class="slide" data-title="PRD → n8n 6레이어 (IMG-06)" data-chapter="M4 · 자동화 PRD">
+    <div class="slide-label"><i data-lucide="layers"><span class="ico-fb">📚</span></i> M4 · IMG-06 PRD → n8n 6레이어 매핑</div>
+    <h1>PRD 5섹션 → n8n <span class="hl3">6레이어</span>로 1:1 매핑</h1>
     <div class="diagram-wrap">
-      <div class="mermaid">
-flowchart LR
-  A["📄 Google Sheets<br/>매출 시트 읽기"] --> B{"IF<br/>매출 &lt; 목표매출 ?"}
-  B -->|true · 미달| C["📄 Sheets Append<br/>'미달 방송' 요약 시트"]
-  B -->|false · 달성| D["⏹ 통과 / 다음 처리"]
-  classDef act fill:#16261f,stroke:#34d399,color:#e4e6ef;
-  classDef cond fill:#2a2415,stroke:#f59e42,color:#e4e6ef;
-  class A,C act;
-  class B cond;
-      </div>
-      <div class="diagram-cap">IF 노드는 조건이 참이면 true 경로, 거짓이면 false 경로로 각 아이템을 보냅니다.</div>
+      <svg viewBox="0 0 920 360" width="100%" role="img" aria-label="자동화 PRD 5섹션이 n8n 6레이어(트리거·수집·가공·AI판단·액션알림·에러)로 매핑되는 다이어그램" style="max-width:920px;font-family:inherit">
+        <!-- left: PRD -->
+        <text x="30" y="24" fill="#8b8fa7" font-size="14" font-weight="700">자동화 PRD</text>
+        <rect x="20" y="36" rx="10" ry="10" width="230" height="44" fill="#1f2438" stroke="#8b8fa7" stroke-width="1.4"/><text x="34" y="56" fill="#e4e6ef" font-size="14" font-weight="700">① 트리거</text><text x="34" y="72" fill="#aeb6cc" font-size="11.5">언제 켜지나</text>
+        <rect x="20" y="90" rx="10" ry="10" width="230" height="44" fill="#1f2438" stroke="#8b8fa7" stroke-width="1.4"/><text x="34" y="110" fill="#e4e6ef" font-size="14" font-weight="700">② 입력</text><text x="34" y="126" fill="#aeb6cc" font-size="11.5">무엇을 받나</text>
+        <rect x="20" y="144" rx="10" ry="10" width="230" height="62" fill="#1f2438" stroke="#8b8fa7" stroke-width="1.4"/><text x="34" y="164" fill="#e4e6ef" font-size="14" font-weight="700">③ 처리</text><text x="34" y="180" fill="#aeb6cc" font-size="11.5">변환 · 판단(AI)</text>
+        <rect x="20" y="216" rx="10" ry="10" width="230" height="44" fill="#1f2438" stroke="#8b8fa7" stroke-width="1.4"/><text x="34" y="236" fill="#e4e6ef" font-size="14" font-weight="700">④ 출력</text><text x="34" y="252" fill="#aeb6cc" font-size="11.5">어디로 보내나</text>
+        <rect x="20" y="270" rx="10" ry="10" width="230" height="44" fill="#1f2438" stroke="#8b8fa7" stroke-width="1.4"/><text x="34" y="290" fill="#e4e6ef" font-size="14" font-weight="700">⑤ 예외·한도</text><text x="34" y="306" fill="#aeb6cc" font-size="11.5">실패 · 비용</text>
+        <!-- links -->
+        <path d="M250 58 H670" stroke="#4f8cff" stroke-width="1.6" opacity="0.6" fill="none"/>
+        <path d="M250 112 H670" stroke="#4f8cff" stroke-width="1.6" opacity="0.6" fill="none"/>
+        <path d="M250 165 H670" stroke="#4f8cff" stroke-width="1.6" opacity="0.6" fill="none"/>
+        <path d="M250 195 H670" stroke="#4f8cff" stroke-width="1.6" opacity="0.6" fill="none"/>
+        <path d="M250 238 H670" stroke="#4f8cff" stroke-width="1.6" opacity="0.6" fill="none"/>
+        <path d="M250 292 H670" stroke="#4f8cff" stroke-width="1.6" opacity="0.6" fill="none"/>
+        <!-- right: n8n layers -->
+        <text x="680" y="24" fill="#8b8fa7" font-size="14" font-weight="700">n8n 6레이어</text>
+        <rect x="670" y="36"  rx="10" ry="10" width="230" height="44" fill="#1a2740" stroke="#4f8cff" stroke-width="1.6"/><text x="684" y="56" fill="#e4e6ef" font-size="14" font-weight="700">트리거</text><text x="684" y="72" fill="#aeb6cc" font-size="11.5">Schedule/Webhook/Form</text>
+        <rect x="670" y="90"  rx="10" ry="10" width="230" height="44" fill="#16261f" stroke="#34d399" stroke-width="1.6"/><text x="684" y="110" fill="#e4e6ef" font-size="14" font-weight="700">수집</text><text x="684" y="126" fill="#aeb6cc" font-size="11.5">Sheets/HTTP/Gmail</text>
+        <rect x="670" y="144" rx="10" ry="10" width="230" height="44" fill="#16261f" stroke="#34d399" stroke-width="1.6"/><text x="684" y="164" fill="#e4e6ef" font-size="14" font-weight="700">가공</text><text x="684" y="180" fill="#aeb6cc" font-size="11.5">Code/Set/Filter/Merge</text>
+        <rect x="670" y="198" rx="10" ry="10" width="230" height="44" fill="#2a2415" stroke="#f59e42" stroke-width="2.4"/><text x="684" y="218" fill="#e4e6ef" font-size="14" font-weight="700">AI 판단 ★</text><text x="684" y="234" fill="#aeb6cc" font-size="11.5">Anthropic Chat Model(API 키)</text>
+        <rect x="670" y="252" rx="10" ry="10" width="230" height="44" fill="#16261f" stroke="#34d399" stroke-width="1.6"/><text x="684" y="272" fill="#e4e6ef" font-size="14" font-weight="700">액션·알림</text><text x="684" y="288" fill="#aeb6cc" font-size="11.5">Sheets/Slack/Gmail</text>
+        <rect x="670" y="306" rx="10" ry="10" width="230" height="44" fill="#2b1a1a" stroke="#e66" stroke-width="1.6"/><text x="684" y="326" fill="#e4e6ef" font-size="14" font-weight="700">에러핸들링</text><text x="684" y="342" fill="#aeb6cc" font-size="11.5">Error Trigger/IF/Stop</text>
+      </svg>
+      <div class="diagram-cap">PRD ③ 처리는 "가공"과 "AI 판단" 두 레이어로 갈라집니다 — AI 판단(★)은 2일차에 회사 API 키로.</div>
     </div>
-      <aside class="kit-notes" hidden>조건에 따라 다르게 처리하는 게 IF·Filter 노드 — 길을 가르는 신호등. 예: 목표 매출 미달 방송만 빼서 보고.</aside>
+      <aside class="kit-notes" hidden>PRD 5섹션을 n8n 6레이어로 매핑(처리가 가공+AI판단으로 분화). 이 매핑이 빌드의 설계도. AI 판단 레이어가 ④ Anthropic 노드(API 키)이고 2일차 핸즈온 대상. 이 다이어그램은 day2 M7에서도 재사용.</aside>
   </div>
 
-  <!-- 16 -->
-  <div class="slide" data-title="IF vs Filter" data-chapter="M4 · 조건분기">
-    <div class="slide-label"><i data-lucide="git-fork"><span class="ico-fb">🍴</span></i> M4 · 헷갈리는 두 노드</div>
+  <!-- ===================== LAB 3 실습 step 슬라이드 (M4 brainstorming PRD) ===================== -->
+
+  <!-- L3-0 지금 실습 안내 -->
+  <div class="slide" data-title="▶ 지금 실습: 워크북 Lab 3 펴기" data-chapter="M4 · 자동화 PRD">
+    <div class="slide-label"><i data-lucide="play-circle"><span class="ico-fb">▶️</span></i> M4 · 실습 시작 — 워크북 Lab 3</div>
+    <h1><span class="hl">▶ 지금 실습</span> — 워크북 <span class="hl3">Lab 3</span>을 펴세요</h1>
+    <p class="subtitle">노드를 만들기 <b>전에</b>, <code>/superpowers:brainstorming</code>으로 <b>자동화 PRD 5섹션</b>을 손으로 채우고 n8n 6레이어에 매핑합니다. 설계가 승인되기 전엔 워크플로를 만들지 않습니다(HARD-GATE).</p>
+    <div class="grid-2">
+      <div class="card highlight">
+        <div class="card-icon"><i data-lucide="target"><span class="ico-fb">🎯</span></i></div>
+        <div class="card-title">이번 랩에서 만드는 것</div>
+        <div class="card-body">내 반복업무 1개에 대한 <b>PRD 1장</b> + 6레이어 매핑표 + 짝 리뷰 1개.</div>
+      </div>
+      <div class="card success-card">
+        <div class="card-icon" style="color:var(--success)"><i data-lucide="check-circle"><span class="ico-fb">✅</span></i></div>
+        <div class="card-title">완성 모습</div>
+        <div class="card-body">PRD 5섹션 전부 채움 + 6레이어 후보 노드 채움 + 짝 리뷰 1개 주고받음.</div>
+      </div>
+    </div>
+    <div class="warn-box">
+      <i data-lucide="shield-alert"><span class="ico-fb">🛡️</span></i>
+      <p><span class="t">HARD-GATE:</span> 이 랩은 코드를 만들지 않습니다 — <b>말로 명확히 하는 설계</b>가 산출물입니다. 질문은 <b>하나씩</b> 답하세요.</p>
+    </div>
+      <aside class="kit-notes" hidden>Lab3 진입 안내. 빌드 전 brainstorming으로 PRD 5섹션+6레이어 매핑. HARD-GATE=설계 승인 전 빌드 금지. 질문 하나씩. 산출물=PRD 1장+매핑표+짝 리뷰. 이 랩은 코드 X.</aside>
+  </div>
+
+  <!-- L3-S1 brainstorming 호출 (프롬프트) -->
+  <div class="slide" data-title="Lab3 · Step 1 — brainstorming 호출" data-chapter="M4 · 자동화 PRD">
+    <div class="slide-label"><i data-lucide="messages-square"><span class="ico-fb">💬</span></i> M4 · Lab3 Step 1</div>
+    <h1>Lab3 · Step 1 — <span class="hl">/superpowers:brainstorming</span>을 호출한다</h1>
+    <p class="subtitle">주제를 "내 반복 업무 하나 자동화"로 두고 brainstorming을 시작합니다.</p>
+    <div class="codeblock" style="position:relative;background:#0d1320;border:1px solid var(--border,#243049);border-radius:12px;padding:14px 16px;margin:14px 0;max-width:880px">
+      <button type="button" aria-label="명령 복사" onclick="try{navigator.clipboard.writeText(this.nextElementSibling.innerText);this.textContent='✓ 복사됨';setTimeout(()=>{this.textContent='⧉ 복사';},1500);}catch(e){this.textContent='복사 실패';}" style="position:absolute;top:10px;right:10px;font-size:12px;padding:4px 10px;border-radius:7px;border:1px solid var(--accent,#6cf);background:transparent;color:var(--accent,#6cf);cursor:pointer">⧉ 복사</button>
+      <pre class="mono" style="margin:0;white-space:pre-wrap;word-break:break-all;color:#cfe3ff;font-size:13.5px;line-height:1.65">/superpowers:brainstorming
+# 주제: "내 반복 업무 하나를 자동화"</pre>
+    </div>
+    <div class="grid-2">
+      <div class="card highlight"><div class="card-title">② 무엇을 하나</div><div class="card-body">Claude Code에 위 명령 입력 → 주제로 "내가 매일/매주 반복하는 업무 1개"를 제시.</div></div>
+      <div class="card success-card"><div class="card-title">④ ✅ 확인 포인트</div><div class="card-body">Claude Code가 <b>한 번에 한 가지씩 질문</b>하기 시작하면 정상.</div></div>
+    </div>
+    <div class="danger-box">
+      <i data-lucide="alert-triangle"><span class="ico-fb">⚠️</span></i>
+      <p><span class="t">⑤ 막히면:</span> 명령이 안 먹으면 superpowers 설치/이름을 강사와 확인. AI가 여러 질문을 한꺼번에 쏟으면 "하나씩 물어봐"라고 요청.</p>
+    </div>
+      <aside class="kit-notes" hidden>Step1=/superpowers:brainstorming 호출(프롬프트). 주제=내 반복 업무 1개. 한 번에 하나씩 질문 시작하면 정상. 명령 미작동=설치/이름 확인. 한꺼번에 질문하면 하나씩 요청.</aside>
+  </div>
+
+  <!-- L3-S2 질문 하나씩 답하기 -->
+  <div class="slide" data-title="Lab3 · Step 2 — 질문에 하나씩 답하기" data-chapter="M4 · 자동화 PRD">
+    <div class="slide-label"><i data-lucide="list-checks"><span class="ico-fb">🧭</span></i> M4 · Lab3 Step 2</div>
+    <h1>Lab3 · Step 2 — <span class="hl3">질문 하나씩</span> 답한다 (HARD-GATE)</h1>
+    <p class="subtitle">brainstorming은 한 번에 하나씩 물어봅니다. 답을 모아 설계가 또렷해집니다 — 승인 전엔 빌드 금지.</p>
+    <figure class="img-slot">
+      <i data-lucide="image"><span class="ico-fb">🖼️</span></i>
+      <div class="img-slot-title">[CAP-LAB3-S2 · 강사 dry-run 캡처] brainstorming이 한 번에 한 질문씩 던지는 화면</div>
+      <div class="img-slot-meta">무엇: <b>질문 하나 → 답 → 다음 질문</b>으로 진행되는 대화 화면 / 시점: Lab3 dry-run / alt: "brainstorming 한 질문씩 진행"</div>
+    </figure>
+    <div class="grid-2">
+      <div class="card highlight"><div class="card-title">② 무엇을 하나</div><div class="card-body">질문마다 <b>한 줄로</b> 답한다(트리거·입력·처리·출력·예외를 끌어내는 질문들).</div></div>
+      <div class="card success-card"><div class="card-title">④ ✅ 확인 포인트</div><div class="card-body">대화가 진행될수록 내 자동화의 <b>윤곽이 또렷</b>해지면 정상.</div></div>
+    </div>
+    <div class="danger-box">
+      <i data-lucide="x-octagon"><span class="ico-fb">🚫</span></i>
+      <p><span class="t">⑤ 막히면(오개념):</span> "AI가 알아서 해주니 PRD 불필요" → 아니요. 설계가 흐릿하면 AI도 엉뚱한 노드를 만듭니다(가비지 인·가비지 아웃). <b>승인 전엔 빌드하지 않습니다.</b></p>
+    </div>
+      <aside class="kit-notes" hidden>Step2=질문 하나씩 답하기(HARD-GATE). 트리거·입력·처리·출력·예외를 끌어내는 질문에 한 줄씩. 진행될수록 윤곽 또렷=정상. 오개념="AI가 알아서"→가비지 인 가비지 아웃. 승인 전 빌드 금지.</aside>
+  </div>
+
+  <!-- L3-S3 PRD 5섹션 완성 화면 -->
+  <div class="slide" data-title="Lab3 · Step 3 — PRD 5섹션 완성" data-chapter="M4 · 자동화 PRD">
+    <div class="slide-label"><i data-lucide="clipboard-list"><span class="ico-fb">📋</span></i> M4 · Lab3 Step 3</div>
+    <h1>Lab3 · Step 3 — <span class="hl">PRD 5섹션</span>을 완성한다</h1>
+    <p class="subtitle">답을 모아 5섹션을 채웁니다. 워크북 표에 직접 적어 보세요.</p>
+    <ul class="priority-list">
+      <li><span class="priority-badge p3">트</span><div><b>① 트리거 (언제 시작?)</b> — <code>____</code></div></li>
+      <li><span class="priority-badge p4">입</span><div><b>② 입력 (무엇을 받나·형식)</b> — <code>____</code></div></li>
+      <li><span class="priority-badge p4">처</span><div><b>③ 처리 (변환·판단·AI)</b> — <code>____</code></div></li>
+      <li><span class="priority-badge p5">출</span><div><b>④ 출력 (어디로)</b> — <code>____</code></div></li>
+      <li><span class="priority-badge p2">예</span><div><b>⑤ 예외·한도 (실패·재시도·비용·개인정보)</b> — <code>____</code></div></li>
+    </ul>
+    <figure class="img-slot">
+      <i data-lucide="image"><span class="ico-fb">🖼️</span></i>
+      <div class="img-slot-title">[CAP-LAB3-S3 · 강사 dry-run 캡처] PRD 5섹션이 채워진 결과 화면</div>
+      <div class="img-slot-meta">무엇: <b>brainstorming 결과로 PRD 5섹션이 채워진</b> 문서 화면 / 시점: Lab3 dry-run / alt: "자동화 PRD 5섹션 완성"</div>
+    </figure>
+    <div class="success-box">
+      <i data-lucide="check-circle"><span class="ico-fb">✅</span></i>
+      <p><span class="t">④ ✅ 확인 포인트:</span> 5칸이 모두 한 줄 이상 채워지면 통과. 산출물은 <code>docs/superpowers/specs/</code>에 자동 저장됩니다. <span style="color:var(--text-dim)">⑤ 가장 자주 비는 칸 = ⑤ 예외·한도.</span></p>
+    </div>
+      <aside class="kit-notes" hidden>Step3=PRD 5섹션 완성(트리거·입력·처리·출력·예외). 워크북 빈칸 채우기. 5칸 다 채우면 통과. specs/에 자동 저장. ⑤ 예외·한도가 가장 자주 빔(다음 step 짝 리뷰로 보완).</aside>
+  </div>
+
+  <!-- L3-S4 6레이어 매핑 -->
+  <div class="slide" data-title="Lab3 · Step 4 — n8n 6레이어 매핑" data-chapter="M4 · 자동화 PRD">
+    <div class="slide-label"><i data-lucide="layers"><span class="ico-fb">📚</span></i> M4 · Lab3 Step 4</div>
+    <h1>Lab3 · Step 4 — PRD를 <span class="hl3">n8n 6레이어</span>에 매핑한다</h1>
+    <p class="subtitle">5섹션을 n8n 레이어로 옮기고, 각 레이어의 후보 노드를 적습니다(빈칸 채우기).</p>
+    <ul class="priority-list">
+      <li><span class="priority-badge p3">트</span><div><b>트리거 → 트리거 레이어</b> — 후보: <code>____</code> <span class="sub">(힌트: Schedule/Webhook/Form)</span></div></li>
+      <li><span class="priority-badge p4">입</span><div><b>입력 → 수집</b> — 후보: <code>____</code> <span class="sub">(힌트: Sheets/HTTP/Gmail)</span></div></li>
+      <li><span class="priority-badge p4">처</span><div><b>처리(변환) → 가공</b> — 후보: <code>____</code> <span class="sub">(힌트: Code/Set/Filter/Merge)</span></div></li>
+      <li><span class="priority-badge p4">AI</span><div><b>처리(AI) → AI 판단</b> — 후보: <code>____</code> <span class="sub">(힌트: Anthropic Chat Model · 회사 API 키)</span></div></li>
+      <li><span class="priority-badge p5">출</span><div><b>출력·알림 → 액션·알림</b> — 후보: <code>____</code> <span class="sub">(힌트: Sheets/Slack/Gmail)</span></div></li>
+      <li><span class="priority-badge p2">예</span><div><b>예외 → 에러핸들링</b> — 후보: <code>____</code> <span class="sub">(힌트: Error Trigger/IF/Stop And Error)</span></div></li>
+    </ul>
+    <div class="success-box">
+      <i data-lucide="check-circle"><span class="ico-fb">✅</span></i>
+      <p><span class="t">④ ✅ 확인 포인트:</span> 6레이어 후보 노드가 다 채워지면 통과. ③ 처리는 <b>가공 + AI 판단</b> 둘로 갈라집니다 — 숫자 임계값이면 IF/Filter, 자연어 분류면 Anthropic 노드(2일차).</p>
+    </div>
+      <aside class="kit-notes" hidden>Step4=PRD 5섹션을 n8n 6레이어로 매핑(처리=가공+AI판단 분화). 각 레이어 후보 노드 빈칸 채우기. "판단=무조건 AI"는 오개념(숫자=IF/Filter). AI 판단=Anthropic 노드(회사 API 키, 2일차).</aside>
+  </div>
+
+  <!-- L3-S5 짝 리뷰 -->
+  <div class="slide" data-title="Lab3 · Step 5 — 짝 리뷰" data-chapter="M4 · 자동화 PRD">
+    <div class="slide-label"><i data-lucide="users"><span class="ico-fb">👥</span></i> M4 · Lab3 Step 5 (완료)</div>
+    <h1>Lab3 · Step 5 — <span class="hl">짝 리뷰</span>로 빈 칸을 찾아준다</h1>
+    <p class="subtitle">옆 사람과 PRD를 바꿔 보고, 가장 자주 비는 ⑤ 예외·한도를 점검합니다.</p>
+    <div class="grid-2">
+      <div class="card highlight">
+        <div class="card-icon"><i data-lucide="search"><span class="ico-fb">🔎</span></i></div>
+        <div class="card-title">② 무엇을 하나</div>
+        <div class="card-body">옆 사람 PRD에서 <b>"⑤ 예외·한도"가 비었는지</b> 1개 지적. 워크북에 짝 이름·지적 1줄 적기.</div>
+      </div>
+      <div class="card success-card">
+        <div class="card-icon" style="color:var(--success)"><i data-lucide="check-circle"><span class="ico-fb">✅</span></i></div>
+        <div class="card-title">④ ✅ 확인 포인트(Lab3 통과)</div>
+        <div class="card-body">PRD 5섹션 + 6레이어 매핑 + <b>짝 리뷰 1개</b> 주고받으면 Lab3 완료.</div>
+      </div>
+    </div>
+    <div class="warn-box">
+      <i data-lucide="info"><span class="ico-fb">ℹ️</span></i>
+      <p><span class="t">⑤ 막히면:</span> 지적할 게 안 보이면 → ⑤ 예외·한도(실패 시 재시도? 발송 한도? 민감정보?)를 묻는 것부터. 다음 M5 본실습에서 이 설계를 빌드로 옮깁니다.</p>
+    </div>
+      <aside class="kit-notes" hidden>Step5=짝 리뷰로 ⑤ 예외·한도 점검 1개 지적. 워크북에 짝 이름·지적 기록. PRD 5섹션+6레이어+짝 리뷰면 Lab3 완료. 지적 막히면 ⑤(재시도·한도·민감정보)부터. 다음 M5에서 빌드.</aside>
+  </div>
+
+  <!-- ===================== CH6: M5 조건분기·데이터·다중출력 ===================== -->
+
+  <!-- 24 IF / Filter -->
+  <div class="slide" data-title="IF vs Filter" data-chapter="M5 · 분기·집계·다중">
+    <div class="slide-label"><i data-lucide="git-fork"><span class="ico-fb">🍴</span></i> M5 · 조건분기 — IF vs Filter</div>
     <h1><span class="hl">IF</span>와 <span class="hl2">Filter</span>는 무엇이 다른가</h1>
     <div class="grid-2">
       <div class="card highlight">
         <div class="card-icon"><i data-lucide="split"><span class="ico-fb">🔀</span></i></div>
         <div class="card-title">IF — 두 갈래</div>
-        <div class="card-body"><strong>true / false 두 출력</strong>이 생긴다. 양쪽을 <strong>각각 다르게</strong> 후속 처리할 때.<br>예: 미달 방송은 요약 시트에, 달성 방송은 그냥 통과.</div>
+        <div class="card-body"><strong>true / false 두 출력</strong>이 생긴다. 양쪽을 <strong>각각 다르게</strong> 후속 처리할 때.<br>예: 미달 방송은 요약 시트에, 달성 방송은 통과.</div>
       </div>
       <div class="card warn-card">
         <div class="card-icon" style="color:var(--warn)"><i data-lucide="filter"><span class="ico-fb">🧹</span></i></div>
@@ -1297,361 +1965,376 @@ flowchart LR
     </div>
     <div class="warn-box">
       <i data-lucide="alert-triangle"><span class="ico-fb">⚠️</span></i>
-      <p><span class="t">흔한 실수:</span> 매출이 <span class="mono">"1,200,000"</span> 처럼 <b>문자열</b>이면 숫자 비교가 항상 실패합니다 → 콤마 제거 후 <b>Number로 변환</b>해 비교하세요.</p>
+      <p><span class="t">흔한 실수:</span> 매출이 <span class="mono">"1,200,000"</span>처럼 <b>문자열</b>이면 숫자 비교가 항상 실패합니다 → 콤마 제거 후 <b>Number로 변환</b>해 비교하세요.</p>
     </div>
-    <div class="kit-mcq" data-group="m4" data-id="mcq-iffilter" data-question="IF vs Filter">
+    <div class="kit-mcq" data-group="m5" data-id="mcq-iffilter" data-question="IF vs Filter">
       <p class="kit-mcq-q">"통과할 아이템만 남기고 나머지는 버리되, 분기는 만들지 않는다" — 어느 노드일까요?</p>
       <div class="kit-mcq-opts" role="group" aria-label="객관식 보기">
         <button type="button" class="kit-mcq-opt">A. IF — true/false 두 출력으로 갈라진다</button>
-        <button type="button" class="kit-mcq-opt" data-correct>B. Filter — 통과 아이템만 남기고 분기는 없다</button>
+        <button type="button" class="kit-mcq-opt" data-correct>B. Filter — 조건을 통과한 항목만 남긴다</button>
         <button type="button" class="kit-mcq-opt">C. Schedule Trigger</button>
-        <button type="button" class="kit-mcq-opt">D. Gmail Send</button>
+        <button type="button" class="kit-mcq-opt">D. Gmail · Send</button>
       </div>
       <p class="kit-mcq-live" aria-live="polite"></p>
       <div class="kit-mcq-explain" hidden>
-        <strong>정답: B.</strong> Filter는 통과 아이템만 남기고 나머지는 버립니다(분기 없음). IF는 true/false <b>두 출력</b>으로 갈라 양쪽을 각각 다르게 처리할 때 씁니다.
+        <strong>정답: B.</strong> Filter는 통과 항목만 남기고 분기를 만들지 않습니다. 두 갈래(참/거짓)로 나누는 건 IF입니다.
       </div>
     </div>
-    <section class="kit-checkpoint" data-group="m4" data-pass="0.7" data-review-anchor="#slide-19">
-      <h3 class="kit-cp-title">체크포인트 · M4 조건분기</h3>
-      <p style="color:var(--text-dim);font-size:14px;margin:0 0 .4rem">위 IF vs Filter 문항을 먼저 풀고 눌러 보세요.</p>
-      <button type="button" class="kit-cp-check">단원 통과 확인</button>
-      <p class="kit-cp-result" aria-live="polite"></p>
-      <div class="kit-cp-review" hidden>
-        아직 부족해요. <a href="#slide-19" class="kit-cp-anchor">M4 조건분기 첫 슬라이드로 돌아가기 ↑</a>
-      </div>
-    </section>
-      <aside class="kit-notes" hidden>IF=두 갈래(참이면 true 경로, 거짓이면 false 경로, 양쪽 다 따로 처리). Filter=한 갈래(통과한 것만 남기고 나머지 버림). 둘 다 처리하면 IF, 남길 것만이면 Filter. 캔버스에서 IF의 두 출력과 Filter의 단일 출력을 나란히 비교. true/false 가지를 거꾸로 연결하는 실수 잦음.</aside>
+      <aside class="kit-notes" hidden>IF=참/거짓 두 출력으로 분기, Filter=통과만 남기고 버림(분기 없음). 문자열 매출은 숫자 비교 실패 → 콤마 제거+Number 변환. 표현식 환각은 다음 슬라이드.</aside>
   </div>
 
-  <!-- 16b -->
-  <div class="slide" data-title="조건식의 함정" data-chapter="M4 · 조건분기">
-    <div class="slide-label"><i data-lucide="hash"><span class="ico-fb">🔢</span></i> M4 · 조건식의 함정 — 문자열 vs 숫자</div>
-    <h1>매출이 <span class="hl2">"1,200,000"</span>이면<br>숫자 비교가 <span class="hl2">항상 실패</span>합니다</h1>
-    <p class="subtitle">콤마가 들어간 <b>문자열</b>("1,200,000")은 숫자(1200000)와 다릅니다. IF가 "작다/크다"를 따질 수 없어 비교가 늘 어긋납니다.</p>
+  <!-- 25 표현식 미니청크 (환각 함정) -->
+  <div class="slide" data-title="표현식 미니청크" data-chapter="M5 · 분기·집계·다중">
+    <div class="slide-label"><i data-lucide="braces"><span class="ico-fb">🔤</span></i> M5 · 표현식 — 작은 한 조각</div>
+    <h1>값을 꺼낼 땐 <span class="hl3">{{ $json.필드 }}</span> — 여기 함정이 있습니다</h1>
+    <p class="subtitle">앞 노드의 데이터를 참조하는 표현식. AI가 자주 틀리는 두 지점을 미리 알아 둡니다.</p>
     <div class="grid-2">
       <div class="card warn-card">
-        <div class="card-icon" style="color:var(--warn)"><i data-lucide="circle-alert"><span class="ico-fb">⚠️</span></i></div>
-        <div class="card-title">증상</div>
-        <div class="card-body">매출 시트의 <span class="mono">일일매출_콤마</span> 열이 <strong>"1,200,000"</strong>(콤마 문자열).<br>IF <span class="mono">매출 &lt; 목표매출</span> 가 <strong>항상 false</strong> — 미달 방송이 하나도 안 잡힌다.</div>
+        <div class="card-icon" style="color:var(--warn)"><i data-lucide="case-sensitive"><span class="ico-fb">🔠</span></i></div>
+        <div class="card-title">함정 ① 노드명 대소문자</div>
+        <div class="card-body">노드명·필드명은 <strong>대소문자·공백까지 정확</strong>해야 합니다. <span class="mono">$('HTTP Request')</span> ≠ <span class="mono">$('http request')</span>. AI가 살짝 바꿔 쓰면 실패.</div>
       </div>
-      <div class="card success-card">
-        <div class="card-icon" style="color:var(--success)"><i data-lucide="wrench"><span class="ico-fb">🔧</span></i></div>
-        <div class="card-title">해결</div>
-        <div class="card-body">① <strong>콤마 제거</strong> → ② <strong>Number로 변환</strong> 후 비교.<br>③ IF 조건의 <strong>데이터 타입을 Number로</strong> 지정.</div>
+      <div class="card warn-card">
+        <div class="card-icon" style="color:var(--warn)"><i data-lucide="terminal-square"><span class="ico-fb">$</span></i></div>
+        <div class="card-title">함정 ② <span class="mono">$json.</span> 접두사</div>
+        <div class="card-body">현재 아이템 값은 <span class="mono">{{ $json.email }}</span>처럼 <strong>$json. 접두사</strong>로. AI가 접두사를 빠뜨리면 값이 안 나옵니다.</div>
       </div>
     </div>
-    <div class="warn-box">
-      <i data-lucide="alert-triangle"><span class="ico-fb">⚠️</span></i>
-      <p><span class="t">시연:</span> <span class="mono">일일매출_콤마</span> 열을 그대로 비교 → 미달 0건. 콤마 제거·Number 변환·조건 타입 Number로 바꾸면 정상적으로 미달 방송만 분기됩니다.</p>
+    <div class="danger-box">
+      <i data-lucide="bug"><span class="ico-fb">🐞</span></i>
+      <p><span class="t">AI 환각 주의:</span> Claude Code가 표현식을 만들어 줘도 <b>대소문자·접두사를 슬쩍 틀릴 수</b> 있습니다. → 반드시 <b>에디터에서 실행</b>해 값이 나오는지 확인하세요(가설→검증).</p>
     </div>
-      <aside class="kit-notes" hidden>가장 많이 막히는 건 타입 불일치 — 매출이 "1,200,000"처럼 콤마 든 문자열이면 숫자 비교가 어긋난다. 콤마 빼고 Number로 변환 후 비교. 비교 연산자도 데이터 타입에 맞게. 타입 함정 1회 시연.</aside>
+      <aside class="kit-notes" hidden>표현식 두 함정: ①노드명 대소문자·공백 정확 ②$json. 접두사 누락. AI가 자주 틀리니 에디터 실행으로 검증. {{ }}는 미니청크로 외재부하를 낮춰 따로 다룬다.</aside>
   </div>
 
-  <!-- 16c -->
-  <div class="slide" data-title="조건 결합 (AND)" data-chapter="M4 · 조건분기">
-    <div class="slide-label"><i data-lucide="git-merge"><span class="ico-fb">🔗</span></i> M4 · 조건 결합 — AND로 좁히기</div>
-    <h1>조건을 <span class="hl">AND</span>로 묶어<br>대상을 더 <span class="hl">좁힙니다</span></h1>
-    <p class="subtitle">조건은 하나가 아니어도 됩니다. 여러 조건을 <b>AND</b>로 결합하면 둘 다 맞는 아이템만 true 가지로 갑니다.</p>
+  <!-- 26 상품군 group/sum 집계 -->
+  <div class="slide" data-title="상품군 집계 (group/sum)" data-chapter="M5 · 분기·집계·다중">
+    <div class="slide-label"><i data-lucide="sigma"><span class="ico-fb">∑</span></i> M5 · 집계 — 모아서 합치기</div>
+    <h1>일일매출을 <span class="hl">상품군별</span>로 묶어 <span class="hl3">합산</span>합니다</h1>
+    <p class="subtitle">행 단위 매출을 상품군으로 그룹핑(group)하고 매출을 합(sum)해 요약을 만듭니다.</p>
     <div class="diagram-wrap">
       <div class="mermaid">
 flowchart LR
-  A["📄 매출 시트 읽기"] --> B{"IF<br/>매출 &lt; 목표매출<br/>AND 상품군 = 주방"}
-  B -->|true · 둘 다 충족| C["📄 Sheets Append<br/>'주방 미달' 요약"]
-  B -->|false| D["⏹ 통과 / 제외"]
+  A["📄 Sheets<br/>일일매출 읽기"] --> F["🧹 Filter / IF<br/>(필요 행만)"]
+  F --> S["∑ Summarize<br/>상품군 group · 매출 sum"]
+  S --> W["📄 Sheets Append<br/>요약시트 (sum_매출)"]
   classDef act fill:#16261f,stroke:#34d399,color:#e4e6ef;
   classDef cond fill:#2a2415,stroke:#f59e42,color:#e4e6ef;
-  class A,C act;
-  class B cond;
+  class A,S,W act;
+  class F cond;
       </div>
-      <div class="diagram-cap">예(Lab2 확장과제): "매출 미달 <b>그리고</b> 상품군 = 주방" — 두 조건을 AND로 결합해 주방 미달 방송만 추출.</div>
+      <div class="diagram-cap">읽기 → 거르기 → 집계(group/sum) → 요약시트 쓰기 — 집계 파이프라인의 기본형</div>
     </div>
-    <div class="warn-box">
-      <i data-lucide="check-check"><span class="ico-fb">✔️</span></i>
-      <p><span class="t">습관:</span> 분기 후 <b>true / false 가지 라벨</b>을 꼭 확인하세요. 가지를 거꾸로 연결하면 의도와 반대로 처리됩니다.</p>
+    <div class="success-box">
+      <i data-lucide="table-2"><span class="ico-fb">📊</span></i>
+      <p><span class="t">Summarize 노드:</span> "상품군"으로 group, "매출"을 sum → 출력키 <span class="mono">sum_매출</span>. 결과를 요약시트에 Append하면 사람이 보던 합계표가 자동으로 채워집니다.</p>
     </div>
-      <aside class="kit-notes" hidden>조건 두 개 이상 묶기: IF 노드 안에서 조건 추가 후 AND로 묶으면 둘 다 참일 때만 true, OR는 하나만 참이어도 통과. 오늘은 AND만 한 번. Lab2: 매출 &lt; 목표매출 IF로 걸어 true 가지에 미달 방송만 흐르게.</aside>
+      <aside class="kit-notes" hidden>Summarize로 상품군 group + 매출 sum → 출력키 sum_매출 → 요약시트 Append. 사람이 손으로 만들던 합계표를 자동화. 다음은 이 요약을 여러 곳에 보내는 다중발송.</aside>
   </div>
 
-  <!-- ===================== CH6: M5 다중출력 ===================== -->
-
-  <!-- 17 -->
-  <div class="slide" data-title="표현식 미니청크" data-chapter="M5 · 다중출력">
-    <div class="slide-label"><i data-lucide="braces"><span class="ico-fb">{ }</span></i> M5 도입 · 표현식·데이터 매핑 (5분)</div>
-    <h1><span class="mono" style="font-size:0.85em">{{ $json }}</span> — 앞 노드의 데이터를 <span class="hl">참조</span>하는 법</h1>
-    <p class="subtitle">다중출력으로 가기 전, 노드 사이에서 값을 꺼내 쓰는 <span class="kit-term">표현식<button type="button" class="kit-term-btn" popovertarget="def-expr" aria-label="표현식 용어 설명" aria-expanded="false">ⓘ</button><span class="kit-term-pop" id="def-expr" popover role="tooltip"><strong>표현식(Expression)</strong> — 노드 입력칸에 <span class="mono">{{ }}</span>로 감싸 적는 작은 코드 조각입니다. 앞 노드가 넘긴 데이터(<span class="mono">$json</span>)에서 값을 꺼내 동적으로 채웁니다.</span></span> 한 가지를 짧게 익힙니다.</p>
-    <ul class="lead-list">
-      <li><i data-lucide="corner-down-right"><span class="ico-fb">↳</span></i><span><span class="mono">$json</span> = 바로 <b>앞 노드가 넘긴 현재 아이템</b></span></li>
-      <li><i data-lucide="corner-down-right"><span class="ico-fb">↳</span></i><span><span class="mono">{{ $json.상품군 }}</span> → 그 아이템의 <b>'상품군' 필드 값</b></span></li>
-      <li><i data-lucide="corner-down-right"><span class="ico-fb">↳</span></i><span>한글·공백·특수문자 필드는 대괄호로: <span class="mono">{{ $json["상품군"] }}</span></span></li>
-    </ul>
-    <div class="warn-box">
-      <i data-lucide="alert-triangle"><span class="ico-fb">⚠️</span></i>
-      <p><span class="t">표현식은 <span class="mono">{{ }}</span> 안에서만</span> 평가됩니다. 중괄호를 빼면 <span class="mono">$json.매출</span> 글자가 그대로 메일에 찍힙니다. (필드명 오타도 단골 원인 → Schema 보기로 실제 키 확인)</p>
-    </div>
-    <div class="kit-mcq" data-group="m5" data-id="mcq-expr" data-question="표현식 $json">
-      <p class="kit-mcq-q">앞 노드가 넘긴 현재 아이템의 '상품군' 필드 값을 메일 본문에 넣으려면?</p>
-      <div class="kit-mcq-opts" role="group" aria-label="객관식 보기">
-        <button type="button" class="kit-mcq-opt">A. <span class="mono">$json.상품군</span> (중괄호 없이)</button>
-        <button type="button" class="kit-mcq-opt" data-correct>B. <span class="mono">{{ $json.상품군 }}</span></button>
-        <button type="button" class="kit-mcq-opt">C. <span class="mono">상품군</span> 만 적는다</button>
-        <button type="button" class="kit-mcq-opt">D. 표현식으로는 불가능하다</button>
-      </div>
-      <p class="kit-mcq-live" aria-live="polite"></p>
-      <div class="kit-mcq-explain" hidden>
-        <strong>정답: B.</strong> 표현식은 <span class="mono">{{ }}</span> 안에서만 평가됩니다. 중괄호를 빼면 <span class="mono">$json.상품군</span> 글자가 그대로 찍힙니다. (한글·공백 필드는 <span class="mono">{{ $json["상품군"] }}</span> 형태도 가능)
-      </div>
-    </div>
-      <aside class="kit-notes" hidden>딱 5분 — 알면 모든 실습이 쉬워진다. {{ $json }}은 바로 앞 노드가 넘긴 데이터. {{ $json.상품군 }}하면 "주방", {{ $json.매출 }}하면 값이 나온다(점 찍고 필드 이름). 5분 엄수, 길어지면 Lab3 시간 잠식.</aside>
-  </div>
-
-  <!-- 17b -->
-  <div class="slide" data-title="표현식 문법 디테일" data-chapter="M5 · 다중출력">
-    <div class="slide-label"><i data-lucide="braces"><span class="ico-fb">{ }</span></i> M5 · 표현식 문법 디테일</div>
-    <h1>표현식이 <span class="hl2">글자 그대로</span> 찍힐 때,<br>대부분 이 <span class="hl">3가지</span> 때문입니다</h1>
-    <ul class="lead-list">
-      <li><i data-lucide="corner-down-right"><span class="ico-fb">↳</span></i><span><span class="mono">{{ }}</span> <b>안에서만</b> 평가됩니다 — 중괄호 밖의 표현식은 평가되지 않습니다.</span></li>
-      <li><i data-lucide="corner-down-right"><span class="ico-fb">↳</span></i><span>한글·공백 필드는 대괄호로: <span class="mono">{{ $json["상품군"] }}</span></span></li>
-    </ul>
-    <div class="grid-3">
-      <div class="card warn-card">
-        <div class="card-icon" style="color:var(--warn)"><i data-lucide="braces"><span class="ico-fb">{ }</span></i></div>
-        <div class="card-title">① 중괄호 누락</div>
-        <div class="card-body"><span class="mono">$json.매출</span> 만 적으면 <strong>글자 그대로</strong> 출력 → <span class="mono">{{ }}</span>로 감싸고 표현식 토글 확인.</div>
-      </div>
-      <div class="card warn-card">
-        <div class="card-icon" style="color:var(--warn)"><i data-lucide="type"><span class="ico-fb">🔤</span></i></div>
-        <div class="card-title">② 점표기 한글 실패</div>
-        <div class="card-body"><span class="mono">$json.상품군</span> 이 안 잡히면 → 공백·특수문자 있는 필드는 <span class="mono">["상품군"]</span> 대괄호 표기로.</div>
-      </div>
-      <div class="card warn-card">
-        <div class="card-icon" style="color:var(--warn)"><i data-lucide="search"><span class="ico-fb">🔍</span></i></div>
-        <div class="card-title">③ 필드명 오타</div>
-        <div class="card-body"><span class="mono">매충</span>처럼 오타면 빈 값 → 앞 노드의 <strong>Schema 보기</strong>로 실제 키 이름을 확인.</div>
-      </div>
-    </div>
-      <aside class="kit-notes" hidden>문법 3가지: ①한글·공백 필드는 대괄호 {{ $json["상품군"] }} ②{{ }} 중괄호 안에서만 평가(빼면 글자 그대로 — 아까 메일 본문 사례) ③필드명은 앞 노드 출력 키와 정확히 일치(오타 한 글자면 빈 값, Schema 보기로 확인). 핵심 한 줄로 압축 가능.</aside>
-  </div>
-
-  <!-- 18 -->
-  <div class="slide" data-title="다중출력이란" data-chapter="M5 · 다중출력">
-    <div class="slide-label"><i data-lucide="share-2"><span class="ico-fb">📤</span></i> M5 · 다중출력 이해하기</div>
-    <h1>하나의 결과를 <span class="hl">여러 곳</span>으로 — 매출 집계 → 다중 발송</h1>
-    <p class="subtitle">본실습: 일일 매출을 읽어 상품군별로 합산하고, 그 요약을 시트와 메일 두 곳 이상으로 내보냅니다. (Lab3)</p>
-    <div class="diagram-wrap">
-      <div class="mermaid">
-flowchart LR
-  A["📄 Sheets · Get Row(s)<br/>일일 매출 읽기"] --> B["🧮 Edit Fields(Set)/집계<br/>상품군별 합산"]
-  B --> C["📄 Sheets · Append<br/>요약 시트 작성"]
-  B --> D["📧 Gmail · Send<br/>담당자 요약 메일"]
-  B --> E["📧 Gmail · Send<br/>팀 메일링리스트"]
-  classDef act fill:#16261f,stroke:#34d399,color:#e4e6ef;
-  classDef proc fill:#221a2e,stroke:#a78bfa,color:#e4e6ef;
-  class A,C,D,E act;
-  class B proc;
-      </div>
-      <div class="diagram-cap">핵심: 먼저 <b>하나의 요약 아이템</b>으로 집계한 뒤 여러 목적지로 분배. (집계 전 발송하면 행마다 메일이 따로 갑니다.)</div>
-    </div>
-      <aside class="kit-notes" hidden>다중출력=하나의 결과를 여러 곳으로 보내기. 매출을 집계해 요약 시트에도 쓰고 동시에 메일로도 보내는 것.</aside>
-  </div>
-
-  <!-- 18b -->
-  <div class="slide" data-title="집계의 개념" data-chapter="M5 · 다중출력">
-    <div class="slide-label"><i data-lucide="sigma"><span class="ico-fb">Σ</span></i> M5 · 집계의 개념 — group + sum</div>
-    <h1>상품군을 <span class="hl">키</span>로 묶어<br>매출을 <span class="hl3">합산</span>합니다</h1>
-    <p class="subtitle">집계 = "같은 상품군끼리 모아서(group) 매출을 더한다(sum)". 다중발송으로 가기 전, 먼저 <b>하나의 요약</b>을 만드는 단계입니다.</p>
+  <!-- 27 다중발송 (Gmail/Workspace 한도) -->
+  <div class="slide" data-title="다중발송 · 발송 한도" data-chapter="M5 · 분기·집계·다중">
+    <div class="slide-label"><i data-lucide="send"><span class="ico-fb">📧</span></i> M5 · 다중출력 — 여러 곳으로</div>
+    <h1>요약을 <span class="hl">담당자 + 팀장</span>에게 <span class="hl3">동시에</span> 보냅니다</h1>
+    <p class="subtitle">하나의 결과를 여러 수신자/채널로 내보내는 게 다중출력입니다. 단, 발송 한도를 넘기지 않게 설계합니다.</p>
     <div class="grid-2">
       <div class="card highlight">
-        <div class="card-icon"><i data-lucide="sigma"><span class="ico-fb">Σ</span></i></div>
-        <div class="card-title">Summarize 노드 설정</div>
-        <div class="card-body">
-          • <span class="mono">fieldsToSplitBy = 상품군</span> (묶는 키)<br>
-          • <span class="mono">sum = 매출</span> (합산할 값)<br>
-          → 출력 키 <span class="mono">sum_매출</span> 생성.
-        </div>
-      </div>
-      <div class="card success-card">
-        <div class="card-icon" style="color:var(--success)"><i data-lucide="list-tree"><span class="ico-fb">🧮</span></i></div>
-        <div class="card-title">결과 예시</div>
-        <div class="card-body">
-          입력: 주방 120 · 주방 80 · 패션 200<br>
-          → <span class="mono">[{상품군:주방, 합계:200}, {상품군:패션, 합계:200}]</span><br>
-          상품군별 <strong>하나의 요약 아이템</strong>.
-        </div>
-      </div>
-    </div>
-    <div class="warn-box">
-      <i data-lucide="alert-triangle"><span class="ico-fb">⚠️</span></i>
-      <p><span class="t">함정:</span> 집계 <b>전에</b> 발송하면 <b>행마다 메일</b>이 따로 갑니다. 반드시 <b>먼저 집계</b>해 하나의 요약을 만든 뒤 발송하세요.</p>
-    </div>
-      <aside class="kit-notes" hidden>집계=여러 행을 하나로 묶어 요약. 핵심은 무엇으로 묶고(group) 무엇을 더하나(sum) — 상품군으로 묶고 매출 더하면 행이 상품군 수만큼 줄어든다. n8n은 Summarize 노드가 group+sum 담당. 집계하면 데이터가 줄어든다는 감만 잡으면 됨(다음 발송 단계 전제). group+sum으로 행이 줄어드는 걸 전/후 행 수 비교로 1회 시연.</aside>
-  </div>
-
-  <!-- 19 -->
-  <div class="slide" data-title="집계 → 다중발송 순서" data-chapter="M5 · 다중출력">
-    <div class="slide-label"><i data-lucide="layers"><span class="ico-fb">🧱</span></i> M5 · Lab3 단계</div>
-    <h1>일일 매출 → 상품군별 합산 → <span class="hl">여러 곳 발송</span></h1>
-    <ul class="priority-list">
-      <li><span class="priority-badge p3">1</span><div><b>Sheets · Get Row(s)</b> — 일일 매출 읽기(방송명·상품군·매출).</div></li>
-      <li><span class="priority-badge p4">2</span><div><b>상품군별 합산</b> — Edit Fields(Set)/집계로 group(상품군) + sum(매출).<span class="sub">결과 예: <span class="mono">[{상품군:주방, 합계:200}, {상품군:패션, 합계:200}]</span> — 하나의 요약 아이템.</span></div></li>
-      <li><span class="priority-badge p5">3</span><div><b>Sheets · Append</b> — 요약 시트에 집계 결과 기록(<span class="mono">{{ $json.상품군 }}</span>·<span class="mono">{{ $json.합계 }}</span> 매핑).</div></li>
-      <li><span class="priority-badge p5">4</span><div><b>Gmail · Send ×2 이상</b> — 같은 요약을 담당자 + 팀 메일링리스트로. 필요하면 <b>Merge</b>로 분기 결과를 합쳐 한 번에.</div></li>
-    </ul>
-    <div class="success-box">
-      <i data-lucide="target"><span class="ico-fb">🎯</span></i>
-      <p><span class="t">성공 기준:</span> 같은 집계 결과가 <b>요약 시트 + 메일(2곳 이상)</b>에 동일하게 정확히 출력되면 다중출력 완성.</p>
-    </div>
-      <aside class="kit-notes" hidden>순서: 먼저 집계, 그다음 발송. 집계 안 하고 바로 메일 보내면 행 100개=메일 100통 폭탄 → 반드시 하나의 요약 아이템으로 묶은 뒤 발송. Lab3: 매출 읽기→상품군별 합산→요약 시트 Append→메일 발송(2곳 이상). "집계 먼저"를 일부러 틀리게 보여주고 고치는 시연이 효과적.</aside>
-  </div>
-
-  <!-- ===================== CH7: M6 정리/디버깅 ===================== -->
-
-  <!-- 20 -->
-  <div class="slide" data-title="에러 핸들링" data-chapter="M6 · 정리/디버깅">
-    <div class="slide-label"><i data-lucide="shield-alert"><span class="ico-fb">🛡️</span></i> M6 · 1일차 정리 · 디버깅</div>
-    <h1>실패하면? <span class="hl2">에러 핸들링</span>과 <span class="hl">실행 로그</span></h1>
-    <p class="subtitle">"한 번 만들면 끝"이 아닙니다. 워크플로가 깨질 때 어디서·왜를 찾는 도구를 익힙니다.</p>
-    <div class="grid-3">
-      <div class="card"><div class="card-icon"><i data-lucide="siren"><span class="ico-fb">🚨</span></i></div><div class="card-title">Error Trigger</div><div class="card-body">워크플로가 실패하면 <strong>자동으로 실행</strong>되는 별도 흐름. 실패를 잡아 알림 등을 보낼 수 있다.</div></div>
-      <div class="card"><div class="card-icon"><i data-lucide="octagon-x"><span class="ico-fb">⛔</span></i></div><div class="card-title">Stop And Error</div><div class="card-body">특정 조건에서 <strong>일부러 흐름을 멈추고</strong> 에러를 발생시켜, 잘못된 데이터가 흘러가지 않게 한다.</div></div>
-      <div class="card"><div class="card-icon"><i data-lucide="scroll-text"><span class="ico-fb">📜</span></i></div><div class="card-title">Executions (실행 로그)</div><div class="card-body">실행 기록에서 <strong>어느 노드가·왜 실패</strong>했는지 확인한다. 디버깅의 출발점.</div></div>
-    </div>
-    <div class="success-box">
-      <i data-lucide="sparkles"><span class="ico-fb">✨</span></i>
-      <p><span class="t">Claude 챗 활용:</span> 빨간 에러 로그를 복사해 claude.ai 챗에 붙여 "이 에러 원인이 뭐야?"로 <b>해석 보조</b>를 받을 수 있습니다. (워크플로를 대신 돌리는 건 아님 — 그건 API 키)</p>
-    </div>
-      <aside class="kit-notes" hidden>자동화는 실패할 수 있다 — Error Trigger(실패 시 따로 잡기), Stop And Error(일부러 멈춤), 실패 원인은 Executions 실행 로그에서 확인. 막힐 땐 claude.ai 챗에 에러 로그를 붙여 물어보는 디버깅 보조 활용. 의도적 오류(잘못된 시트 ID)를 실행해 빨간 에러를 띄우고 로그를 함께 읽는다.</aside>
-  </div>
-
-  <!-- 21 -->
-  <div class="slide" data-title="흔한 오류 3종" data-chapter="M6 · 정리/디버깅">
-    <div class="slide-label"><i data-lucide="bug"><span class="ico-fb">🐞</span></i> M6 · 자주 만나는 오류와 해결</div>
-    <h1>오늘 실습에서 <span class="hl2">막히기 쉬운</span> 곳들</h1>
-    <div class="warn-box">
-      <i data-lucide="key"><span class="ico-fb">🔑</span></i>
-      <p><span class="t">"credential not found" (구글 인증):</span> Credential에서 <b>Sign in with Google</b>로 연결. 사내 OAuth가 막히면 강사 제공 <b>공용 데모 시트/수신함</b>으로 진행.</p>
-    </div>
-    <div class="warn-box">
-      <i data-lucide="type"><span class="ico-fb">🔤</span></i>
-      <p><span class="t">메일에 <span class="mono">{{ $json.방송명 }}</span> 글자가 그대로:</span> 표현식 미평가 — <b>중괄호/표현식 토글</b>과 <b>필드명</b>을 확인(앞 노드 출력 키와 일치).</p>
-    </div>
-    <div class="warn-box">
-      <i data-lucide="hash"><span class="ico-fb">🔢</span></i>
-      <p><span class="t">조건 비교가 항상 false:</span> 매출이 <b>문자열</b>이라 숫자 비교 실패 — 콤마 제거 후 <b>Number 변환</b>.</p>
-    </div>
-      <aside class="kit-notes" hidden>막히기 쉬운 3곳: ①구글 인증 안 됨(Sign in with Google 다시) ②표현식 글자 그대로(중괄호·필드명 확인) ③숫자가 문자열이라 비교 실패(Number 변환). 이 셋이면 에러의 80%.</aside>
-  </div>
-
-  <!-- 22 -->
-  <div class="slide" data-title="장시간 워크플로 주의" data-chapter="M6 · 정리/디버깅">
-    <div class="slide-label"><i data-lucide="timer"><span class="ico-fb">⏱️</span></i> M6 · Cloud 한계 미리 알기</div>
-    <h1>대량·장시간 작업이면 <span class="hl2">이 한계</span>를 기억하세요</h1>
-    <div class="grid-2">
-      <div class="card warn-card">
-        <div class="card-icon" style="color:var(--warn)"><i data-lucide="hourglass"><span class="ico-fb">⏳</span></i></div>
-        <div class="card-title">응답 100초 제한</div>
-        <div class="card-body">n8n Cloud의 Webhook 응답이 <strong>100초를 넘기면 524 오류</strong>(앞단 Cloudflare). 대량 리포트·AI 요약에서 주의(2일차 대비).</div>
+        <div class="card-icon"><i data-lucide="users"><span class="ico-fb">👥</span></i></div>
+        <div class="card-title">다중발송 패턴</div>
+        <div class="card-body">집계 결과 → <strong>담당자 메일</strong> + <strong>팀장 메일</strong> + (선택) Slack/시트. 같은 데이터를 여러 액션 노드로 분기.</div>
       </div>
       <div class="card warn-card">
-        <div class="card-icon" style="color:var(--warn)"><i data-lucide="package"><span class="ico-fb">📦</span></i></div>
-        <div class="card-title">페이로드 16MB 기본</div>
-        <div class="card-body">Webhook 페이로드 기본 <strong>16MB</strong>. 이 한도를 키우는 <span class="mono">N8N_PAYLOAD_SIZE_MAX</span>는 <strong>self-host 전용</strong>(Cloud에선 변경 불가).</div>
+        <div class="card-icon" style="color:var(--warn)"><i data-lucide="gauge"><span class="ico-fb">⏲️</span></i></div>
+        <div class="card-title">발송 한도 주의</div>
+        <div class="card-body">Gmail/Workspace는 하루 발송 <strong>한도</strong>가 있습니다(개인~약 500 / Workspace~약 2,000). 대량은 메일링리스트 1건으로 묶어 한도를 아끼세요.</div>
       </div>
     </div>
     <div class="warn-box">
       <i data-lucide="info"><span class="ico-fb">ℹ️</span></i>
-      <p><span class="t">지금은 몰라도 됩니다:</span> 1일차 실습 규모에선 문제없습니다. "대량 데이터를 다룰 땐 한계가 있다"만 기억하고, 2일차 주간 리포트에서 다시 만납니다.</p>
+      <p><span class="t">⚠️ 당일 확인:</span> 정확한 발송 한도·Workspace 정책은 변동될 수 있어 강의 직전 확인합니다. 핵심은 "사람마다 개별 발송"보다 <b>리스트 1건</b>이 안전하다는 원칙.</p>
     </div>
-      <aside class="kit-notes" hidden>n8n Cloud 한계: 응답 100초 초과 시 끊김(524 에러), 페이로드 16MB 기본. 대량 리포트·AI 요약 때 기억 — 내일 주간 리포트에서 다시 나온다. 질문(F12): "Webhook은 100초 넘겨도 괜찮다"→거짓.</aside>
+      <aside class="kit-notes" hidden>다중출력=하나의 결과를 여러 수신자/채널로. Gmail/Workspace 발송 한도(~500/~2,000) 주의 — 개별 발송 남발 말고 메일링리스트로 묶기. 수치는 당일 확인 각주.</aside>
   </div>
 
-  <!-- 23 -->
-  <div class="slide" data-title="개념 퀵체크 (데모)" data-chapter="M6 · 정리/디버깅">
-    <div class="slide-label"><i data-lucide="brain"><span class="ico-fb">🧠</span></i> M6 · 1일차 개념 퀵체크</div>
-    <h1>이건 <span class="hl">트리거? 액션? Cloud? API?</span></h1>
-    <p class="subtitle">버튼을 눌러 분류해 보세요. 오늘 배운 핵심 구분을 점검합니다.</p>
-    <div class="demo-box">
-      <div class="demo-header"><i data-lucide="list-checks"><span class="ico-fb">✅</span></i> 개념 분류 퀵체크</div>
-      <div class="demo-body">
-        <div class="clf-q" id="clfQ">로딩 중…</div>
-        <div class="clf-opts" id="clfOpts"></div>
-        <div class="clf-feedback" id="clfFb"></div>
-        <div class="clf-progress" id="clfProg"></div>
+  <!-- 28 본실습 (CAP-06) -->
+  <div class="slide" data-title="본실습: 일일매출 → 다중발송" data-chapter="M5 · 분기·집계·다중">
+    <div class="slide-label"><i data-lucide="rocket"><span class="ico-fb">🚀</span></i> M5 · 본실습 (Lab4 · 독립)</div>
+    <h1>일일매출 → <span class="hl">집계</span> → 요약시트 → <span class="hl3">다중발송</span></h1>
+    <ul class="priority-list">
+      <li><span class="priority-badge p3">1</span><div><b>표현식 미니청크</b> — <span class="mono">{{ $json.상품군 }}</span> · <span class="mono">{{ $json["매출"] }}</span> 참조 연습.</div></li>
+      <li><span class="priority-badge p4">2</span><div><b>읽기 → 거르기 → 집계</b> — Sheets(일일매출) → IF/Filter(목표 미달) → Summarize(상품군 group/sum, <span class="mono">sum_매출</span>).</div></li>
+      <li><span class="priority-badge p4">3</span><div><b>요약시트 쓰기 → 다중발송</b> — 담당자 + 팀장 메일.</div></li>
+      <li><span class="priority-badge p5">4</span><div><b>Claude Code 적용</b> — Lab3 PRD를 붙여 "이 가공·집계 노드 표현식 만들어줘" → <b>노드별 실행 검증</b>.</div></li>
+    </ul>
+    <figure class="img-slot">
+      <i data-lucide="image"><span class="ico-fb">🖼️</span></i>
+      <div class="img-slot-title">[CAP-06-workflow-canvas · 강사 붙여넣기] 집계·다중출력 워크플로 캔버스 (실행 녹색)</div>
+      <div class="img-slot-meta">무엇: <b>읽기→집계→요약시트→다중발송 노드가 모두 녹색</b>인 캔버스 / 시점: Lab4 dry-run / alt: "일일매출 집계·다중발송 워크플로 실행 성공"</div>
+    </figure>
+    <div class="success-box">
+      <i data-lucide="check-circle"><span class="ico-fb">✅</span></i>
+      <p><span class="t">체크포인트:</span> 요약시트에 <b>집계값</b>이 채워지고 <b>다중발송이 녹색</b>이면 성공. 막히면 <span class="mono">lab2-조건분기.json</span>·<span class="mono">lab3-다중출력.json</span> import로 합류.</p>
+    </div>
+      <aside class="kit-notes" hidden>Lab4 독립 실습: 표현식 연습→읽기·거르기·집계(Summarize)→요약시트→담당자+팀장 다중발송. Lab3 PRD를 Claude Code에 붙여 표현식 받되 노드별 검증. 막히면 assets json 합류.</aside>
+  </div>
+
+  <!-- ===================== LAB 4 실습 step 슬라이드 (M5 분기·집계·다중출력) ===================== -->
+
+  <!-- L4-0 지금 실습 안내 -->
+  <div class="slide" data-title="▶ 지금 실습: 워크북 Lab 4 펴기" data-chapter="M5 · 분기·집계·다중">
+    <div class="slide-label"><i data-lucide="play-circle"><span class="ico-fb">▶️</span></i> M5 · 실습 시작 — 워크북 Lab 4</div>
+    <h1><span class="hl">▶ 지금 실습</span> — 워크북 <span class="hl3">Lab 4</span>를 펴세요</h1>
+    <p class="subtitle"><code>일일매출</code> 읽기 → <b>IF/Filter</b>(목표 미달 추출) → <b>상품군별 집계</b>(group/sum) → 요약시트 → <b>다중 발송</b>. 표현식은 Claude Code 초안 + <b>에디터 실행으로 검증</b>합니다.</p>
+    <div class="grid-2">
+      <div class="card highlight">
+        <div class="card-icon"><i data-lucide="target"><span class="ico-fb">🎯</span></i></div>
+        <div class="card-title">이번 랩에서 만드는 것</div>
+        <div class="card-body">읽기 → 분기 → 집계(<code>sum_매출</code>) → 요약시트 → 담당자+팀장 다중발송.</div>
+      </div>
+      <div class="card success-card">
+        <div class="card-icon" style="color:var(--success)"><i data-lucide="check-circle"><span class="ico-fb">✅</span></i></div>
+        <div class="card-title">완성 모습</div>
+        <div class="card-body">상품군별 합계가 <code>요약시트</code>에 기록 + 담당자·팀장 다중발송 녹색.</div>
       </div>
     </div>
-      <aside class="kit-notes" hidden>오늘 배운 것 퀵체크를 인터랙티브 데모로 손들기: "매일 8시 실행"=트리거, "메일 보내기"=액션. 피로 구간이라 그룹토의·손들기로 능동성 유지. 밀리면 2문항만.</aside>
+    <div class="warn-box">
+      <i data-lucide="book-open"><span class="ico-fb">📖</span></i>
+      <p><span class="t">손으로 채우는 자료:</span> 워크북 Lab 4의 표현식·IF 조건 빈칸을 직접 채우며 따라오세요. Lab3 PRD를 Claude Code에 붙여 표현식을 받되, <b>노드별 실행으로 검증</b>합니다.</p>
+    </div>
+      <aside class="kit-notes" hidden>Lab4 진입 안내. 일일매출 읽기→IF/Filter→Summarize(sum_매출)→요약시트→담당자+팀장 다중발송. 표현식=AI 초안+에디터 검증. 목표=요약시트 기록+다중발송 녹색. 워크북 빈칸 채우기.</aside>
   </div>
 
-  <!-- 24 -->
-  <div class="slide" data-title="오늘의 마스터리" data-chapter="M6 · 정리/디버깅">
+  <!-- L4-S1 일일매출 시트 읽기 -->
+  <div class="slide" data-title="Lab4 · Step 1 — 일일매출 시트 읽기" data-chapter="M5 · 분기·집계·다중">
+    <div class="slide-label"><i data-lucide="table-2"><span class="ico-fb">📄</span></i> M5 · Lab4 Step 1</div>
+    <h1>Lab4 · Step 1 — <span class="hl3">일일매출</span> 시트를 읽는다</h1>
+    <p class="subtitle">Get Row(s)로 일일매출을 읽고, 매출·목표매출이 숫자(콤마 없는 정수)로 들어오는지 확인합니다.</p>
+    <ul class="priority-list">
+      <li><span class="priority-badge p3">1</span><div><b>② 클릭경로</b> — <b>Google Sheets 노드 더블클릭</b> → Operation = <b>Get Row(s)</b> → Sheet = <b>일일매출</b>.</div></li>
+      <li><span class="priority-badge p4">2</span><div><b>표현식 미니청크(빈칸)</b> — 상품군 꺼내기 <code>{{ $json.____ }}</code> · 한글/공백 매출 필드 <code>{{ $json["____"] }}</code>(대괄호 표기).</div></li>
+    </ul>
+    <div class="success-box">
+      <i data-lucide="check-circle"><span class="ico-fb">✅</span></i>
+      <p><span class="t">④ ✅ 확인 포인트:</span> 노드 <b>Test step</b> → 방송별 행(매출·목표매출 포함)이 테이블로 보이면 통과.</p>
+    </div>
+    <div class="danger-box">
+      <i data-lucide="alert-triangle"><span class="ico-fb">⚠️</span></i>
+      <p><span class="t">⑤ 막히면:</span> 매출이 <code>"12,000,000"</code>처럼 <b>문자열(콤마 포함)</b>이면 뒤 비교가 항상 실패합니다 → 데모 <code>일일매출_콤마.csv</code>로 증상 확인 후 Step 3에서 Number 변환.</p>
+    </div>
+      <aside class="kit-notes" hidden>Step1=Google Sheets Get Row(s)로 일일매출 읽기. 표현식 미니청크 빈칸(상품군 점표기·한글 매출 대괄호). Test step에 행 보이면 통과. 매출 문자열(콤마)=비교 실패 복선→Step3 Number 변환.</aside>
+  </div>
+
+  <!-- L4-S2 IF/Filter 조건 분기 -->
+  <div class="slide" data-title="Lab4 · Step 2 — IF/Filter로 조건 분기" data-chapter="M5 · 분기·집계·다중">
+    <div class="slide-label"><i data-lucide="git-fork"><span class="ico-fb">🍴</span></i> M5 · Lab4 Step 2</div>
+    <h1>Lab4 · Step 2 — <span class="hl">IF/Filter</span>로 목표 미달을 가른다</h1>
+    <p class="subtitle">IF 노드의 조건을 빈칸으로 구성합니다(매출 &lt; 목표). 숫자 타입으로 비교해야 합니다.</p>
+    <ul class="priority-list">
+      <li><span class="priority-badge p3">1</span><div><b>② 클릭경로</b> — 캔버스 <b>+</b> → <b>IF</b> 노드 추가 → 더블클릭.</div></li>
+      <li><span class="priority-badge p4">왼</span><div><b>왼쪽 값(left)</b> — <code>{{ $json.______ }}</code> ← 비교할 매출 필드</div></li>
+      <li><span class="priority-badge p4">연</span><div><b>비교 연산자</b> — <code>____</code> <span class="sub">("~보다 작다" 영어로? 힌트: is s____ than · Number 타입)</span></div></li>
+      <li><span class="priority-badge p5">오</span><div><b>오른쪽 값(right)</b> — <code>{{ $json.______ }}</code> ← 기준이 될 목표 필드</div></li>
+    </ul>
+    <div class="success-box">
+      <i data-lucide="check-circle"><span class="ico-fb">✅</span></i>
+      <p><span class="t">④ ✅ 확인 포인트:</span> IF가 <b>true/false 두 갈래</b>로 갈라지고, 미달 행만 true로 가면 통과. <span style="color:var(--text-dim)">IF=두 갈래 분기 / Filter=통과한 것만 남김.</span></p>
+    </div>
+    <div class="danger-box">
+      <i data-lucide="alert-triangle"><span class="ico-fb">⚠️</span></i>
+      <p><span class="t">⑤ 막히면:</span> 비교가 항상 실패 → 매출이 <b>문자열</b>이라 그렇습니다. 콤마 제거 후 <b>Number 변환</b>(Edit Fields) 뒤 비교. 비교 타입을 <b>Number</b>로 지정했는지 확인.</p>
+    </div>
+      <aside class="kit-notes" hidden>Step2=IF로 매출<목표 분기. 왼쪽/연산자(smaller than·Number)/오른쪽 빈칸. IF=두 갈래, Filter=통과만 남김. 비교 항상 실패=문자열→Number 변환(Edit Fields)·비교 타입 Number. 데모 일일매출_콤마.csv로 증상.</aside>
+  </div>
+
+  <!-- L4-S3 Summarize 집계 -->
+  <div class="slide" data-title="Lab4 · Step 3 — Summarize 집계" data-chapter="M5 · 분기·집계·다중">
+    <div class="slide-label"><i data-lucide="sigma"><span class="ico-fb">∑</span></i> M5 · Lab4 Step 3</div>
+    <h1>Lab4 · Step 3 — <span class="hl3">Summarize</span>로 상품군별 합계를 낸다</h1>
+    <p class="subtitle">행 단위 매출을 상품군으로 묶어(group) 합산(sum)합니다. 빈칸을 채워 보세요.</p>
+    <ul class="priority-list">
+      <li><span class="priority-badge p3">1</span><div><b>② 클릭경로</b> — 캔버스 <b>+</b> → <b>Summarize</b> 노드 추가 → 더블클릭.</div></li>
+      <li><span class="priority-badge p4">합</span><div><b>합계 낼 필드(aggregation = sum)</b> — <code>____</code> <span class="sub">(힌트: 숫자 매출 필드명)</span></div></li>
+      <li><span class="priority-badge p4">묶</span><div><b>묶는 기준(split by)</b> — <code>____</code> <span class="sub">(힌트: 상품군)</span></div></li>
+      <li><span class="priority-badge p5">키</span><div><b>출력 합계 키</b> — <code>____</code> <span class="sub">(힌트: 강의 정본 출력키 <code>sum_매출</code>)</span></div></li>
+    </ul>
+    <figure class="img-slot">
+      <i data-lucide="image"><span class="ico-fb">🖼️</span></i>
+      <div class="img-slot-title">[CAP-LAB4-S3 · 강사 dry-run 캡처] Summarize 출력 = 상품군별 합계 1줄씩</div>
+      <div class="img-slot-meta">무엇: <b>상품군 group · 매출 sum → 상품군별 합계가 1줄씩</b> 나온 출력 / 시점: Lab4 dry-run / alt: "Summarize 상품군별 집계 결과"</div>
+    </figure>
+    <div class="success-box">
+      <i data-lucide="check-circle"><span class="ico-fb">✅</span></i>
+      <p><span class="t">④ ✅ 확인 포인트:</span> 출력이 <b>상품군별 합계 1줄씩</b>(<code>sum_매출</code>)으로 나오면 통과.</p>
+    </div>
+      <aside class="kit-notes" hidden>Step3=Summarize로 상품군 group·매출 sum→출력키 sum_매출. 빈칸(합계 필드·split by·출력키) 채우기. 상품군별 1줄씩 나오면 통과. 사람이 손으로 만들던 합계표 자동화.</aside>
+  </div>
+
+  <!-- L4-S4 Set/Edit으로 요약 정리 -->
+  <div class="slide" data-title="Lab4 · Step 4 — Set/Edit으로 요약 정리" data-chapter="M5 · 분기·집계·다중">
+    <div class="slide-label"><i data-lucide="pencil"><span class="ico-fb">✏️</span></i> M5 · Lab4 Step 4</div>
+    <h1>Lab4 · Step 4 — <span class="hl">Edit Fields(Set)</span>로 요약을 정리한다</h1>
+    <p class="subtitle">집계 결과를 요약시트에 쓰고, 사람이 읽을 본문으로 정리합니다. 빈칸을 채워 보세요.</p>
+    <ul class="priority-list">
+      <li><span class="priority-badge p3">1</span><div><b>② 클릭경로</b> — <b>Edit Fields(Set)</b> 노드 추가 → 본문 구성. 그리고 <b>Google Sheets Append</b>로 <code>요약시트</code>에 집계 쓰기.</div></li>
+      <li><span class="priority-badge p4">매</span><div><b>매핑(빈칸)</b> — <code>{{ $json.______ }}</code>(상품군) · <code>{{ $json.______ }}</code>(합계).</div></li>
+      <li><span class="priority-badge p5">본</span><div><b>요약 본문</b> — <code>{{ $json.상품군 }} 합계 {{ $json.sum_매출 }}</code> 형태로 한 줄.</div></li>
+    </ul>
+    <div class="success-box">
+      <i data-lucide="check-circle"><span class="ico-fb">✅</span></i>
+      <p><span class="t">④ ✅ 확인 포인트:</span> <code>요약시트</code>에 <b>상품군별 합계가 행으로 기록</b>되고, 요약 본문에 실제 값이 들어가면 통과.</p>
+    </div>
+    <div class="danger-box">
+      <i data-lucide="alert-triangle"><span class="ico-fb">⚠️</span></i>
+      <p><span class="t">⑤ 막히면:</span> 표현식이 글자 그대로 나오면 → 표현식 토글·필드명(대소문자·<code>$json.</code> 접두사) 확인. AI가 준 표현식은 실행으로 검증.</p>
+    </div>
+      <aside class="kit-notes" hidden>Step4=Edit Fields(Set)로 요약 본문 정리 + Google Sheets Append로 요약시트 기록. 매핑 빈칸(상품군·합계). 본문={{ $json.상품군 }} 합계 {{ $json.sum_매출 }}. 요약시트에 행 기록되면 통과. 글자 그대로=토글·필드명 확인.</aside>
+  </div>
+
+  <!-- L4-S5 다중 발송 -->
+  <div class="slide" data-title="Lab4 · Step 5 — 다중 발송 (담당자+팀장)" data-chapter="M5 · 분기·집계·다중">
+    <div class="slide-label"><i data-lucide="send"><span class="ico-fb">📧</span></i> M5 · Lab4 Step 5</div>
+    <h1>Lab4 · Step 5 — <span class="hl">담당자 + 팀장</span>에게 <span class="hl3">다중 발송</span></h1>
+    <p class="subtitle">같은 요약을 두 곳으로 보냅니다 — 집계 결과를 Gmail Send 두 갈래로 분기합니다.</p>
+    <ul class="priority-list">
+      <li><span class="priority-badge p3">1</span><div><b>② 클릭경로</b> — 요약 결과 노드에서 <b>Gmail Send</b>를 <b>두 갈래로 연결</b>(담당자 / 팀장).</div></li>
+      <li><span class="priority-badge p4">2</span><div><b>한도 주의</b> — Gmail/Workspace 발송 한도(개인~약 500 / Workspace~약 2,000). 대량은 메일링리스트 1건으로 묶어 한도를 아낀다.</div></li>
+    </ul>
+    <div class="success-box">
+      <i data-lucide="check-circle"><span class="ico-fb">✅</span></i>
+      <p><span class="t">④ ✅ 확인 포인트:</span> <b>담당자·팀장 두 곳</b>에 같은 집계가 동시에 발송되면 통과.</p>
+    </div>
+    <div class="warn-box">
+      <i data-lucide="info"><span class="ico-fb">ℹ️</span></i>
+      <p><span class="t">⑤ 막히면:</span> 집계 <b>전에 발송</b>하면 행마다 메일이 여러 통 갑니다 → 먼저 Summarize로 하나의 요약을 만든 뒤 발송하세요. 정확한 한도·정책은 당일 확인.</p>
+    </div>
+      <aside class="kit-notes" hidden>Step5=Gmail Send 두 갈래(담당자+팀장) 다중발송. 한도(~500/~2,000) 주의·대량은 리스트로. 두 곳 동시 발송이면 통과. 집계 전 발송=행마다 여러 통→Summarize 후 발송. 한도 수치 당일 확인.</aside>
+  </div>
+
+  <!-- L4-S6 실행 검증 -->
+  <div class="slide" data-title="Lab4 · Step 6 — 실행 검증" data-chapter="M5 · 분기·집계·다중">
+    <div class="slide-label"><i data-lucide="check-check"><span class="ico-fb">✅</span></i> M5 · Lab4 Step 6 (완료)</div>
+    <h1>Lab4 · Step 6 — <span class="hl">전체 실행</span>으로 검증한다</h1>
+    <p class="subtitle">읽기 → 분기 → 집계 → 요약시트 → 다중발송을 한 번에 실행해 모두 녹색인지 봅니다.</p>
+    <figure class="img-slot">
+      <i data-lucide="image"><span class="ico-fb">🖼️</span></i>
+      <div class="img-slot-title">[CAP-LAB4-S6 · 강사 dry-run 캡처] 집계·다중출력 워크플로 캔버스 (실행 전부 녹색)</div>
+      <div class="img-slot-meta">무엇: <b>읽기→분기→집계→요약시트→다중발송 노드가 모두 녹색</b>인 캔버스 / 시점: Lab4 dry-run / alt: "일일매출 집계·다중발송 워크플로 실행 성공"</div>
+    </figure>
+    <div class="success-box">
+      <i data-lucide="party-popper"><span class="ico-fb">🎉</span></i>
+      <p><span class="t">④ ✅ 확인 포인트(Lab4 통과):</span> IF가 <b>숫자 타입으로 비교</b>되고 + 상품군별 합계가 <code>요약시트</code>에 기록 + <b>다중발송(2곳 이상) 녹색</b>이면 Lab4 완료.</p>
+    </div>
+    <div class="danger-box">
+      <i data-lucide="alert-triangle"><span class="ico-fb">⚠️</span></i>
+      <p><span class="t">⑤ 막히면:</span> 표현식 대소문자·<code>$json.</code> 접두사를 AI가 틀리게 줬으면 에디터 실행으로 잡기. 막히면 <code>assets/import/lab2-조건분기.json</code>·<code>lab3-다중출력.json</code> import로 합류.</p>
+    </div>
+      <aside class="kit-notes" hidden>Step6=전체 실행 검증. IF 숫자 비교+요약시트 기록+다중발송 녹색이면 Lab4 완료. Lab3 PRD를 붙여 표현식 받되 노드별 검증. 막히면 assets lab2-조건분기.json·lab3-다중출력.json import 합류.</aside>
+  </div>
+
+  <!-- ===================== CH7: M6 디버깅 · 1일차 정리 ===================== -->
+
+  <!-- 29 디버깅: Error Trigger / Stop And Error / 로그 -->
+  <div class="slide" data-title="디버깅 · 에러 핸들링" data-chapter="M6 · 디버깅·정리">
+    <div class="slide-label"><i data-lucide="bug"><span class="ico-fb">🐞</span></i> M6 · 디버깅 — 실패에 대비</div>
+    <h1>워크플로가 <span class="hl2">실패</span>할 때, <span class="hl">로그</span>로 원인을 찾습니다</h1>
+    <div class="grid-2">
+      <div class="card"><div class="card-icon"><i data-lucide="alert-triangle"><span class="ico-fb">⚠️</span></i></div><div class="card-title">Error Trigger</div><div class="card-body">워크플로가 실패하면 <strong>별도 흐름</strong>을 켜서 알림(메일/Slack)을 보냅니다.</div></div>
+      <div class="card"><div class="card-icon"><i data-lucide="octagon-x"><span class="ico-fb">⛔</span></i></div><div class="card-title">Stop And Error</div><div class="card-body">조건이 어긋나면 <strong>일부러 멈추고 에러</strong>를 냅니다(잘못된 데이터로 진행 방지).</div></div>
+      <div class="card"><div class="card-icon"><i data-lucide="scroll-text"><span class="ico-fb">📜</span></i></div><div class="card-title">실행 로그</div><div class="card-body">Executions 탭에서 <strong>어느 노드가 빨강</strong>인지, 입력/출력 데이터를 확인합니다.</div></div>
+      <div class="card highlight"><div class="card-icon"><i data-lucide="bot"><span class="ico-fb">🤖</span></i></div><div class="card-title">Claude Code로 해석</div><div class="card-body">빨강 노드의 <strong>에러 메시지를 그대로 붙여</strong> "왜 났고 어떻게 고쳐?"를 묻습니다.</div></div>
+    </div>
+    <div class="success-box">
+      <i data-lucide="search-check"><span class="ico-fb">🔎</span></i>
+      <p><span class="t">디버깅 루프:</span> 빨강 노드 찾기 → 입력/출력 데이터 확인 → <b>에러를 Claude Code에</b> → 가설 받기 → <b>다시 실행해 검증</b>. 한 번에 한 노드씩.</p>
+    </div>
+      <aside class="kit-notes" hidden>Error Trigger(실패 시 알림 흐름), Stop And Error(일부러 멈춤), 실행 로그(빨강 노드·입출력 데이터), Claude Code로 에러 해석. 디버깅도 한 노드씩, AI는 가설·검증은 실행.</aside>
+  </div>
+
+  <!-- 30 1일차 랩업 + exam -->
+  <div class="slide" data-title="1일차 랩업 + 종합 점검" data-chapter="M6 · 디버깅·정리">
     <div class="slide-label"><i data-lucide="trophy"><span class="ico-fb">🏆</span></i> 1일차 마무리 · 목표 점검</div>
     <h1>오늘 끝에 이걸 <span class="hl3">할 수 있으면</span> 성공입니다</h1>
-    <p class="subtitle">항목을 클릭해 스스로 체크해 보세요.</p>
     <ul class="mastery-list">
-      <li><i data-lucide="circle" class="check-icon"><span class="ico-fb">⭕</span></i> 트리거·액션·노드·워크플로 4개 개념을 내 말로 구분해 설명한다</li>
-      <li><i data-lucide="circle" class="check-icon"><span class="ico-fb">⭕</span></i> n8n Cloud(매니지드)와 self-host의 차이, 그리고 Claude 구독(챗) ≠ Anthropic API 키를 구분한다</li>
-      <li><i data-lucide="circle" class="check-icon"><span class="ico-fb">⭕</span></i> 스케줄 → 구글시트 → 메일 기본 워크플로를 직접 만들어 실행한다 (Lab1)</li>
-      <li><i data-lucide="circle" class="check-icon"><span class="ico-fb">⭕</span></i> IF·Filter로 조건분기하고, 집계 결과를 여러 곳으로 다중출력한다 (Lab2·Lab3)</li>
-      <li><i data-lucide="circle" class="check-icon"><span class="ico-fb">⭕</span></i> 실패한 워크플로를 실행 로그·에러 핸들링으로 진단한다</li>
+      <li><i data-lucide="circle" class="check-icon"><span class="ico-fb">⭕</span></i> Claude Code 도움으로 <b>self-host n8n을 내 노트북에 설치·구동</b>했다 (<code>~/.n8n</code>·타임존)</li>
+      <li><i data-lucide="circle" class="check-icon"><span class="ico-fb">⭕</span></i> 도구지도 4구분 — <b>Anthropic 노드 ≠ Claude Pro</b>를 구분한다</li>
+      <li><i data-lucide="circle" class="check-icon"><span class="ico-fb">⭕</span></i> n8n-MCP로 노드를 조회해 <b>첫 워크플로를 노드별로 빌드·검증</b>했다</li>
+      <li><i data-lucide="circle" class="check-icon"><span class="ico-fb">⭕</span></i> brainstorming으로 <b>자동화 PRD 5섹션</b>을 쓰고 6레이어로 매핑한다</li>
+      <li><i data-lucide="circle" class="check-icon"><span class="ico-fb">⭕</span></i> IF·Filter·집계로 <b>일일매출을 다중발송</b>하고, 실패를 로그로 진단한다</li>
     </ul>
     <div class="success-box">
       <i data-lucide="arrow-right-circle"><span class="ico-fb">➡️</span></i>
-      <p><span class="t">2일차 예고:</span> 오늘의 부품을 <b>설계 템플릿(트리거→수집→가공→판단→액션→알림)</b>으로 조립해 <b>주간 성과 리포트</b>를 완성하고, <b>회사 제공 API 키로 Anthropic Chat Model을 직접 핸즈온</b>해 CS 문의를 분류·요약합니다.</p>
+      <p><span class="t">2일차 예고:</span> 오늘의 부품을 <b>설계 템플릿(트리거→수집→가공→판단→액션→알림)</b>으로 조립해 <b>주간 성과 리포트</b>를 완성하고, <b>회사 API 키로 Anthropic Chat Model</b>을 직접 핸즈온해 CS 문의를 분류·요약합니다.</p>
     </div>
 
-    <section class="kit-exam" data-group="exam-day1" data-pass="0.7">
+    <section class="kit-exam" data-group="exam-day1" data-pass="0.6">
       <h3 class="kit-exam-title">M1~M6 종합 점검</h3>
-      <p class="kit-exam-desc">제출 전까지 정답은 숨겨집니다. 4문항을 다 고른 뒤 "제출하고 채점"을 누르세요. (미응답은 오답 처리)</p>
+      <p class="kit-exam-desc">제출 전까지 정답은 숨겨집니다. 5문항을 다 고른 뒤 "제출하고 채점"을 누르세요. (통과 60% · 미응답은 오답 처리)</p>
 
       <div class="kit-mcq" data-group="exam-day1" data-id="ex-d1-q1">
-        <p class="kit-mcq-q">트리거(Trigger)와 액션(Action)의 차이로 옳은 것은?</p>
+        <p class="kit-mcq-q">1. <span class="mono">npx n8n</span>으로 띄운 n8n의 워크플로·자격증명은 어디에 저장되나요?</p>
         <div class="kit-mcq-opts" role="group" aria-label="객관식 보기">
-          <button type="button" class="kit-mcq-opt">A. 트리거는 데이터를 가공하고, 액션은 워크플로를 시작한다</button>
-          <button type="button" class="kit-mcq-opt" data-correct>B. 트리거는 워크플로를 시작하고(언제), 액션은 실제 일을 수행한다(무엇을)</button>
-          <button type="button" class="kit-mcq-opt">C. 둘 다 워크플로를 시작하는 노드로 차이가 없다</button>
-          <button type="button" class="kit-mcq-opt">D. 트리거는 메일만, 액션은 시트만 처리한다</button>
+          <button type="button" class="kit-mcq-opt">A. 메모리에만 있어 끄면 사라진다</button>
+          <button type="button" class="kit-mcq-opt" data-correct>B. <span class="mono">~/.n8n</span> 폴더 — 껐다 켜도 유지, 백업은 이 폴더 복사</button>
+          <button type="button" class="kit-mcq-opt">C. n8n 클라우드 서버에 저장된다</button>
+          <button type="button" class="kit-mcq-opt">D. 저장되지 않는다</button>
         </div>
         <p class="kit-mcq-live" aria-live="polite"></p>
         <div class="kit-mcq-explain" hidden>
-          <strong>해설:</strong> 트리거는 "언제 시작하나"(예: Schedule Trigger)를 정하고, 액션은 "무엇을 하나"(예: Google Sheets 읽기/쓰기, Gmail 발송)를 수행합니다.
+          <strong>해설: B.</strong> npx/npm 설치는 <code>~/.n8n</code>(<code>database.sqlite</code>+<code>config</code>)에 저장돼 재시작해도 유지됩니다. Docker 볼륨이 필요 없고, 백업은 이 폴더를 복사하면 됩니다.
         </div>
       </div>
 
       <div class="kit-mcq" data-group="exam-day1" data-id="ex-d1-q2">
-        <p class="kit-mcq-q">IF 노드와 Filter 노드의 차이로 옳은 것은?</p>
+        <p class="kit-mcq-q">2. n8n 워크플로 안의 Anthropic 노드를 실제로 구동하려면?</p>
         <div class="kit-mcq-opts" role="group" aria-label="객관식 보기">
-          <button type="button" class="kit-mcq-opt" data-correct>A. IF는 조건에 따라 흐름을 두 갈래(참/거짓)로 나누고, Filter는 조건을 통과한 항목만 남긴다</button>
-          <button type="button" class="kit-mcq-opt">B. IF는 항목을 거르고, Filter는 흐름을 두 갈래로 나눈다</button>
-          <button type="button" class="kit-mcq-opt">C. 둘 다 항상 모든 항목을 그대로 통과시킨다</button>
-          <button type="button" class="kit-mcq-opt">D. IF와 Filter는 이름만 다르고 동작이 완전히 같다</button>
+          <button type="button" class="kit-mcq-opt">A. 개인 Claude Pro 챗 구독만 있으면 된다</button>
+          <button type="button" class="kit-mcq-opt" data-correct>B. 별도 Anthropic API 키(종량과금)가 필요하다 — 보통 회사 제공</button>
+          <button type="button" class="kit-mcq-opt">C. n8n-MCP를 붙이면 자동으로 된다</button>
+          <button type="button" class="kit-mcq-opt">D. self-host면 키 없이 무료로 된다</button>
         </div>
         <p class="kit-mcq-live" aria-live="polite"></p>
         <div class="kit-mcq-explain" hidden>
-          <strong>해설:</strong> IF는 참/거짓 두 출력으로 흐름을 분기하고, Filter는 조건을 통과한 항목만 다음으로 내보냅니다(거짓은 버림).
+          <strong>해설: B.</strong> 워크플로 안 Anthropic 노드는 <b>API 키로만</b> 동작합니다. Claude Pro 챗 구독은 설계·디버깅 보조용일 뿐입니다.
         </div>
       </div>
 
-      <div class="kit-tf" data-group="exam-day1" data-id="ex-d1-q3" data-answer="true">
-        <p class="kit-tf-claim">"앞 노드의 데이터를 참조할 때 표현식은 <span class="kbd2">{{ $json.상품군 }}</span> 처럼 이중 중괄호 <span class="kbd2">{{ }}</span> 안에 쓴다."</p>
+      <div class="kit-mcq" data-group="exam-day1" data-id="ex-d1-q3">
+        <p class="kit-mcq-q">3. 설치 명령에서 타임존을 한국으로 맞추는 환경변수는?</p>
+        <div class="kit-mcq-opts" role="group" aria-label="객관식 보기">
+          <button type="button" class="kit-mcq-opt" data-correct>A. <span class="mono">GENERIC_TIMEZONE=Asia/Seoul</span> (예: <span class="mono">GENERIC_TIMEZONE=Asia/Seoul npx n8n</span>)</button>
+          <button type="button" class="kit-mcq-opt">B. <span class="mono">npx n8n --timezone=KR</span></button>
+          <button type="button" class="kit-mcq-opt">C. <span class="mono">N8N_PORT=5678</span></button>
+          <button type="button" class="kit-mcq-opt">D. 타임존은 설정할 수 없다</button>
+        </div>
+        <p class="kit-mcq-live" aria-live="polite"></p>
+        <div class="kit-mcq-explain" hidden>
+          <strong>해설: A.</strong> <span class="mono">GENERIC_TIMEZONE</span>과 <span class="mono">TZ</span>를 <span class="mono">Asia/Seoul</span>로 지정해야 스케줄이 한국 시각으로 동작합니다.
+        </div>
+      </div>
+
+      <div class="kit-mcq" data-group="exam-day1" data-id="ex-d1-q4">
+        <p class="kit-mcq-q">4. <span class="mono">/superpowers:brainstorming</span>의 HARD-GATE 원칙은?</p>
+        <div class="kit-mcq-opts" role="group" aria-label="객관식 보기">
+          <button type="button" class="kit-mcq-opt">A. 질문은 한 번에 모두 던진다</button>
+          <button type="button" class="kit-mcq-opt" data-correct>B. PRD(설계)가 승인되기 전에는 워크플로를 만들지 않는다</button>
+          <button type="button" class="kit-mcq-opt">C. PRD 없이 먼저 빌드하고 나중에 문서화한다</button>
+          <button type="button" class="kit-mcq-opt">D. 거대 JSON을 한 번에 import한다</button>
+        </div>
+        <p class="kit-mcq-live" aria-live="polite"></p>
+        <div class="kit-mcq-explain" hidden>
+          <strong>해설: B.</strong> brainstorming은 한 번에 하나씩 질문하며 PRD를 만들고, <b>설계가 승인되기 전에는 워크플로 빌드를 막는</b> HARD-GATE를 둡니다.
+        </div>
+      </div>
+
+      <div class="kit-tf" data-group="exam-day1" data-id="ex-d1-q5" data-answer="false">
+        <p class="kit-tf-claim">"Claude Code가 만든 거대한 워크플로 JSON은 한 번에 통째로 import하는 것이 가장 안전하다."</p>
         <div class="kit-tf-btns" role="group" aria-label="참 또는 거짓">
           <button type="button" class="kit-tf-btn" data-val="true">참</button>
           <button type="button" class="kit-tf-btn" data-val="false">거짓</button>
         </div>
         <p class="kit-tf-live" aria-live="polite"></p>
         <div class="kit-tf-why" hidden>
-          <strong>참.</strong> n8n 표현식은 <span class="kbd2">{{ }}</span> 안에 작성하며, <span class="kbd2">{{ $json.필드 }}</span> 로 이전 노드의 데이터를 참조합니다.
-        </div>
-      </div>
-
-      <div class="kit-tf" data-group="exam-day1" data-id="ex-d1-q4" data-answer="false">
-        <p class="kit-tf-claim">"오늘 실습 환경인 n8n Cloud와 self-host는 동일하며, Cloud Business 플랜이 곧 매니지드 실습 플랜이다."</p>
-        <div class="kit-tf-btns" role="group" aria-label="참 또는 거짓">
-          <button type="button" class="kit-tf-btn" data-val="true">참</button>
-          <button type="button" class="kit-tf-btn" data-val="false">거짓</button>
-        </div>
-        <p class="kit-tf-live" aria-live="polite"></p>
-        <div class="kit-tf-why" hidden>
-          <strong>거짓.</strong> 실습은 n8n Cloud(매니지드)이고 self-host는 직접 서버를 운영하는 방식입니다. Cloud Business는 self-host 전용 플랜이라 매니지드 실습 플랜이 아닙니다(실습 플랜은 Starter/Pro).
+          <strong>거짓.</strong> 통째 import는 한 곳만 틀려도 원인 파악이 어렵고 버전 차이로 실패할 수 있습니다. <b>노드별 순차 빌드 + 즉시 실행·검증</b>이 정석입니다.
         </div>
       </div>
 
@@ -1660,7 +2343,7 @@ flowchart LR
       <div class="kit-exam-review" hidden>오답 문항은 위 해설을 확인하고, 필요하면 해당 모듈로 돌아가 다시 학습하세요.</div>
     </section>
 
-      <aside class="kit-notes" hidden>오늘 성공 기준: 트리거·노드·분기·다중출력을 알고 첫 워크플로를 직접 돌려봤다. 클로징 — 부품은 다 모았으니 내일은 조립. 퇴근길에 "내가 매주 반복하는 업무" 하나 더 생각해 오게 한다. "다 하셨죠?" 한 줄로 압축 가능.</aside>
+      <aside class="kit-notes" hidden>오늘 성공 기준: self-host 설치·도구지도 구분·노드별 빌드·PRD 5섹션·분기/집계/다중발송·디버깅. 클로징 — 부품은 다 모았으니 내일은 조립. 퇴근길에 "내가 매주 반복하는 업무" 하나 더 생각해 오게 한다.</aside>
   </div>
 
 </div>
@@ -1858,7 +2541,7 @@ window.addEventListener('load', () => {
       { q: '"매주 월요일 08시에 자동 실행"', opts: ['트리거', '액션', '조건분기'], a: 0, why: 'Schedule Trigger — 흐름을 시작시키는 사건입니다.' },
       { q: '"Gmail로 담당자에게 메일 보내기"', opts: ['트리거', '액션', '조건분기'], a: 1, why: 'Gmail Send — 실제 일을 수행하는 액션입니다.' },
       { q: '"매출이 목표 미달이면 갈라짐"', opts: ['트리거', '액션', '조건분기'], a: 2, why: 'IF 노드 — 조건에 따라 true/false로 분기합니다.' },
-      { q: '"n8n을 Docker로 우리 서버에 직접 띄움"', opts: ['Cloud(매니지드)', 'self-host'], a: 1, why: 'self-host입니다. 이 강의 실습은 Cloud, self-host는 문서로만 다룹니다.' },
+      { q: '"n8n을 우리 노트북에 직접 띄움"', opts: ['Cloud(매니지드)', 'self-host'], a: 1, why: 'self-host입니다. ★이 강의는 self-host를 npx로 직접 실습합니다(Cloud 아님).' },
       { q: '"워크플로 안에서 Claude로 CS 문의 요약"', opts: ['Claude 구독(챗)으로 가능', 'Anthropic API 키 필요'], a: 1, why: '워크플로 AI 노드는 회사가 제공한 Anthropic API 키로만 동작합니다. claude.ai 챗 구독으로는 구동 불가.' }
     ];
     let idx = 0, score = 0, answered = false;

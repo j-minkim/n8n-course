@@ -1,0 +1,140 @@
+{
+  "name": "Lab4 체크포인트① - 집계까지 (전반 게이트 통과 상태)",
+  "nodes": [
+    {
+      "parameters": {
+        "notes": "Import 후: 구글 자격증명 + 시트ID(documentId)·시트명(sheetName, 주간매출/요약시트)을 본인 것으로 설정하세요. 이 파일은 전반 게이트(집계까지) 통과 상태로, 낙오자가 불러와 후반부터 합류하는 출발점입니다. 스케줄 타임존은 GENERIC_TIMEZONE=Asia/Seoul npx n8n(미설정 시 America/New_York). typeVersion·UI 경로는 강의 전 본인 로컬 npx n8n에서 dry-run 1회 확인.",
+        "rule": {
+          "interval": [
+            {
+              "field": "weeks",
+              "triggerAtDay": [
+                1
+              ],
+              "triggerAtHour": 8,
+              "triggerAtMinute": 0
+            }
+          ]
+        }
+      },
+      "id": "n-schedule-weekly",
+      "name": "주간 스케줄",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "",
+          "mode": "name"
+        },
+        "operation": "read",
+        "options": {}
+      },
+      "id": "n-sheets-read-weekly",
+      "name": "주간매출 읽기",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        500,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "fieldsToSummarize": {
+          "values": [
+            {
+              "aggregation": "sum",
+              "field": "매출"
+            }
+          ]
+        },
+        "fieldsToSplitBy": "상품군",
+        "options": {}
+      },
+      "id": "n-summarize",
+      "name": "상품군 집계",
+      "type": "n8n-nodes-base.summarize",
+      "typeVersion": 1.1,
+      "position": [
+        760,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "",
+          "mode": "name"
+        },
+        "operation": "append",
+        "options": {}
+      },
+      "id": "n-sheets-append-summary",
+      "name": "요약시트 기록",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        1020,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "주간 스케줄": {
+      "main": [
+        [
+          {
+            "node": "주간매출 읽기",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "주간매출 읽기": {
+      "main": [
+        [
+          {
+            "node": "상품군 집계",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "상품군 집계": {
+      "main": [
+        [
+          {
+            "node": "요약시트 기록",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {}
+}
