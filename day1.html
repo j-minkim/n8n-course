@@ -1059,10 +1059,15 @@ html.icons-ok i[data-lucide] .ico-fb { display: none; }
       <pre class="mono" style="margin:0;white-space:pre-wrap;word-break:break-all;color:#cfe3ff;font-size:13.5px;line-height:1.65">node -v                                  # Node 20.19~24.x 확인 (없으면 nvm 안내)
 GENERIC_TIMEZONE=Asia/Seoul npx n8n      # 첫 실행은 1~5분 다운로드(정상)</pre>
     </div>
-    <figure class="img-slot">
-      <i data-lucide="image"><span class="ico-fb">🖼️</span></i>
-      <div class="img-slot-title">[CAP-02-install · 강사 붙여넣기] 터미널 npx n8n 실행 + localhost:5678 Owner 생성 화면</div>
-      <div class="img-slot-meta">무엇: 터미널에서 <b>npx n8n</b> 실행 후 <b>http://localhost:5678 → Owner 계정 생성</b> 화면 / 시점: Lab1 dry-run / alt: "npx로 띄운 n8n self-host 첫 화면"</div>
+    <figure style="margin:14px 0;">
+      <pre style="background:#0e1420;border:1px solid var(--line,#233047);border-radius:10px;padding:14px 16px;overflow-x:auto;font-size:12px;line-height:1.6;color:#cfe3ff;white-space:pre-wrap;word-break:break-word;text-align:left;margin:0;">$ GENERIC_TIMEZONE=Asia/Seoul npx n8n
+…(첫 실행은 패키지 다운로드로 1~5분)…
+n8n Task Broker ready on 127.0.0.1, port 5679
+Version: 2.27.4
+Building workflow dependency index...
+Editor is now accessible via:
+http://localhost:5678</pre>
+      <figcaption class="img-slot-meta">[CAP-02-install] <b>실제 기동 로그</b> — "Editor is now accessible"가 뜨면 성공 → 브라우저로 <b>localhost:5678</b> 접속해 Owner 생성</figcaption>
       <figcaption>⚠️ Node 지원 범위·npx 캐시 동작은 버전에 따라 변할 수 있음 — 강사가 당일 라이브 재확인(공식 install-with-npm).</figcaption>
     </figure>
       <aside class="kit-notes" hidden>node -v로 Node 20.19~24.x 확인(없으면 nvm)→GENERIC_TIMEZONE=Asia/Seoul npx n8n(첫 실행 1~5분 다운로드, 정상). "복사"로 가져가되 직접 치지 말고 Claude Code에 "Asia/Seoul, Docker 말고 npx로 n8n 띄워줘, 나는 윈도우(또는 맥)야"로 생성·실행받게 한다. Node 범위·npx 동작은 당일 재확인 각주.</aside>
@@ -1096,10 +1101,9 @@ GENERIC_TIMEZONE=Asia/Seoul npx n8n      # 첫 실행은 1~5분 다운로드(정
 # ↑ 실행 중 뜬 에러 출력 전체를 복사해서 Claude Code에 그대로 붙여넣기:
 #   "n8n을 npx로 띄우는데 이 에러가 떠. 원인이 뭐고 어떻게 고쳐?"</pre>
     </div>
-    <figure class="img-slot">
-      <i data-lucide="image"><span class="ico-fb">🖼️</span></i>
-      <div class="img-slot-title">[CAP-03-claude-fix · 강사 붙여넣기] npx 실행 에러를 Claude Code에 붙여 해결하는 화면</div>
-      <div class="img-slot-meta">무엇: 터미널 <b>npx n8n 에러 출력 → Claude Code 채팅에 붙여넣고 해결책 받는</b> 화면 / 시점: Lab1 dry-run / alt: "에러 출력을 Claude Code에 붙여 함께 디버깅"</div>
+    <figure style="margin:14px 0;text-align:center;">
+      <img src="captures/cap-03-claude-fix.png" alt="비번 분실(401) → Claude Code가 user-management:reset으로 해결" style="max-width:100%;border-radius:10px;border:1px solid var(--line,#233047);" loading="lazy">
+      <figcaption class="img-slot-meta">[CAP-03-claude-fix] <b>비번 분실(401)</b> → Claude Code가 <code>npx n8n user-management:reset</code>으로 해결 ("Successfully reset" · 워크플로·자격증명은 보존)</figcaption>
     </figure>
     <div class="success-box">
       <i data-lucide="messages-square"><span class="ico-fb">💬</span></i>
@@ -1209,10 +1213,14 @@ nvm install 20</pre>
 # 첫 실행은 1~5분 다운로드(정상)
 # 직접 치기보다 Claude Code가 만들어 실행하게 하세요</pre>
     </div>
-    <figure class="img-slot">
-      <i data-lucide="image"><span class="ico-fb">🖼️</span></i>
-      <div class="img-slot-title">[CAP-LAB1-S3 · 강사 dry-run 캡처] 터미널에서 npx n8n 실행 + "ready" 메시지</div>
-      <div class="img-slot-meta">무엇: 터미널에서 <b>GENERIC_TIMEZONE=Asia/Seoul npx n8n</b> 실행 후 n8n이 떴다는 메시지 + 접속 주소 안내 / 시점: Lab1 dry-run / alt: "npx n8n 첫 실행 터미널 화면"</div>
+    <figure style="margin:14px 0;">
+      <pre style="background:#0e1420;border:1px solid var(--line,#233047);border-radius:10px;padding:14px 16px;overflow-x:auto;font-size:12px;line-height:1.6;color:#cfe3ff;white-space:pre-wrap;word-break:break-word;text-align:left;margin:0;">$ GENERIC_TIMEZONE=Asia/Seoul npx n8n
+…(첫 실행은 패키지 다운로드로 1~5분)…
+n8n Task Broker ready on 127.0.0.1, port 5679
+Version: 2.27.4
+Editor is now accessible via:
+http://localhost:5678</pre>
+      <figcaption class="img-slot-meta">[CAP-LAB1-S3] 실제 npx n8n 기동 로그 — <b>"Editor is now accessible"</b>가 뜨면 성공(이 줄이 신호)</figcaption>
       <figcaption>⚠️ npx 캐시·다운로드 동작은 버전에 따라 다를 수 있음 — 강사가 당일 라이브 재확인.</figcaption>
     </figure>
     <div class="grid-2">
@@ -1239,10 +1247,9 @@ nvm install 20</pre>
         <div class="card-body">n8n <b>Setup Wizard(또는 로그인) 화면</b>이 뜨면 통과. 워크북 빈칸: 접속 포트 = <code>____</code>.</div>
       </div>
     </div>
-    <figure class="img-slot">
-      <i data-lucide="image"><span class="ico-fb">🖼️</span></i>
-      <div class="img-slot-title">[CAP-LAB1-S4 · 강사 dry-run 캡처] 브라우저 localhost:5678 첫 접속 화면</div>
-      <div class="img-slot-meta">무엇: 브라우저 주소창 <b>http://localhost:5678</b> + n8n 첫 화면(Setup Wizard/로그인) / 시점: Lab1 dry-run / alt: "localhost:5678 n8n 첫 접속 화면"</div>
+    <figure style="margin:14px 0;text-align:center;">
+      <img src="captures/cap-lab1-s4.png" alt="localhost:5678 n8n 에디터 — 워크플로 목록" style="max-width:100%;border-radius:10px;border:1px solid var(--line,#233047);" loading="lazy">
+      <figcaption class="img-slot-meta">[CAP-LAB1-S4] <b>http://localhost:5678</b> 에디터 진입 — 워크플로 목록(Claude Code가 API로 만든 워크플로들이 그대로 보인다)</figcaption>
     </figure>
     <div class="danger-box">
       <i data-lucide="alert-triangle"><span class="ico-fb">⚠️</span></i>
@@ -1341,10 +1348,9 @@ nvm install 20</pre>
         <div class="card-body">"Google Sheets 트리거 노드의 정확한 파라미터 알려줘" → <strong>실제 노드 정보 조회</strong> → 에디터에서 그대로 동작.</div>
       </div>
     </div>
-    <figure class="img-slot">
-      <i data-lucide="image"><span class="ico-fb">🖼️</span></i>
-      <div class="img-slot-title">[CAP-04-mcp-node · 강사 붙여넣기] Claude Code+n8n-MCP가 노드 정보 조회/JSON 초안 화면</div>
-      <div class="img-slot-meta">무엇: <b>n8n-MCP로 노드 파라미터를 조회하고 JSON 초안을 만드는</b> 화면 / 시점: Lab2 dry-run / alt: "Claude Code가 n8n-MCP로 정확한 노드 정보 조회"</div>
+    <figure style="margin:14px 0;text-align:center;">
+      <img src="captures/cap-04-mcp-node.png" alt="claude mcp list — n8n-mcp ✔ Connected" style="max-width:100%;border-radius:10px;border:1px solid var(--line,#233047);" loading="lazy">
+      <figcaption class="img-slot-meta">[CAP-04-mcp-node] <code>claude mcp list</code> → <b>n8n-mcp ✔ Connected</b> (연결 확인). 이 상태에서 Claude Code가 n8n-MCP로 정확한 노드 정보를 조회한다.</figcaption>
     </figure>
     <div class="codeblock" style="position:relative;background:#0d1320;border:1px solid var(--border,#243049);border-radius:12px;padding:14px 16px;margin:14px 0;max-width:880px">
       <button type="button" aria-label="명령 복사" onclick="try{navigator.clipboard.writeText(this.nextElementSibling.innerText);this.textContent='✓ 복사됨';setTimeout(()=>{this.textContent='⧉ 복사';},1500);}catch(e){this.textContent='복사 실패';}" style="position:absolute;top:10px;right:10px;font-size:12px;padding:4px 10px;border-radius:7px;border:1px solid var(--accent,#6cf);background:transparent;color:var(--accent,#6cf);cursor:pointer">⧉ 복사</button>
@@ -1360,6 +1366,44 @@ nvm install 20</pre>
       <p><span class="t">⚠️ 당일 확인:</span> n8n-MCP의 문서 동기화·무료 한도는 변동 도메인 — 강의 직전 라이브 1회 조회로 최신 동작을 확인합니다.</p>
     </div>
       <aside class="kit-notes" hidden>n8n-MCP=Claude Code에 붙이는 노드 두뇌. 없으면 노드명·파라미터를 지어내 환각, 붙이면 실제 조회로 정확. 등록 명령=claude mcp add n8n-mcp -e MCP_MODE=stdio -e LOG_LEVEL=error -e DISABLE_CONSOLE_OUTPUT=true -- npx n8n-mcp(한 번만)→재시작→claude mcp list에서 ✔ Connected. 윈도우 PowerShell은 -e를 따옴표로. API 키 없이도 조회·검증 작동(실습 충분), 직접 생성/실행까지면 N8N_API_URL·N8N_API_KEY 추가. 동기화·한도는 당일 확인 각주. 노드 1개 라이브 조회로 신뢰 보여주기.</aside>
+  </div>
+
+  <!-- 16a 심화 — MCP가 워크플로를 직접 만들기 (n8n API 키) -->
+  <div class="slide" data-title="심화 — MCP가 워크플로를 직접 만들기 (n8n API 키)" data-chapter="M3 · 기초+첫 워크플로">
+    <div class="slide-label"><i data-lucide="key-round"><span class="ico-fb">🔑</span></i> M3 · 심화(선택) — MCP가 워크플로를 직접 생성</div>
+    <h1>심화 — <span class="hl">MCP</span>가 워크플로를 <span class="hl3">직접 만들기</span> (n8n API 키)</h1>
+    <p class="subtitle">문서모드(노드 조회·검증)까지는 API 키가 <b>필요 없습니다</b>. <b>MCP가 워크플로를 n8n에 직접 생성/실행</b>하게 하려면 <span class="mono">n8n API 키</span>가 필요합니다.</p>
+    <div class="grid-2">
+      <div class="card warn-card">
+        <div class="card-icon" style="color:var(--warn)"><i data-lucide="server-cog"><span class="ico-fb">🛠️</span></i></div>
+        <div class="card-title">n8n API 키</div>
+        <div class="card-body"><strong>n8n 자체를 바깥에서 제어</strong>하는 키 — MCP가 n8n에 워크플로를 직접 만들고 실행하게 해줍니다.</div>
+      </div>
+      <div class="card success-card">
+        <div class="card-icon" style="color:var(--success)"><i data-lucide="bot"><span class="ico-fb">🤖</span></i></div>
+        <div class="card-title">Anthropic API 키 (≠)</div>
+        <div class="card-body"><strong>워크플로 안 AI 노드를 구동</strong>하는 키 — n8n API 키와는 <b>완전히 다른 키</b>입니다. 혼동 금지.</div>
+      </div>
+    </div>
+    <p class="subtitle" style="margin-top:10px"><b>발급 절차:</b> n8n 에디터 → <span class="mono">Settings → n8n API → Create an API key</span> → 복사(1회만 표시). <span class="mono">(메뉴 위치는 버전별로 다를 수 있어 당일 확인)</span></p>
+    <figure style="margin:12px 0;text-align:center;">
+      <img src="captures/cap-api-key.png" alt="n8n Settings → n8n API → Create API Key 화면" style="max-width:100%;border-radius:10px;border:1px solid var(--line,#233047);" loading="lazy">
+      <figcaption class="img-slot-meta">Settings → <b>n8n API</b> → <b>Create API Key</b>(Label·Expiration·Scopes). 발급 후 키를 복사해 MCP API 모드에 넣는다.</figcaption>
+    </figure>
+    <div class="codeblock" style="position:relative;background:#0d1320;border:1px solid var(--border,#243049);border-radius:12px;padding:14px 16px;margin:14px 0;max-width:880px">
+      <button type="button" aria-label="명령 복사" onclick="try{navigator.clipboard.writeText(this.nextElementSibling.innerText);this.textContent='✓ 복사됨';setTimeout(()=>{this.textContent='⧉ 복사';},1500);}catch(e){this.textContent='복사 실패';}" style="position:absolute;top:10px;right:10px;font-size:12px;padding:4px 10px;border-radius:7px;border:1px solid var(--accent,#6cf);background:transparent;color:var(--accent,#6cf);cursor:pointer">⧉ 복사</button>
+      <pre class="mono" style="margin:0;white-space:pre-wrap;word-break:break-all;color:#cfe3ff;font-size:13.5px;line-height:1.65">claude mcp add n8n-mcp -e MCP_MODE=stdio -e LOG_LEVEL=error -e DISABLE_CONSOLE_OUTPUT=true -e N8N_API_URL=http://localhost:5678 -e N8N_API_KEY=발급받은키 -- npx n8n-mcp</pre>
+    </div>
+    <p class="subtitle" style="margin-top:8px">API 모드로 재등록 → Claude Code 재시작 → "이 워크플로 n8n에 직접 만들어줘" → 에디터에 <b>바로 생성</b>됩니다.</p>
+    <figure style="margin:14px 0;text-align:center;">
+      <img src="captures/cap-lab2-mcp-direct.png" alt="Claude Code가 n8n API로 직접 만든 뉴스레터 워크플로 — RSS가 뉴스 34개 크롤링" style="max-width:100%;border-radius:10px;border:1px solid var(--line,#233047);" loading="lazy">
+      <figcaption class="img-slot-meta">[CAP-LAB2-MCP-DIRECT] Claude Code가 n8n API로 직접 생성 → <b>매일 09:00 → RSS 크롤링(34건) → 상위 5개 정리 → 메일 전달</b>. Schedule·RSS·Code 노드 실행 녹색(Gmail만 자격증명 필요)</figcaption>
+    </figure>
+    <div class="warn-box">
+      <i data-lucide="alert-triangle"><span class="ico-fb">⚠️</span></i>
+      <p><span class="t">⚠️ 주의:</span> n8n API 키는 <b>n8n 전체를 제어</b>합니다 — 유출 금지·필요 없으면 삭제하세요. 기본 실습(Lab2~5)은 이 키 <b>없이도</b> 됩니다(심화·선택). 메뉴 위치·동작은 당일 dry-run으로 1회 확인.</p>
+    </div>
+      <aside class="kit-notes" hidden>심화·선택 슬라이드. 문서모드(노드 조회·검증)는 API 키 불필요, MCP가 워크플로를 n8n에 직접 생성/실행하려면 n8n API 키 필요. ★키 구분=n8n API 키(n8n 자체를 바깥에서 제어) ≠ Anthropic API 키(워크플로 안 AI 노드 구동), 완전히 다른 키. 발급=n8n 에디터 Settings → n8n API → Create an API key → 복사(1회 표시, 메뉴 위치 버전별 당일 확인). API 모드 재등록=claude mcp add n8n-mcp -e MCP_MODE=stdio -e LOG_LEVEL=error -e DISABLE_CONSOLE_OUTPUT=true -e N8N_API_URL=http://localhost:5678 -e N8N_API_KEY=발급받은키 -- npx n8n-mcp → 재시작 → "이 워크플로 직접 만들어줘". 주의=키는 n8n 전체 제어라 유출 금지·미사용시 삭제, Lab2~5는 키 없이도 됨. 당일 dry-run 확인 톤, 과장 금지.</aside>
   </div>
 
   <!-- 16b MCP 3종 구분 -->

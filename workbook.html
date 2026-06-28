@@ -315,6 +315,21 @@
 <li><input disabled="" type="checkbox"> <strong>노드별로 실행·검증</strong>한 뒤(통째 import 아님) <strong>수동 실행(Execute Workflow)</strong>.</li>
 <li><input disabled="" type="checkbox"> 받은편지함에서 편성표 메일 1통 확인.</li>
 </ul>
+<p><strong>[심화·선택] MCP가 n8n에 워크플로를 직접 만들게 하기 (★n8n API 키 필요)</strong></p>
+<blockquote>
+<p>여기까지(문서모드)는 n8n-MCP가 <strong>노드 정보만 조회</strong>했어요. <strong>MCP가 워크플로를 n8n에 직접 생성</strong>하게 하려면 <strong>n8n API 키</strong>가 필요해요. (★Anthropic API 키와 다른 키 — 이건 <em>n8n 자체를 제어</em>하는 키)</p>
+</blockquote>
+<ul>
+<li><input disabled="" type="checkbox"> <strong>n8n API 키 발급:</strong> n8n 에디터 → <strong>Settings → n8n API → Create an API key</strong> → 이름 입력 → 생성 → <strong>키 복사</strong>(1회만 표시). <em>(메뉴 위치는 버전마다 다를 수 있어요)</em></li>
+<li><input disabled="" type="checkbox"> <strong>MCP를 API 모드로 재등록</strong>(터미널) — 기존 등록 있으면 <code>claude mcp remove n8n-mcp</code> 후:<blockquote>
+<pre><code class="language-bash">claude mcp add n8n-mcp -e MCP_MODE=stdio -e LOG_LEVEL=error -e DISABLE_CONSOLE_OUTPUT=true -e N8N_API_URL=http://localhost:5678 -e N8N_API_KEY=발급받은키 -- npx n8n-mcp
+</code></pre>
+<p>→ Claude Code 재시작 → <code>claude mcp list</code> ✔ Connected.</p>
+</blockquote>
+</li>
+<li><input disabled="" type="checkbox"> Claude Code에 부탁: <strong>&quot;방금 설계한 스케줄→시트→메일 워크플로를 n8n에 직접 만들어줘.&quot;</strong> → 에디터 새로고침 → 워크플로가 <strong>import 없이 바로 생성</strong>돼 있는지 확인.</li>
+<li><input disabled="" type="checkbox"> ★주의: n8n API 키는 <strong>n8n 전체를 제어</strong>하는 키 → 유출 금지·필요 없으면 삭제. 자가확인: import 없이 MCP가 직접 만들었나? <code>____</code></li>
+</ul>
 <h3>자가 확인 (체크포인트 ☑)</h3>
 <ul>
 <li><input disabled="" type="checkbox"> 노드 3개 전부 <strong>녹색</strong> ✓</li>
