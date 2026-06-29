@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
 <script>(function(){try{var p=localStorage.getItem("theme-pref")||"system";var d=p==="dark"||(p==="system"&&matchMedia("(prefers-color-scheme: dark)").matches);document.documentElement.setAttribute("data-theme",d?"dark":"light");}catch(e){document.documentElement.setAttribute("data-theme","dark");}})();</script>
-<title>n8n + Claude Code · 실습 워크북</title>
+<title>실습 워크북 — n8n + Claude Code</title>
 <style>
   /* ── theme tokens (dark default + light override) ── */
   :root{
@@ -71,7 +71,7 @@
 </head>
 <body>
 <button id="themeToggle" class="theme-toggle" type="button" aria-label="테마 전환" title="테마: 시스템"><span class="tt-ico" aria-hidden="true">🖥</span><span class="tt-label">시스템</span></button>
-<div class="topbar"><span class="badge">n8n 자동화 강의</span><span class="t">n8n + Claude Code · 실습 워크북</span></div>
+<div class="topbar"><span class="badge">n8n 자동화 강의</span><span class="t">실습 워크북 — n8n + Claude Code</span></div>
 <main class="doc">
 <h1>n8n + Claude Code 자동화 — 수강생 실습 워크북 (따라하며 채우기)</h1>
 <blockquote>
@@ -346,17 +346,45 @@
 <p>재활용(막히면 합류): <code>assets/import/lab1-편성표메일.json</code>. (자세한 절차는 <code>30-exercises.md</code> Lab2.)</p>
 </blockquote>
 <hr>
-<h2>Lab 3. 자동화 PRD 설계 (brainstorming) — 만들기 전에 말로 명확히</h2>
-<p><strong>이번 랩에서 만드는 것:</strong> 노드를 만들기 <strong>전에</strong>, <code>/superpowers:brainstorming</code> 으로 <strong>자동화 PRD 5섹션</strong>을 손으로 채우고, n8n 6레이어에 매핑한다.
-<strong>완성 모습:</strong> 내 반복업무 1개에 대한 <strong>PRD 1장</strong> + 6레이어 매핑표 + 짝 리뷰 1개.</p>
+<h2>Lab 3. 자동화 PRD 설계 (경량 스킬) — 만들기 전에 한 번에 명확히</h2>
+<p><strong>이번 랩에서 만드는 것:</strong> 노드를 만들기 <strong>전에</strong>, 경량 스킬 <code>/n8n-automation-prd</code> 로 <strong>자동화 PRD 5섹션</strong>을 한 번에 뽑아 채우고, n8n 6레이어에 매핑한다.
+<strong>완성 모습:</strong> 내 반복업무(또는 아래 우리 회사 예시) 1개에 대한 <strong>PRD 1장</strong> + 6레이어 매핑표 + 짝 리뷰 1개.</p>
 <blockquote>
-<p>★<strong>HARD-GATE:</strong> 설계(PRD)가 승인되기 전엔 워크플로를 만들지 않아요. 질문은 <strong>하나씩</strong> 답해요.</p>
+<p>★<strong>단계 게이트:</strong> 이 랩은 <strong>설계 확정</strong>까지가 산출물이에요(실제 워크플로 생성은 M5). 스킬이 5섹션을 한 번에 주면 <strong>비는 칸만</strong> 채워 확정해요. 한 질문씩 캐묻지 않습니다.</p>
 </blockquote>
+<h3>주제 고르기 — 내 업무 또는 우리 회사 예시 3개 중 하나</h3>
+<table>
+<thead>
+<tr>
+<th>예시</th>
+<th>한 줄 정의</th>
+<th>특징(어떤 노드를 배우나)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A. 방송 실적 리포트</td>
+<td>&quot;방송 끝나면 실적을 담당 MD에게 자동 정리·발송&quot;</td>
+<td>스케줄·집계(Summarize)·다중 출력</td>
+</tr>
+<tr>
+<td>B. 경쟁사 가격 모니터링</td>
+<td>&quot;경쟁사 가격을 매일 체크해 우리보다 싸지면 알림&quot;</td>
+<td>HTTP 수집·IF 분기(가격 역전) · ★robots/약관</td>
+</tr>
+<tr>
+<td>C. 고객 리뷰 VOC 분류</td>
+<td>&quot;고객 리뷰를 AI로 긍/부정 분류해 부정만 담당팀 알림&quot;</td>
+<td>AI 노드(Anthropic·2일차)·IF 분기</td>
+</tr>
+</tbody></table>
 <h3>단계 체크리스트</h3>
-<p><strong>[독립] 스스로 — brainstorming으로 PRD 5섹션 채우기</strong></p>
+<p><strong>[독립] Step 1 — 경량 스킬 호출</strong></p>
 <ul>
-<li><input disabled="" type="checkbox"> Claude Code에서 <code>/superpowers:brainstorming</code> 호출. 주제 = &quot;내 반복 업무 하나 자동화&quot;.</li>
-<li><input disabled="" type="checkbox"> 질문 하나씩 답하며 아래 5섹션 직접 채우기 ↓</li>
+<li><input disabled="" type="checkbox"> Claude Code에서 <code>/n8n-automation-prd</code> 호출. 주제 = 위 A/B/C 중 하나 또는 &quot;내 반복 업무 한 줄&quot;.</li>
+</ul>
+<p><strong>[독립] Step 2 — 5섹션을 한 번에 받고 빈칸만 채우기</strong></p>
+<ul>
+<li><input disabled="" type="checkbox"> 스킬이 5섹션을 한 번에 펼치면, <code>(추정)</code> 표시된 칸을 확인하고 <strong>비는 칸만</strong> 답하기 ↓</li>
 </ul>
 <p><strong>내 자동화 한 줄 정의:</strong> <code>__________________________________________</code></p>
 <table>
@@ -393,7 +421,11 @@
 <td><code>____________________________</code></td>
 </tr>
 </tbody></table>
-<p><strong>[페이드] PRD → n8n 6레이어 매핑 (후보 노드 빈칸 채우기)</strong></p>
+<blockquote>
+<p><strong>✅ 워크드 예시 — A. 방송 실적 리포트</strong> (스킬이 한 번에 뽑은 PRD)
+① 매일 방송 종료 후 23:00(Schedule) · ② 주문·매출 시트 + 편성표(담당 MD) · ③ 방송별·상품군별 매출 집계, 목표 대비 · ④ 담당 MD 슬랙 + 요약 시트 · ⑤ 데이터 미수신·매출 0건·발송 실패 알림</p>
+</blockquote>
+<p><strong>[페이드] Step 3 — PRD → n8n 6레이어 매핑 (후보 노드 빈칸 채우기)</strong></p>
 <table>
 <thead>
 <tr>
@@ -415,12 +447,12 @@
 <tr>
 <td>처리(변환)</td>
 <td>가공</td>
-<td><code>____</code> <em>(힌트: Code/Set/Filter/Merge)</em></td>
+<td><code>____</code> <em>(힌트: Code/Set/Filter/Merge/Summarize)</em></td>
 </tr>
 <tr>
 <td>처리(AI)</td>
 <td>AI 판단</td>
-<td><code>____</code> <em>(힌트: Anthropic Chat Model)</em></td>
+<td><code>____</code> <em>(힌트: Anthropic Chat Model · 2일차)</em></td>
 </tr>
 <tr>
 <td>출력·알림</td>
@@ -433,7 +465,10 @@
 <td><code>____</code> <em>(힌트: Error Trigger/IF/Stop And Error)</em></td>
 </tr>
 </tbody></table>
-<p><strong>[독립] 짝 리뷰</strong></p>
+<blockquote>
+<p><em>예시 A 매핑:</em> Schedule → Sheets×2 → Summarize+Merge → Slack+Sheets → Error Trigger</p>
+</blockquote>
+<p><strong>[독립] Step 4 — 짝 리뷰</strong></p>
 <ul>
 <li><input disabled="" type="checkbox"> 옆 사람 PRD에서 <strong>&quot;⑤ 예외·한도&quot;가 비었는지</strong> 1개 지적.</li>
 </ul>
@@ -448,7 +483,7 @@
 </ul>
 <blockquote>
 <p><strong>오개념 교정:</strong> &quot;AI가 알아서 해주니 PRD 불필요&quot; ✗ → PRD 없으면 AI도 엉뚱한 노드를 만들어요(가비지 인·가비지 아웃).
-산출물은 <code>docs/superpowers/specs/</code>에 자동 저장됨. (자세한 절차는 <code>30-exercises.md</code> Lab3.)</p>
+원하면 스킬에 &quot;이 PRD를 .md로 저장해줘&quot;라고 하면 파일로도 남아요. 정말 크고 복잡한 설계면 그때만 <code>/superpowers:brainstorming</code>으로. (자세한 절차는 <code>30-exercises.md</code> Lab3.)</p>
 </blockquote>
 <hr>
 <h2>Lab 4. 조건분기·데이터처리·다중출력 — 일일매출 집계</h2>
@@ -627,12 +662,12 @@
 <hr>
 <h2>Lab 6. 나만의 자동화 프로젝트 (PRD→구축→시연)</h2>
 <blockquote>
-<p>내가 <strong>매주/매일 반복하는 업무 1개</strong>를 골라 brainstorming으로 PRD를 만들고 → Claude Code+n8n-MCP로 노드별 빌드 → <strong>2분 시연</strong>. 범위는 작게(노드 2~5개).</p>
+<p>내가 <strong>매주/매일 반복하는 업무 1개</strong>를 골라 <code>/n8n-automation-prd</code>로 PRD를 만들고 → Claude Code+n8n-MCP로 노드별 빌드 → <strong>2분 시연</strong>. 범위는 작게(노드 2~5개).</p>
 </blockquote>
 <h3>단계 체크리스트</h3>
 <p><strong>[독립] PRD → 구축 → 시연</strong></p>
 <ul>
-<li><input disabled="" type="checkbox"> <strong>내 반복작업 발견</strong> → <code>/superpowers:brainstorming</code> 으로 <strong>자동화 PRD 5섹션</strong>(Lab3 양식 재사용).</li>
+<li><input disabled="" type="checkbox"> <strong>내 반복작업 발견</strong> → <code>/n8n-automation-prd</code> 로 <strong>자동화 PRD 5섹션</strong>(Lab3 양식 재사용).</li>
 </ul>
 <p><strong>내 업무 한 줄 정의:</strong> <code>__________________________________________</code></p>
 <table>

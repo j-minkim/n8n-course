@@ -833,7 +833,7 @@ html.icons-ok i[data-lucide] .ico-fb { display: none; }
       <div class="tl-item"><div class="tl-dot">1</div><div class="tl-label">M1 · 1h</div><div class="tl-title">자동화+AI-native</div><div class="tl-desc">도구지도 4구분</div></div>
       <div class="tl-item"><div class="tl-dot">2</div><div class="tl-label">M2 · 1.5h</div><div class="tl-title">self-host 설치</div><div class="tl-desc">npx로 내 노트북에</div></div>
       <div class="tl-item"><div class="tl-dot">3</div><div class="tl-label">M3 · 1.5h</div><div class="tl-title">첫 워크플로</div><div class="tl-desc">n8n-MCP로 노드 빌드</div></div>
-      <div class="tl-item"><div class="tl-dot">4</div><div class="tl-label">M4 · 1h</div><div class="tl-title">자동화 PRD</div><div class="tl-desc">brainstorming</div></div>
+      <div class="tl-item"><div class="tl-dot">4</div><div class="tl-label">M4 · 1h</div><div class="tl-title">자동화 PRD</div><div class="tl-desc">경량 설계 스킬</div></div>
       <div class="tl-item"><div class="tl-dot">5</div><div class="tl-label">M5 · 2.5h</div><div class="tl-title">분기·집계·다중</div><div class="tl-desc">일일매출 본실습</div></div>
     </div>
     <div class="success-box" style="margin-top:22px">
@@ -851,7 +851,7 @@ html.icons-ok i[data-lucide] .ico-fb { display: none; }
     <ul class="lead-list">
       <li data-click="1"><i data-lucide="server"><span class="ico-fb">🖥️</span></i><span><b>self-host</b> — 클라우드가 아니라 <b>내 노트북에 npx로</b> n8n을 직접 띄운다(Docker 없이 · 데이터 주권)</span></li>
       <li data-click="2"><i data-lucide="bot"><span class="ico-fb">🤖</span></i><span><b>Claude Code 파트너</b> — 설치 명령 생성·에러 해결·노드 빌드를 <b>같이</b> 한다</span></li>
-      <li data-click="3"><i data-lucide="file-text"><span class="ico-fb">📄</span></i><span><b>PRD 먼저</b> — 만들기 전에 "무엇을 자동화할지"를 brainstorming으로 명확히 한다</span></li>
+      <li data-click="3"><i data-lucide="file-text"><span class="ico-fb">📄</span></i><span><b>PRD 먼저</b> — 만들기 전에 "무엇을 자동화할지"를 경량 설계 스킬로 한 번에 명확히 한다</span></li>
       <li data-click="4"><i data-lucide="git-branch"><span class="ico-fb">🔀</span></i><span><b>분기·집계·다중출력</b> — 일일매출을 상품군별로 모아 여러 곳에 보낸다</span></li>
     </ul>
     <div class="quote-box" data-click="5">
@@ -1716,7 +1716,7 @@ flowchart LR
       <aside class="kit-notes" hidden>Step7=세 노드 연결→Execute Workflow→메일 도착. 3노드 녹색+실제 값 메일 1통이면 Lab2 완료. 노드명 대소문자 오류=에디터 실행으로 교체. 막히면 assets lab1-편성표메일.json import 합류(자격증명·시트ID 교체).</aside>
   </div>
 
-  <!-- ===================== CH5: M4 자동화 PRD (brainstorming) ===================== -->
+  <!-- ===================== CH5: M4 자동화 PRD (경량 스킬 /n8n-automation-prd) ===================== -->
 
   <!-- 20 무엇을 자동화? 먼저 -->
   <div class="slide" data-title="무엇을 자동화? 먼저" data-chapter="M4 · 자동화 PRD">
@@ -1730,31 +1730,35 @@ flowchart LR
       <i data-lucide="x-octagon"><span class="ico-fb">🚫</span></i>
       <p><span class="t">오개념 교정:</span> "AI가 알아서 해주니 PRD는 불필요" → <b>아니요.</b> PRD가 없으면 AI도 엉뚱한 노드를 만듭니다(가비지 인·가비지 아웃).</p>
     </div>
-      <aside class="kit-notes" hidden>빌드 전에 "무엇을 자동화?"를 말로 명확히. PRD 없는 AI 위임=목적지 없는 택시. "AI가 알아서"는 오개념(가비지 인 가비지 아웃). 다음 슬라이드에서 brainstorming으로 PRD를 끌어낸다.</aside>
+      <aside class="kit-notes" hidden>빌드 전에 "무엇을 자동화?"를 말로 명확히. PRD 없는 AI 위임=목적지 없는 택시. "AI가 알아서"는 오개념(가비지 인 가비지 아웃). 다음 슬라이드에서 경량 스킬 /n8n-automation-prd로 PRD를 한 번에 끌어낸다.</aside>
   </div>
 
-  <!-- 21 brainstorming 질문 하나씩 + HARD-GATE (CAP-05, code-copy) -->
-  <div class="slide" data-title="brainstorming · HARD-GATE" data-chapter="M4 · 자동화 PRD">
-    <div class="slide-label"><i data-lucide="messages-square"><span class="ico-fb">💬</span></i> M4 · /superpowers:brainstorming</div>
-    <h1><span class="hl">질문 하나씩</span> 답하며 설계, <span class="hl2">승인 전엔 빌드 금지</span></h1>
-    <p class="subtitle">brainstorming은 한 번에 하나씩 물어보며 설계를 끌어냅니다. 설계가 승인되기 전에는 워크플로를 만들지 않습니다(HARD-GATE).</p>
+  <!-- 21 n8n-automation-prd 경량 스킬 + 단계 게이트 (CAP-05, code-copy) -->
+  <div class="slide" data-title="경량 스킬로 PRD · 단계 게이트" data-chapter="M4 · 자동화 PRD">
+    <div class="slide-label"><i data-lucide="sparkles"><span class="ico-fb">🪄</span></i> M4 · /n8n-automation-prd</div>
+    <h1><span class="hl">5섹션을 한 번에</span> 뽑고, <span class="hl2">단계로 안전하게</span> 짓는다</h1>
+    <p class="subtitle">자동화 설계 전용 <b>경량 스킬</b>입니다. 질문을 하나씩 캐묻지 않고 <b>5섹션 PRD를 한 턴에</b> 만들어 줘요 — 비는 칸만 한꺼번에. 단, <b>핵심 의도와 트리거·출력 같은 결정적 선택은 꼭 확인</b>합니다(경량이어도 엉뚱한 걸 만들지 않게).</p>
     <div class="codeblock" style="position:relative;background:#0d1320;border:1px solid var(--border,#243049);border-radius:12px;padding:14px 16px;margin:14px 0;max-width:880px">
       <button type="button" aria-label="명령 복사" onclick="try{navigator.clipboard.writeText(this.nextElementSibling.innerText);this.textContent='✓ 복사됨';setTimeout(()=>{this.textContent='⧉ 복사';},1500);}catch(e){this.textContent='복사 실패';}" style="position:absolute;top:10px;right:10px;font-size:12px;padding:4px 10px;border-radius:7px;border:1px solid var(--accent,#6cf);background:transparent;color:var(--accent,#6cf);cursor:pointer">⧉ 복사</button>
-      <pre class="mono" style="margin:0;white-space:pre-wrap;word-break:break-all;color:#cfe3ff;font-size:13.5px;line-height:1.65">/superpowers:brainstorming
-# 주제: "내 반복 업무 하나를 자동화"
-# → Claude Code가 한 번에 한 가지씩 질문 → 답하며 PRD 완성
-# → ★PRD가 승인되기 전에는 워크플로를 만들지 않는다 (HARD-GATE)</pre>
+      <pre class="mono" style="margin:0;white-space:pre-wrap;word-break:break-all;color:#cfe3ff;font-size:13.5px;line-height:1.65">/n8n-automation-prd
+# "○○를 자동화하고 싶어" 한 줄이면 시작
+# → 5섹션 PRD(트리거·입력·처리·출력·예외)를 한 번에 + n8n 6레이어 매핑
+# → 단계 게이트: ① 설계 확정 → ② JSON 초안 → ③ 실제 생성(별도 확인)</pre>
     </div>
     <figure class="img-slot">
       <i data-lucide="image"><span class="ico-fb">🖼️</span></i>
-      <div class="img-slot-title">[CAP-05-brainstorm-prd · 강사 붙여넣기] brainstorming 질문 하나씩 → PRD 5섹션 화면</div>
-      <div class="img-slot-meta">무엇: <b>한 번에 하나씩 질문하고, 답을 모아 PRD 5섹션</b>이 만들어지는 화면 / 시점: Lab3 dry-run / alt: "brainstorming으로 자동화 PRD 도출"</div>
+      <div class="img-slot-title">[CAP-05-prd-skill · 강사 붙여넣기] 경량 스킬이 5섹션 PRD를 한 번에 + 6레이어 매핑까지 출력한 화면</div>
+      <div class="img-slot-meta">무엇: <b>한 턴에 5섹션 PRD + 6레이어 매핑 표</b>가 나오는 화면 / 시점: Lab3 dry-run / alt: "경량 스킬로 자동화 PRD 한 번에 도출"</div>
     </figure>
-    <div class="warn-box">
-      <i data-lucide="shield-alert"><span class="ico-fb">🛡️</span></i>
-      <p><span class="t">HARD-GATE 이유:</span> 설계가 흐릿한 채로 빌드하면 잘못된 워크플로를 빠르게 만들 뿐입니다. <b>먼저 합의하고, 그다음에 짓는다.</b></p>
+    <div class="grid-2">
+      <div class="card highlight"><div class="card-title">왜 경량인가</div><div class="card-body">범용 brainstorming은 한 질문씩·접근법 비교로 <b>토큰을 많이</b> 씁니다. 이 스킬은 n8n 전용이라 보통 <b>1턴</b>에 끝나요.</div></div>
+      <div class="card success-card"><div class="card-title">단계 게이트 = 안전</div><div class="card-body">한 번의 "OK"로 실제 생성까지 가지 않습니다. <b>설계 확정 → JSON 초안 → 실제 생성</b>을 끊어서. 실습 기본은 <b>import</b>.</div></div>
     </div>
-      <aside class="kit-notes" hidden>/superpowers:brainstorming은 한 번에 하나씩 질문. HARD-GATE=PRD 승인 전 워크플로 빌드 금지. 흐릿한 설계로 빨리 만들면 빨리 틀린다. PRD는 docs/superpowers/specs/에 저장됨.</aside>
+    <div class="warn-box">
+      <i data-lucide="git-branch-plus"><span class="ico-fb">🌿</span></i>
+      <p><span class="t">언제 brainstorming?</span> 정말 크고 모호한 설계(여러 제품·복잡한 정책)면 그때만 <code>/superpowers:brainstorming</code>으로 올립니다. 보통의 업무 자동화는 이 경량 스킬로 충분합니다.</p>
+    </div>
+      <aside class="kit-notes" hidden>핵심 교체: brainstorming(무겁고 토큰多·질문 하나씩) → 경량 전용 스킬 /n8n-automation-prd(5섹션 한 턴·빈칸만 한꺼번에). 안전장치는 HARD-GATE가 아니라 단계 게이트(설계확정→JSON초안→실제생성, 실습 기본 import). brainstorming은 정말 복잡한 설계의 폴백으로만. "전용 스킬이 가볍고 정확"이 AI-native 메시지.</aside>
   </div>
 
   <!-- 22 자동화 PRD 5섹션 -->
@@ -1809,18 +1813,41 @@ flowchart LR
       <aside class="kit-notes" hidden>PRD 5섹션을 n8n 6레이어로 매핑(처리가 가공+AI판단으로 분화). 이 매핑이 빌드의 설계도. AI 판단 레이어가 ④ Anthropic 노드(API 키)이고 2일차 핸즈온 대상. 이 다이어그램은 day2 M7에서도 재사용.</aside>
   </div>
 
-  <!-- ===================== LAB 3 실습 step 슬라이드 (M4 brainstorming PRD) ===================== -->
+  <!-- 23.5 worked: 홈앤쇼핑 방송실적 PRD 예시 -->
+  <div class="slide" data-title="예시: 방송 실적 리포트 (홈앤쇼핑)" data-chapter="M4 · 자동화 PRD">
+    <div class="slide-label"><i data-lucide="tv"><span class="ico-fb">📺</span></i> M4 · 워크드 예시 (우리 회사)</div>
+    <h1>예시 — <span class="hl">방송 끝나면 실적을 담당 MD에게</span> <span class="hl3">(worked)</span></h1>
+    <p class="subtitle">경량 스킬이 한 번에 뽑은 실제 PRD입니다. 내 업무로 바꾸기 전에 한 번 같이 읽어요.</p>
+    <ul class="priority-list">
+      <li><span class="priority-badge p3">트</span><div><b>① 트리거</b> — 매일 방송 종료 후 <b>23:00</b> (Schedule)</div></li>
+      <li><span class="priority-badge p4">입</span><div><b>② 입력</b> — 주문·매출 시트 + 편성표(방송별 담당 MD)</div></li>
+      <li><span class="priority-badge p4">처</span><div><b>③ 처리</b> — 방송별·상품군별 <b>매출 집계</b>, 목표 대비 달성률</div></li>
+      <li><span class="priority-badge p5">출</span><div><b>④ 출력</b> — 담당 MD <b>슬랙</b> + 요약 시트 기록</div></li>
+      <li><span class="priority-badge p2">예</span><div><b>⑤ 예외</b> — 데이터 미수신·매출 0건·발송 실패 시 알림</div></li>
+    </ul>
+    <div class="success-box">
+      <i data-lucide="layers"><span class="ico-fb">📚</span></i>
+      <p><span class="t">6레이어 매핑:</span> Schedule → Sheets×2(매출·편성표) → <b>Summarize + Merge</b> → Slack + Sheets → Error Trigger.</p>
+    </div>
+    <div class="warn-box">
+      <i data-lucide="copy-plus"><span class="ico-fb">➕</span></i>
+      <p><span class="t">추가 예시 2개(워크북 Lab3):</span> <b>경쟁사 가격 모니터링</b>(HTTP·IF로 가격 역전 감지), <b>고객 리뷰 VOC AI 분류</b>(Anthropic 노드로 긍/부정 분류 → 부정만 담당팀). 셋 중 골라 실습해도 됩니다.</p>
+    </div>
+      <aside class="kit-notes" hidden>홈앤쇼핑 worked example=방송실적 리포트(스케줄·집계·다중출력). 경량 스킬이 한 턴에 뽑은 PRD를 같이 읽고, Lab3에서 각자 본인 업무 또는 제시된 3예시(방송실적·경쟁사 가격·VOC AI분류) 중 하나로. 경쟁사=웹스크래핑(robots 주의), VOC=AI 노드(2일차 연결).</aside>
+  </div>
+
+  <!-- ===================== LAB 3 실습 step 슬라이드 (M4 경량 PRD 스킬) ===================== -->
 
   <!-- L3-0 지금 실습 안내 -->
   <div class="slide" data-title="▶ 지금 실습: 워크북 Lab 3 펴기" data-chapter="M4 · 자동화 PRD">
     <div class="slide-label"><i data-lucide="play-circle"><span class="ico-fb">▶️</span></i> M4 · 실습 시작 — 워크북 Lab 3</div>
     <h1><span class="hl">▶ 지금 실습</span> — 워크북 <span class="hl3">Lab 3</span>을 펴세요</h1>
-    <p class="subtitle">노드를 만들기 <b>전에</b>, <code>/superpowers:brainstorming</code>으로 <b>자동화 PRD 5섹션</b>을 손으로 채우고 n8n 6레이어에 매핑합니다. 설계가 승인되기 전엔 워크플로를 만들지 않습니다(HARD-GATE).</p>
+    <p class="subtitle">노드를 만들기 <b>전에</b>, 경량 스킬 <code>/n8n-automation-prd</code>로 <b>자동화 PRD 5섹션</b>을 한 번에 뽑아 워크북에 옮기고 n8n 6레이어에 매핑합니다. 이 랩은 <b>설계까지</b>만 — 실제 빌드는 M5에서.</p>
     <div class="grid-2">
       <div class="card highlight">
         <div class="card-icon"><i data-lucide="target"><span class="ico-fb">🎯</span></i></div>
         <div class="card-title">이번 랩에서 만드는 것</div>
-        <div class="card-body">내 반복업무 1개에 대한 <b>PRD 1장</b> + 6레이어 매핑표 + 짝 리뷰 1개.</div>
+        <div class="card-body">내 반복업무(또는 제시된 3예시) 1개에 대한 <b>PRD 1장</b> + 6레이어 매핑표 + 짝 리뷰 1개.</div>
       </div>
       <div class="card success-card">
         <div class="card-icon" style="color:var(--success)"><i data-lucide="check-circle"><span class="ico-fb">✅</span></i></div>
@@ -1829,59 +1856,62 @@ flowchart LR
       </div>
     </div>
     <div class="warn-box">
-      <i data-lucide="shield-alert"><span class="ico-fb">🛡️</span></i>
-      <p><span class="t">HARD-GATE:</span> 이 랩은 코드를 만들지 않습니다 — <b>말로 명확히 하는 설계</b>가 산출물입니다. 질문은 <b>하나씩</b> 답하세요.</p>
+      <i data-lucide="git-commit-horizontal"><span class="ico-fb">🚦</span></i>
+      <p><span class="t">단계 게이트:</span> 이 랩은 <b>설계 확정</b>까지가 산출물 — 실제 워크플로 생성은 다음 단계입니다. 스킬이 5섹션을 한 번에 주면, 비는 칸만 채워 확정하세요.</p>
     </div>
-      <aside class="kit-notes" hidden>Lab3 진입 안내. 빌드 전 brainstorming으로 PRD 5섹션+6레이어 매핑. HARD-GATE=설계 승인 전 빌드 금지. 질문 하나씩. 산출물=PRD 1장+매핑표+짝 리뷰. 이 랩은 코드 X.</aside>
+      <aside class="kit-notes" hidden>Lab3 진입 안내. 빌드 전 경량 스킬 /n8n-automation-prd로 PRD 5섹션 한 번에+6레이어 매핑. 단계 게이트=설계 확정까지가 이 랩 산출물(실제 생성은 M5). 산출물=PRD 1장+매핑표+짝 리뷰. 본인 업무 또는 제시 3예시 중 택1.</aside>
   </div>
 
-  <!-- L3-S1 brainstorming 호출 (프롬프트) -->
-  <div class="slide" data-title="Lab3 · Step 1 — brainstorming 호출" data-chapter="M4 · 자동화 PRD">
-    <div class="slide-label"><i data-lucide="messages-square"><span class="ico-fb">💬</span></i> M4 · Lab3 Step 1</div>
-    <h1>Lab3 · Step 1 — <span class="hl">/superpowers:brainstorming</span>을 호출한다</h1>
-    <p class="subtitle">주제를 "내 반복 업무 하나 자동화"로 두고 brainstorming을 시작합니다.</p>
+  <!-- L3-S1 경량 스킬 호출 (프롬프트) -->
+  <div class="slide" data-title="Lab3 · Step 1 — 경량 스킬 호출" data-chapter="M4 · 자동화 PRD">
+    <div class="slide-label"><i data-lucide="sparkles"><span class="ico-fb">🪄</span></i> M4 · Lab3 Step 1</div>
+    <h1>Lab3 · Step 1 — <span class="hl">/n8n-automation-prd</span>를 호출한다</h1>
+    <p class="subtitle">자동화할 업무를 한 줄로 제시합니다 — 내 업무 또는 아래 우리 회사 예시 중 하나.</p>
     <div class="codeblock" style="position:relative;background:#0d1320;border:1px solid var(--border,#243049);border-radius:12px;padding:14px 16px;margin:14px 0;max-width:880px">
       <button type="button" aria-label="명령 복사" onclick="try{navigator.clipboard.writeText(this.nextElementSibling.innerText);this.textContent='✓ 복사됨';setTimeout(()=>{this.textContent='⧉ 복사';},1500);}catch(e){this.textContent='복사 실패';}" style="position:absolute;top:10px;right:10px;font-size:12px;padding:4px 10px;border-radius:7px;border:1px solid var(--accent,#6cf);background:transparent;color:var(--accent,#6cf);cursor:pointer">⧉ 복사</button>
-      <pre class="mono" style="margin:0;white-space:pre-wrap;word-break:break-all;color:#cfe3ff;font-size:13.5px;line-height:1.65">/superpowers:brainstorming
-# 주제: "내 반복 업무 하나를 자동화"</pre>
+      <pre class="mono" style="margin:0;white-space:pre-wrap;word-break:break-all;color:#cfe3ff;font-size:13.5px;line-height:1.65">/n8n-automation-prd
+# 주제 한 줄 — 내 업무 또는 아래 중 하나:
+#  · "방송 끝나면 실적을 담당 MD에게 자동 정리·발송"
+#  · "경쟁사 가격을 매일 체크해 우리보다 싸지면 알림"
+#  · "고객 리뷰를 AI로 긍/부정 분류해 부정만 담당팀 알림"</pre>
     </div>
     <div class="grid-2">
-      <div class="card highlight"><div class="card-title">② 무엇을 하나</div><div class="card-body">Claude Code에 위 명령 입력 → 주제로 "내가 매일/매주 반복하는 업무 1개"를 제시.</div></div>
-      <div class="card success-card"><div class="card-title">④ ✅ 확인 포인트</div><div class="card-body">Claude Code가 <b>한 번에 한 가지씩 질문</b>하기 시작하면 정상.</div></div>
+      <div class="card highlight"><div class="card-title">② 무엇을 하나</div><div class="card-body">Claude Code에 위 명령 입력 → 주제 <b>한 줄</b>만 제시(질문 안 기다려도 됨).</div></div>
+      <div class="card success-card"><div class="card-title">④ ✅ 확인 포인트</div><div class="card-body">스킬이 <b>5섹션 PRD를 한 번에</b> 펼치고, 비는 칸만 모아 물어보면 정상.</div></div>
     </div>
     <div class="danger-box">
       <i data-lucide="alert-triangle"><span class="ico-fb">⚠️</span></i>
-      <p><span class="t">⑤ 막히면:</span> 명령이 안 먹으면 superpowers 설치/이름을 강사와 확인. AI가 여러 질문을 한꺼번에 쏟으면 "하나씩 물어봐"라고 요청.</p>
+      <p><span class="t">⑤ 막히면:</span> 명령이 안 먹으면 스킬 설치/이름을 강사와 확인. 5섹션이 한 번에 안 나오면 "5섹션 PRD로 한 번에 정리해줘"라고 요청.</p>
     </div>
-      <aside class="kit-notes" hidden>Step1=/superpowers:brainstorming 호출(프롬프트). 주제=내 반복 업무 1개. 한 번에 하나씩 질문 시작하면 정상. 명령 미작동=설치/이름 확인. 한꺼번에 질문하면 하나씩 요청.</aside>
+      <aside class="kit-notes" hidden>Step1=/n8n-automation-prd 호출. 주제 한 줄(내 업무 또는 제시 3예시: 방송실적·경쟁사 가격·VOC AI분류). 5섹션 한 번에+비는 칸만 묶어 질문=정상. 미작동=설치/이름 확인. 한 질문씩 캐물으면 "5섹션으로 한 번에" 요청.</aside>
   </div>
 
-  <!-- L3-S2 질문 하나씩 답하기 -->
-  <div class="slide" data-title="Lab3 · Step 2 — 질문에 하나씩 답하기" data-chapter="M4 · 자동화 PRD">
+  <!-- L3-S2 5섹션 한 번에 받기 -->
+  <div class="slide" data-title="Lab3 · Step 2 — 5섹션 한 번에 받기" data-chapter="M4 · 자동화 PRD">
     <div class="slide-label"><i data-lucide="list-checks"><span class="ico-fb">🧭</span></i> M4 · Lab3 Step 2</div>
-    <h1>Lab3 · Step 2 — <span class="hl3">질문 하나씩</span> 답한다 (HARD-GATE)</h1>
-    <p class="subtitle">brainstorming은 한 번에 하나씩 물어봅니다. 답을 모아 설계가 또렷해집니다 — 승인 전엔 빌드 금지.</p>
+    <h1>Lab3 · Step 2 — <span class="hl3">5섹션을 한 번에</span> 받고 빈칸만 채운다</h1>
+    <p class="subtitle">경량 스킬은 추론 가능한 칸은 <code>(추정)</code>으로 미리 채우고, 비는 칸만 한꺼번에 물어봅니다. 한 질문씩 왕복하지 않아요.</p>
     <figure class="img-slot">
       <i data-lucide="image"><span class="ico-fb">🖼️</span></i>
-      <div class="img-slot-title">[CAP-LAB3-S2 · 강사 dry-run 캡처] brainstorming이 한 번에 한 질문씩 던지는 화면</div>
-      <div class="img-slot-meta">무엇: <b>질문 하나 → 답 → 다음 질문</b>으로 진행되는 대화 화면 / 시점: Lab3 dry-run / alt: "brainstorming 한 질문씩 진행"</div>
+      <div class="img-slot-title">[CAP-LAB3-S2 · 강사 dry-run 캡처] 5섹션 PRD가 한 번에 펼쳐지고 비는 칸만 묶어 묻는 화면</div>
+      <div class="img-slot-meta">무엇: <b>5섹션이 한 화면에 + (추정) 표시 + 비는 칸만 한꺼번에 질문</b> / 시점: Lab3 dry-run / alt: "경량 스킬 5섹션 한 번에"</div>
     </figure>
     <div class="grid-2">
-      <div class="card highlight"><div class="card-title">② 무엇을 하나</div><div class="card-body">질문마다 <b>한 줄로</b> 답한다(트리거·입력·처리·출력·예외를 끌어내는 질문들).</div></div>
-      <div class="card success-card"><div class="card-title">④ ✅ 확인 포인트</div><div class="card-body">대화가 진행될수록 내 자동화의 <b>윤곽이 또렷</b>해지면 정상.</div></div>
+      <div class="card highlight"><div class="card-title">② 무엇을 하나</div><div class="card-body">스킬이 묶어 물은 <b>빈칸만 한 번에</b> 답한다(보통 ⑤ 예외·한도).</div></div>
+      <div class="card success-card"><div class="card-title">④ ✅ 확인 포인트</div><div class="card-body">5섹션이 채워지고 <code>(추정)</code>이 사라지면 정상. ★스킬이 되짚는 <b>"핵심 의도가 이게 맞나요?"</b>에 답해 의도를 확정.</div></div>
     </div>
     <div class="danger-box">
       <i data-lucide="x-octagon"><span class="ico-fb">🚫</span></i>
-      <p><span class="t">⑤ 막히면(오개념):</span> "AI가 알아서 해주니 PRD 불필요" → 아니요. 설계가 흐릿하면 AI도 엉뚱한 노드를 만듭니다(가비지 인·가비지 아웃). <b>승인 전엔 빌드하지 않습니다.</b></p>
+      <p><span class="t">⑤ 막히면(오개념):</span> "AI가 알아서 해주니 PRD 불필요" → 아니요. 설계가 흐릿하면 AI도 엉뚱한 노드를 만듭니다(가비지 인·가비지 아웃). <b>설계를 확정한 뒤</b> 빌드합니다.</p>
     </div>
-      <aside class="kit-notes" hidden>Step2=질문 하나씩 답하기(HARD-GATE). 트리거·입력·처리·출력·예외를 끌어내는 질문에 한 줄씩. 진행될수록 윤곽 또렷=정상. 오개념="AI가 알아서"→가비지 인 가비지 아웃. 승인 전 빌드 금지.</aside>
+      <aside class="kit-notes" hidden>Step2=5섹션 한 번에 받기. 스킬이 추론 칸은 (추정), 비는 칸만 한꺼번에 질문 → 빈칸만 답. 5섹션 다 채워지고 (추정) 사라지면 정상. 오개념="AI가 알아서"→가비지 인 가비지 아웃. 설계 확정 후 빌드(단계 게이트).</aside>
   </div>
 
   <!-- L3-S3 PRD 5섹션 완성 화면 -->
   <div class="slide" data-title="Lab3 · Step 3 — PRD 5섹션 완성" data-chapter="M4 · 자동화 PRD">
     <div class="slide-label"><i data-lucide="clipboard-list"><span class="ico-fb">📋</span></i> M4 · Lab3 Step 3</div>
     <h1>Lab3 · Step 3 — <span class="hl">PRD 5섹션</span>을 완성한다</h1>
-    <p class="subtitle">답을 모아 5섹션을 채웁니다. 워크북 표에 직접 적어 보세요.</p>
+    <p class="subtitle">스킬이 한 번에 준 5섹션을 워크북 표에 옮겨 적습니다(빈칸은 직접 채움).</p>
     <ul class="priority-list">
       <li><span class="priority-badge p3">트</span><div><b>① 트리거 (언제 시작?)</b> — <code>____</code></div></li>
       <li><span class="priority-badge p4">입</span><div><b>② 입력 (무엇을 받나·형식)</b> — <code>____</code></div></li>
@@ -1892,13 +1922,13 @@ flowchart LR
     <figure class="img-slot">
       <i data-lucide="image"><span class="ico-fb">🖼️</span></i>
       <div class="img-slot-title">[CAP-LAB3-S3 · 강사 dry-run 캡처] PRD 5섹션이 채워진 결과 화면</div>
-      <div class="img-slot-meta">무엇: <b>brainstorming 결과로 PRD 5섹션이 채워진</b> 문서 화면 / 시점: Lab3 dry-run / alt: "자동화 PRD 5섹션 완성"</div>
+      <div class="img-slot-meta">무엇: <b>경량 스킬 결과로 PRD 5섹션이 채워진</b> 문서 화면 / 시점: Lab3 dry-run / alt: "자동화 PRD 5섹션 완성"</div>
     </figure>
     <div class="success-box">
       <i data-lucide="check-circle"><span class="ico-fb">✅</span></i>
-      <p><span class="t">④ ✅ 확인 포인트:</span> 5칸이 모두 한 줄 이상 채워지면 통과. 산출물은 <code>docs/superpowers/specs/</code>에 자동 저장됩니다. <span style="color:var(--text-dim)">⑤ 가장 자주 비는 칸 = ⑤ 예외·한도.</span></p>
+      <p><span class="t">④ ✅ 확인 포인트:</span> 5칸이 모두 한 줄 이상 채워지면 통과. 원하면 스킬에 "이 PRD를 .md로 저장해줘"라고 하면 파일로도 남겨요. <span style="color:var(--text-dim)">⑤ 가장 자주 비는 칸 = ⑤ 예외·한도.</span></p>
     </div>
-      <aside class="kit-notes" hidden>Step3=PRD 5섹션 완성(트리거·입력·처리·출력·예외). 워크북 빈칸 채우기. 5칸 다 채우면 통과. specs/에 자동 저장. ⑤ 예외·한도가 가장 자주 빔(다음 step 짝 리뷰로 보완).</aside>
+      <aside class="kit-notes" hidden>Step3=PRD 5섹션 완성(트리거·입력·처리·출력·예외). 스킬이 한 번에 준 5섹션을 워크북에 옮기고 빈칸 채우기. 5칸 다 채우면 통과. 원하면 .md 저장 요청 가능. ⑤ 예외·한도가 가장 자주 빔(다음 step 짝 리뷰로 보완).</aside>
   </div>
 
   <!-- L3-S4 6레이어 매핑 -->
@@ -2258,7 +2288,7 @@ flowchart LR
       <li><i data-lucide="circle" class="check-icon"><span class="ico-fb">⭕</span></i> Claude Code 도움으로 <b>self-host n8n을 내 노트북에 설치·구동</b>했다 (<code>~/.n8n</code>·타임존)</li>
       <li><i data-lucide="circle" class="check-icon"><span class="ico-fb">⭕</span></i> 도구지도 4구분 — <b>Anthropic 노드 ≠ Claude Pro</b>를 구분한다</li>
       <li><i data-lucide="circle" class="check-icon"><span class="ico-fb">⭕</span></i> n8n-MCP로 노드를 조회해 <b>첫 워크플로를 노드별로 빌드·검증</b>했다</li>
-      <li><i data-lucide="circle" class="check-icon"><span class="ico-fb">⭕</span></i> brainstorming으로 <b>자동화 PRD 5섹션</b>을 쓰고 6레이어로 매핑한다</li>
+      <li><i data-lucide="circle" class="check-icon"><span class="ico-fb">⭕</span></i> 경량 스킬 <code>/n8n-automation-prd</code>로 <b>자동화 PRD 5섹션</b>을 한 번에 쓰고 6레이어로 매핑한다</li>
       <li><i data-lucide="circle" class="check-icon"><span class="ico-fb">⭕</span></i> IF·Filter·집계로 <b>일일매출을 다중발송</b>하고, 실패를 로그로 진단한다</li>
     </ul>
     <div class="success-box">
@@ -2313,16 +2343,16 @@ flowchart LR
       </div>
 
       <div class="kit-mcq" data-group="exam-day1" data-id="ex-d1-q4">
-        <p class="kit-mcq-q">4. <span class="mono">/superpowers:brainstorming</span>의 HARD-GATE 원칙은?</p>
+        <p class="kit-mcq-q">4. 경량 스킬 <span class="mono">/n8n-automation-prd</span>의 단계 게이트로 옳은 것은?</p>
         <div class="kit-mcq-opts" role="group" aria-label="객관식 보기">
-          <button type="button" class="kit-mcq-opt">A. 질문은 한 번에 모두 던진다</button>
-          <button type="button" class="kit-mcq-opt" data-correct>B. PRD(설계)가 승인되기 전에는 워크플로를 만들지 않는다</button>
-          <button type="button" class="kit-mcq-opt">C. PRD 없이 먼저 빌드하고 나중에 문서화한다</button>
+          <button type="button" class="kit-mcq-opt">A. 질문을 하나씩만 던지며 토큰을 많이 쓴다</button>
+          <button type="button" class="kit-mcq-opt" data-correct>B. 설계 확정 → JSON 초안 → 실제 생성을 끊어서 진행한다(실습 기본 import)</button>
+          <button type="button" class="kit-mcq-opt">C. 한 번의 "OK"로 실제 n8n 생성까지 바로 간다</button>
           <button type="button" class="kit-mcq-opt">D. 거대 JSON을 한 번에 import한다</button>
         </div>
         <p class="kit-mcq-live" aria-live="polite"></p>
         <div class="kit-mcq-explain" hidden>
-          <strong>해설: B.</strong> brainstorming은 한 번에 하나씩 질문하며 PRD를 만들고, <b>설계가 승인되기 전에는 워크플로 빌드를 막는</b> HARD-GATE를 둡니다.
+          <strong>해설: B.</strong> 경량 스킬은 5섹션 PRD를 한 번에 뽑되, <b>설계 확정 → JSON 초안 → 실제 생성</b>을 단계로 끊습니다. 한 번의 승인으로 실제 생성까지 가지 않아요(수강생 실습 기본은 import). 정말 복잡한 설계만 brainstorming으로 올립니다.
         </div>
       </div>
 

@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<script>(function(){try{var p=localStorage.getItem("theme-pref")||"system";var d=p==="dark"||(p==="system"&&matchMedia("(prefers-color-scheme: dark)").matches);document.documentElement.setAttribute("data-theme",d?"dark":"light");}catch(e){document.documentElement.setAttribute("data-theme","dark");}})();</script>
+<title>자동화 PRD 경량 스킬 가이드</title>
+<style>
+  /* ── theme tokens (dark default + light override) ── */
+  :root{
+    color-scheme:dark;
+    --bg:#0b0f17; --fg:#e6edf3; --card-bg:#121826;
+    --topbar-bg:rgba(11,15,23,.92); --line:#233047; --line2:#1f2a3c; --cell:#2a3850;
+    --accent:#60a5fa; --h2:#dbeafe; --h3:#bfdbfe; --h4:#93c5fd;
+    --code-bg:#111827; --pre-bg:#0e1420; --quote-bg:#101826; --quote-fg:#cbd5e1; --quote-bd:#3b82f6;
+    --th-bg:#152032; --th-fg:#dbeafe; --tr-even:#0f1827; --strong:#fde68a;
+  }
+  :root[data-theme="light"]{
+    color-scheme:light;
+    --bg:#f7f8fa; --fg:#1f2533; --card-bg:#ffffff;
+    --topbar-bg:rgba(247,248,250,.92); --line:#d7dce6; --line2:#e3e7ef; --cell:#cfd6e2;
+    --accent:#2563eb; --h2:#1e3a8a; --h3:#2456b8; --h4:#3b6fd4;
+    --code-bg:#eef1f6; --pre-bg:#f1f4f9; --quote-bg:#eef3fb; --quote-fg:#44506a; --quote-bd:#2563eb;
+    --th-bg:#e9eef6; --th-fg:#1e3a8a; --tr-even:#f3f6fb; --strong:#b45309;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body { background:var(--bg); color:var(--fg); line-height:1.75; word-break:keep-all; overflow-wrap:anywhere;
+    transition:background-color .25s,color .25s;
+    font-family:-apple-system,BlinkMacSystemFont,"Pretendard","Apple SD Gothic Neo","Segoe UI",Roboto,sans-serif; }
+  /* ── theme toggle (system/light/dark) ── */
+  .theme-toggle{position:fixed;top:10px;right:14px;z-index:2000;display:inline-flex;align-items:center;gap:6px;
+    padding:7px 11px;border-radius:999px;border:1px solid var(--line);background:var(--card-bg);color:var(--fg);
+    font:600 12px/1 inherit;cursor:pointer;opacity:.85;transition:opacity .2s,border-color .2s,background-color .25s,color .25s}
+  .theme-toggle:hover{opacity:1;border-color:var(--accent)}
+  .theme-toggle .tt-ico{font-size:14px;line-height:1}
+  @media print{.theme-toggle{display:none!important}}
+  @media(max-width:760px){.theme-toggle .tt-label{display:none}}
+  .topbar { position:sticky; top:0; z-index:10; background:var(--topbar-bg); backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line2); padding:12px 64px 12px 20px; display:flex; gap:10px; align-items:center; }
+  .topbar .badge { font-size:11px; color:var(--accent); border:1px solid var(--line); border-radius:999px; padding:3px 9px; }
+  .topbar .t { font-size:14px; font-weight:700; }
+  main.doc { max-width:880px; margin:0 auto; padding:32px 22px 96px; }
+  h1,h2,h3,h4 { line-height:1.35; font-weight:800; margin:1.6em 0 .6em; }
+  h1 { font-size:26px; border-bottom:2px solid var(--line); padding-bottom:.3em; }
+  h2 { font-size:21px; color:var(--h2); border-bottom:1px solid var(--line2); padding-bottom:.25em; }
+  h3 { font-size:17px; color:var(--h3); }
+  h4 { font-size:15px; color:var(--h4); }
+  p, li { font-size:15px; }
+  a { color:var(--accent); }
+  hr { border:0; border-top:1px solid var(--line); margin:2em 0; }
+  blockquote { margin:1em 0; padding:.6em 1em; border-left:3px solid var(--quote-bd); background:var(--quote-bg);
+    border-radius:0 8px 8px 0; color:var(--quote-fg); }
+  blockquote p { margin:.3em 0; }
+  code { background:var(--code-bg); border:1px solid var(--line); border-radius:5px; padding:.1em .4em; font-size:.9em;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; }
+  pre { background:var(--pre-bg); border:1px solid var(--line); border-radius:10px; padding:14px 16px; overflow:auto; }
+  pre code { background:none; border:0; padding:0; font-size:13px; line-height:1.6; }
+  table { border-collapse:collapse; width:100%; margin:1.1em 0; font-size:14px; display:block; overflow-x:auto; }
+  th, td { border:1px solid var(--cell); padding:8px 10px; text-align:left; vertical-align:top; }
+  th { background:var(--th-bg); font-weight:700; color:var(--th-fg); }
+  tr:nth-child(even) td { background:var(--tr-even); }
+  ul, ol { padding-left:1.4em; }
+  li { margin:.3em 0; }
+  li input[type=checkbox] { transform:scale(1.15); margin-right:.5em; accent-color:var(--accent); }
+  ul:has(li input[type=checkbox]) { list-style:none; padding-left:.2em; }
+  strong { color:var(--strong); }
+  img { max-width:100%; }
+</style>
+</head>
+<body>
+<button id="themeToggle" class="theme-toggle" type="button" aria-label="테마 전환" title="테마: 시스템"><span class="tt-ico" aria-hidden="true">🖥</span><span class="tt-label">시스템</span></button>
+<div class="topbar"><span class="badge">n8n 자동화 강의</span><span class="t">자동화 PRD 경량 스킬 가이드</span></div>
+<main class="doc">
+<h1>자동화 PRD 경량 스킬 — <code>/n8n-automation-prd</code></h1>
+<blockquote>
+<p>워크플로를 만들기 <strong>전에</strong>, &quot;무엇을 자동화할지&quot;를 <strong>5섹션 PRD</strong>로 한 번에 정리해 주는 Claude Code 전용 경량 스킬입니다. M4(Lab3)·M9(Lab6)에서 사용해요.</p>
+</blockquote>
+<h2>무엇을 해 주나</h2>
+<ul>
+<li>자동화할 업무를 <strong>한 줄</strong>로 주면 → <strong>5섹션 PRD</strong>(① 트리거 ② 입력 ③ 처리 ④ 출력 ⑤ 예외·한도)를 <strong>한 턴에</strong> 만들어 줍니다. 추론 가능한 칸은 <code>(추정)</code>으로 미리 채우고, <strong>비는 칸만 한꺼번에</strong> 물어봐요.</li>
+<li>이어서 PRD를 <strong>n8n 6레이어</strong>(트리거·수집·가공·AI 판단·액션/알림·에러)로 매핑해 줍니다.</li>
+<li><strong>단계 게이트로 안전하게:</strong> ① 설계 확정 → ② JSON 초안 → ③ 실제 생성을 <strong>끊어서</strong> 진행합니다. 한 번의 &quot;OK&quot;로 실제 n8n 생성까지 가지 않아요(<strong>실습 기본은 import</strong>).</li>
+</ul>
+<h2>왜 경량인가 (vs brainstorming)</h2>
+<p>범용 <code>superpowers:brainstorming</code>은 질문을 <strong>하나씩</strong> 던지고 접근법을 비교하느라 토큰을 많이 씁니다. 이 스킬은 <strong>n8n 전용</strong>이라 보통 <strong>1턴</strong>에 끝나요. <em>정말 크고 복잡한 설계</em>(여러 제품·복잡한 정책)일 때만 brainstorming으로 올리면 됩니다.</p>
+<h2>설치 (둘 중 하나)</h2>
+<p><strong>A. 폴더 복사 (권장)</strong></p>
+<ol>
+<li><strong><a href="n8n-automation-prd-skill.zip">⬇ n8n-automation-prd-skill.zip 내려받기</a></strong> 후 압축을 풉니다.</li>
+<li><code>n8n-automation-prd/</code> 폴더를 통째로 아래 위치에 넣습니다.<ul>
+<li>macOS / Linux: <code>~/.claude/skills/</code></li>
+<li>Windows: <code>%USERPROFILE%\.claude\skills\</code></li>
+</ul>
+</li>
+<li>Claude Code를 <strong>재시작</strong>합니다.</li>
+</ol>
+<p><strong>B. 이미 설치돼 있는지 확인</strong></p>
+<ul>
+<li>Claude Code에서 <code>/</code> 를 입력했을 때 <code>n8n-automation-prd</code>가 보이면 설치된 것입니다.</li>
+</ul>
+<blockquote>
+<p>설치 후 폴더 구조: <code>~/.claude/skills/n8n-automation-prd/SKILL.md</code> + <code>references/n8n-node-map.md</code></p>
+</blockquote>
+<h2>사용법</h2>
+<p>Claude Code에서:</p>
+<pre><code>/n8n-automation-prd
+&quot;매주 반복하는 ___ 업무를 자동화하고 싶어.&quot;
+</code></pre>
+<p>또는 그냥 평소 말투로 — <strong>&quot;○○를 자동화하고 싶어&quot;</strong>, <strong>&quot;이 반복업무 n8n으로 만들 수 있어?&quot;</strong> 라고만 해도 스킬이 자동으로 붙습니다.</p>
+<h3>우리 회사(홈앤쇼핑) 예시 3개 — 그대로 실습해도 됩니다</h3>
+<table>
+<thead>
+<tr>
+<th>예시</th>
+<th>한 줄 정의</th>
+<th>배우는 노드</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ⓐ 방송 실적 리포트</td>
+<td>&quot;방송 끝나면 실적을 담당 MD에게 자동 정리·발송&quot;</td>
+<td>Schedule · 집계(Summarize) · 다중 출력</td>
+</tr>
+<tr>
+<td>ⓑ 경쟁사 가격 모니터링</td>
+<td>&quot;경쟁사 가격을 매일 체크해 우리보다 싸지면 알림&quot;</td>
+<td>HTTP 수집 · IF 분기 · ★robots·약관</td>
+</tr>
+<tr>
+<td>ⓒ 고객 리뷰 VOC 분류</td>
+<td>&quot;고객 리뷰를 AI로 긍/부정 분류해 부정만 담당팀 알림&quot;</td>
+<td>Anthropic 노드(2일차) · IF 분기</td>
+</tr>
+</tbody></table>
+<h3>흐름 한눈에</h3>
+<ol>
+<li><strong>주제 한 줄</strong> 제시 → 2. 스킬이 <strong>5섹션 PRD + 6레이어 매핑</strong>을 한 번에 → 3. <strong>비는 칸만</strong> 채워 &quot;이 설계 맞나요?&quot; 확정 → 4. (원하면) &quot;JSON 초안 만들어줘&quot; → 5. n8n에서 <code>⋮ → Import from File</code>.</li>
+</ol>
+<h2>자주 묻는 것</h2>
+<ul>
+<li><strong>PRD를 파일로 남기고 싶어요</strong> → &quot;이 PRD를 .md로 저장해줘&quot;라고 하면 됩니다.</li>
+<li><strong>AI 판단 노드(③ 처리)는 무엇으로 도나요?</strong> → 워크플로 안 Anthropic 노드는 **별도 Anthropic API 키(종량과금)**로 돕니다. 개인 Claude 구독으로는 <strong>안 돼요</strong>(2일차에서 회사 키로 실습).</li>
+<li><strong>노드를 한 번에 다 만들어도 되나요?</strong> → 아니요. 거대 JSON 통째 생성은 cascade 에러 위험 → <strong>노드별로 만들고 즉시 검증</strong>하세요.</li>
+</ul>
+<blockquote>
+<p>깊은 빌드 지식(정확한 파라미터·검증·에러 패턴)은 공식 <code>n8n-io/skills</code>·<code>czlonkowski/n8n-skills</code>·<strong>n8n-MCP</strong>가 담당합니다. 이 스킬은 <em>가벼운 설계 진입점</em>이에요.</p>
+</blockquote>
+
+</main>
+<script>
+(function(){
+  var root=document.documentElement, btn=document.getElementById("themeToggle");
+  var mq=window.matchMedia("(prefers-color-scheme: dark)");
+  var ICON={system:"🖥",light:"☀️",dark:"🌙"}, LABEL={system:"시스템",light:"라이트",dark:"다크"};
+  var cur="system"; try{cur=localStorage.getItem("theme-pref")||"system";}catch(e){}
+  function apply(){
+    var d=cur==="dark"||(cur==="system"&&mq.matches);
+    root.setAttribute("data-theme",d?"dark":"light");
+    if(btn){var i=btn.querySelector(".tt-ico"),l=btn.querySelector(".tt-label");
+      if(i)i.textContent=ICON[cur]; if(l)l.textContent=LABEL[cur]; btn.title="테마: "+LABEL[cur];}
+  }
+  apply();
+  if(btn)btn.addEventListener("click",function(){
+    var o=["system","light","dark"]; cur=o[(o.indexOf(cur)+1)%o.length];
+    try{localStorage.setItem("theme-pref",cur);}catch(e){}
+    apply();
+  });
+  if(mq.addEventListener)mq.addEventListener("change",function(){if(cur==="system")apply();});
+})();
+</script>
+</body>
+</html>

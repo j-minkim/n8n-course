@@ -829,7 +829,7 @@ html.icons-ok i[data-lucide] .ico-fb { display: none; }
     <div class="bento">
       <div class="card"><div class="card-icon"><i data-lucide="server"><span class="ico-fb">🖥️</span></i></div><div class="card-title">self-host n8n</div><div class="card-body">내 노트북에 npx로 띄운 n8n. 데이터는 <span class="kbd2">~/.n8n</span> 폴더에 영속(Docker 불필요).</div></div>
       <div class="card"><div class="card-icon"><i data-lucide="box"><span class="ico-fb">📦</span></i></div><div class="card-title">트리거 · 노드</div><div class="card-body">Schedule Trigger로 시작, Google Sheets·Gmail 같은 액션 노드로 실제 동작.</div></div>
-      <div class="card"><div class="card-icon"><i data-lucide="message-circle-question"><span class="ico-fb">💬</span></i></div><div class="card-title">자동화 PRD</div><div class="card-body"><span class="kbd2">/superpowers:brainstorming</span> 으로 트리거·입력·처리·출력·예외 5섹션을 먼저 정함.</div></div>
+      <div class="card"><div class="card-icon"><i data-lucide="sparkles"><span class="ico-fb">🪄</span></i></div><div class="card-title">자동화 PRD</div><div class="card-body"><span class="kbd2">/n8n-automation-prd</span> 로 트리거·입력·처리·출력·예외 5섹션을 한 번에 정함.</div></div>
       <div class="card"><div class="card-icon"><i data-lucide="braces"><span class="ico-fb">{ }</span></i></div><div class="card-title">표현식 · MCP 빌드</div><div class="card-body"><span class="kbd2">{{ $json.상품군 }}</span> 참조 + Claude Code+n8n-MCP로 노드별 빌드.</div></div>
     </div>
     <aside class="kit-notes" hidden>빠른 회상 질문으로 선행지식 활성화(슬라이드 다시 읽지 말고 청중이 답하게): self-host=내 노트북(npx), 데이터=<span class="kbd2">~/.n8n</span> 폴더, 트리거=흐름 시작, PRD=무엇을 자동화할지 먼저, {{ $json }}=앞 노드 데이터, n8n-MCP=정확한 노드 조회. 어제 만든 노드 이름 하나 말하게 한다.</aside>
@@ -867,7 +867,7 @@ html.icons-ok i[data-lucide] .ico-fb { display: none; }
       <svg viewBox="0 0 920 230" width="100%" role="img" aria-label="자동화 PRD 5섹션이 n8n 6레이어로 매핑되는 다이어그램">
         <g font-family="Pretendard, sans-serif">
           <!-- PRD column -->
-          <text x="14" y="24" fill="#8b8fa7" font-size="13" font-weight="700">자동화 PRD (brainstorming)</text>
+          <text x="14" y="24" fill="#8b8fa7" font-size="13" font-weight="700">자동화 PRD (경량 스킬)</text>
           <rect x="14" y="36" width="190" height="30" rx="7" fill="rgba(79,140,255,0.10)" stroke="#4f8cff"/><text x="26" y="56" fill="#e4e6ef" font-size="13">① 트리거 — 언제</text>
           <rect x="14" y="72" width="190" height="30" rx="7" fill="rgba(79,140,255,0.10)" stroke="#4f8cff"/><text x="26" y="92" fill="#e4e6ef" font-size="13">② 입력 — 무엇을</text>
           <rect x="14" y="108" width="190" height="30" rx="7" fill="rgba(79,140,255,0.10)" stroke="#4f8cff"/><text x="26" y="128" fill="#e4e6ef" font-size="13">③ 처리 — 변환·AI 판단</text>
@@ -896,15 +896,15 @@ html.icons-ok i[data-lucide] .ico-fb { display: none; }
   <!-- 5 -->
   <div class="slide" data-title="PRD→순차 빌드" data-chapter="M7 복합 워크플로 설계">
     <div class="slide-label"><i data-lucide="bot"><span class="ico-fb">🤖</span></i> AI-native 빌드 원칙 · ★핵심</div>
-    <h1>brainstorming PRD → Claude Code+n8n-MCP <span class="hl">노드별 순차 빌드</span></h1>
+    <h1>경량 스킬 PRD → Claude Code+n8n-MCP <span class="hl">노드별 순차 빌드</span></h1>
     <p class="subtitle">복합 워크플로를 한 번에 만들려 하지 마세요. 설계도(PRD)를 먼저 잡고, 노드를 <strong>하나씩</strong> 붙이며 즉시 검증합니다.</p>
     <div class="img-ph" style="margin-top:14px">
       <span class="ph-tag">코드 · 화면에서 함께 입력 (Claude Code)</span>
       <span class="ph-title">설계 → 빌드 호출 예시</span>
-      <div style="position:relative;margin-top:8px;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:14px 16px;font-family:'SFMono-Regular',Consolas,monospace;font-size:13.5px;color:var(--accent2);line-height:1.7;white-space:pre-wrap;word-break:break-all" id="cc-build">/superpowers:brainstorming
-  → "주간 매출 리포트를 자동화하고 싶어. 트리거·입력·처리·출력·예외를 하나씩 물어봐줘."
+      <div style="position:relative;margin-top:8px;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:14px 16px;font-family:'SFMono-Regular',Consolas,monospace;font-size:13.5px;color:var(--accent2);line-height:1.7;white-space:pre-wrap;word-break:break-all" id="cc-build">/n8n-automation-prd
+  → "주간 매출 리포트를 자동화하고 싶어." (5섹션 PRD 한 번에)
 
-(PRD 승인 후, n8n-MCP 연결 상태에서)
+(설계 확정 후, n8n-MCP 연결 상태에서)
   → "이 PRD대로 Schedule Trigger 노드부터 JSON으로 만들어줘. 한 번에 다 만들지 말고 노드 하나씩."</div>
       <button type="button" class="btn btn-secondary" style="align-self:flex-start;margin-top:8px" onclick="(function(b){try{navigator.clipboard.writeText(document.getElementById('cc-build').innerText);b.innerHTML='&#10003; 복사됨';setTimeout(function(){b.innerHTML='⧉ 복사';},1500);}catch(e){}})(this)"><i data-lucide="copy"><span class="ico-fb">⧉</span></i> 복사</button>
     </div>
@@ -912,7 +912,7 @@ html.icons-ok i[data-lucide] .ico-fb { display: none; }
       <i data-lucide="alert-triangle"><span class="ico-fb">⚠️</span></i>
       <p><strong>★거대 JSON 통째 생성 금지(cascade):</strong> AI에게 "워크플로 전체 JSON을 한 번에" 시키면 노드 하나가 어긋날 때 줄줄이 에러가 나 어디서 깨졌는지 못 찾습니다. <strong>노드별로 만들고 → 붙이고 → 즉시 실행·검증</strong>해야 문제를 바로 격리합니다.</p>
     </div>
-    <aside class="kit-notes" hidden>오늘 빌드의 대원칙: PRD 먼저(brainstorming 질문 하나씩, HARD-GATE), 그다음 n8n-MCP로 정확한 노드 조회하며 노드 하나씩 빌드·검증. "전체 JSON 한 방"은 금지 — 어긋나면 cascade로 다 깨져 디버깅 불가. import는 낙오 합류용일 뿐 정석은 순차 빌드. 라이브에서 통째 생성 유혹 들면 참는다.</aside>
+    <aside class="kit-notes" hidden>오늘 빌드의 대원칙: PRD 먼저(경량 스킬 /n8n-automation-prd로 5섹션 한 번에·단계 게이트), 그다음 n8n-MCP로 정확한 노드 조회하며 노드 하나씩 빌드·검증. "전체 JSON 한 방"은 금지 — 어긋나면 cascade로 다 깨져 디버깅 불가. import는 낙오 합류용일 뿐 정석은 순차 빌드. 라이브에서 통째 생성 유혹 들면 참는다.</aside>
   </div>
 
   <!-- 6 -->
@@ -1595,10 +1595,10 @@ flowchart LR
   <div class="slide" data-title="▶ 실습 Lab6 시작" data-chapter="M9 나만의 자동화 프로젝트">
     <div class="slide-label"><i data-lucide="play-circle"><span class="ico-fb">▶</span></i> 지금 실습 · 워크북 Lab6</div>
     <h1>이제 <span class="hl">내 업무</span>로 — 워크북 Lab6 (PRD→구축→시연)</h1>
-    <p class="subtitle">강사 예제가 아니라 <strong>내가 매주/매일 반복하는 업무 1개</strong>를 골라, brainstorming으로 PRD를 만들고 → Claude Code+n8n-MCP로 노드별 빌드 → 2분 시연합니다. 워크북(<span class="kbd2">30-lab-workbook.md</span> Lab6)을 펴세요.</p>
+    <p class="subtitle">강사 예제가 아니라 <strong>내가 매주/매일 반복하는 업무 1개</strong>를 골라, <span class="kbd2">/n8n-automation-prd</span>로 PRD를 만들고 → Claude Code+n8n-MCP로 노드별 빌드 → 2분 시연합니다. 워크북(<span class="kbd2">30-lab-workbook.md</span> Lab6)을 펴세요.</p>
     <ul class="priority-list">
       <li><span class="priority-badge p3">1</span><span><span class="pl-title">반복작업 1개 고르기</span></span></li>
-      <li><span class="priority-badge p3">2</span><span><span class="pl-title"><span class="kbd2">/superpowers:brainstorming</span> PRD 5섹션</span></span></li>
+      <li><span class="priority-badge p3">2</span><span><span class="pl-title"><span class="kbd2">/n8n-automation-prd</span> PRD 5섹션 (한 번에)</span></span></li>
       <li><span class="priority-badge p3">3</span><span><span class="pl-title">Claude Code+n8n-MCP 노드별 빌드</span></span></li>
       <li><span class="priority-badge p3">4</span><span><span class="pl-title">실행·검증</span></span></li>
       <li><span class="priority-badge p3">5</span><span><span class="pl-title">2분 시연 + 동료 피드백</span></span></li>
@@ -1628,24 +1628,24 @@ flowchart LR
   </div>
 
   <!-- 17 -->
-  <div class="slide" data-title="자동화 PRD (brainstorming)" data-chapter="M9 나만의 자동화 프로젝트">
-    <div class="slide-label"><i data-lucide="message-circle-question"><span class="ico-fb">💬</span></i> M9 · 설계 먼저</div>
-    <h1><span class="hl">/superpowers:brainstorming</span> 으로 내 자동화 PRD</h1>
-    <p class="subtitle">코드/노드를 만들기 전에 <strong>무엇을 자동화할지</strong> 말로 명확히. 질문 하나씩 답하면 PRD가 완성됩니다.</p>
+  <div class="slide" data-title="자동화 PRD (경량 스킬)" data-chapter="M9 나만의 자동화 프로젝트">
+    <div class="slide-label"><i data-lucide="sparkles"><span class="ico-fb">🪄</span></i> M9 · 설계 먼저</div>
+    <h1><span class="hl">/n8n-automation-prd</span> 로 내 자동화 PRD (한 번에)</h1>
+    <p class="subtitle">코드/노드를 만들기 전에 <strong>무엇을 자동화할지</strong> 명확히. 어제 Lab3에서 쓴 경량 스킬을 그대로 — <strong>5섹션을 한 턴에</strong>, 비는 칸만 채웁니다.</p>
     <div class="img-ph" style="margin-top:14px">
-      <span class="ph-tag">코드 · 화면에서 함께 입력 (Claude Code) · CAP-05-brainstorm-prd</span>
+      <span class="ph-tag">코드 · 화면에서 함께 입력 (Claude Code) · CAP-05-prd-skill</span>
       <span class="ph-title">자동화 PRD 호출</span>
-      <div style="position:relative;margin-top:8px;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:14px 16px;font-family:'SFMono-Regular',Consolas,monospace;font-size:13.5px;color:var(--accent2);line-height:1.7;white-space:pre-wrap;word-break:break-all" id="cc-bs">/superpowers:brainstorming
+      <div style="position:relative;margin-top:8px;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:14px 16px;font-family:'SFMono-Regular',Consolas,monospace;font-size:13.5px;color:var(--accent2);line-height:1.7;white-space:pre-wrap;word-break:break-all" id="cc-bs">/n8n-automation-prd
 
-  주제: "내가 매주 반복하는 ___ 업무를 자동화하고 싶어.
-        트리거·입력·처리·출력·예외를 하나씩 물어봐줘."</div>
+  "내가 매주 반복하는 ___ 업무를 자동화하고 싶어."
+  → 5섹션 PRD를 한 번에 + n8n 6레이어 매핑</div>
       <button type="button" class="btn btn-secondary" style="align-self:flex-start;margin-top:8px" onclick="(function(b){try{navigator.clipboard.writeText(document.getElementById('cc-bs').innerText);b.innerHTML='&#10003; 복사됨';setTimeout(function(){b.innerHTML='⧉ 복사';},1500);}catch(e){}})(this)"><i data-lucide="copy"><span class="ico-fb">⧉</span></i> 복사</button>
     </div>
     <div class="warn-box">
-      <i data-lucide="shield"><span class="ico-fb">🛡️</span></i>
-      <p><strong>HARD-GATE:</strong> PRD가 승인되기 전에는 워크플로를 빌드하지 않습니다. PRD가 명확해야 AI도 맞는 노드를 만듭니다(가비지 인·가비지 아웃).</p>
+      <i data-lucide="git-commit-horizontal"><span class="ico-fb">🚦</span></i>
+      <p><strong>단계 게이트:</strong> 설계 확정 → JSON 초안 → 실제 생성을 끊어서. 한 번의 OK로 실제 생성까지 가지 않습니다(실습 기본 import). PRD가 명확해야 AI도 맞는 노드를 만듭니다(가비지 인·가비지 아웃).</p>
     </div>
-    <aside class="kit-notes" hidden>내 업무 PRD 5섹션(트리거·입력·처리·출력·예외/한도)을 brainstorming으로 잡는다. 질문 하나씩, 승인 전 빌드 금지(HARD-GATE). PRD는 docs/superpowers/specs/에 자동 저장. "AI가 알아서 해주니 PRD 불필요"는 오개념 — PRD 없으면 엉뚱한 노드.</aside>
+    <aside class="kit-notes" hidden>내 업무 PRD 5섹션(트리거·입력·처리·출력·예외/한도)을 경량 스킬 /n8n-automation-prd로 한 번에 잡는다. 어제 Lab3 도구 재사용. 단계 게이트(설계확정→JSON초안→실제생성, 실습 기본 import). 정말 복잡한 설계만 brainstorming 폴백. "AI가 알아서 해주니 PRD 불필요"는 오개념 — PRD 없으면 엉뚱한 노드.</aside>
   </div>
 
   <!-- 18 -->
@@ -1697,29 +1697,29 @@ flowchart LR
     <aside class="kit-notes" hidden>Lab6 Step1=업무 고르기. 반복·규칙·데이터 셋 다 되면 좋은 후보. "너무 큰 업무"가 최대 함정→노드 2~5개로 스코프 다운. 후보 못 정한 사람은 강사 예시. 한 줄 정의를 워크북에 적게 한다.</aside>
   </div>
 
-  <!-- Lab6 · Step 2 — brainstorming PRD 5섹션 -->
+  <!-- Lab6 · Step 2 — 경량 스킬 PRD 5섹션 -->
   <div class="slide" data-title="Lab6·Step2 PRD 5섹션" data-chapter="M9 나만의 자동화 프로젝트">
-    <div class="slide-label"><i data-lucide="message-circle-question"><span class="ico-fb">💬</span></i> Lab6 · Step 2 · CAP-LAB6-02-prd</div>
-    <h1>Lab6 · Step 2 — <span class="hl">brainstorming PRD</span> 5섹션</h1>
-    <p class="subtitle">코드/노드를 만들기 <strong>전에</strong> <span class="kbd2">/superpowers:brainstorming</span> 으로 트리거·입력·처리·출력·예외 5섹션을 말로 명확히 합니다. 질문은 <strong>하나씩</strong>.</p>
+    <div class="slide-label"><i data-lucide="sparkles"><span class="ico-fb">🪄</span></i> Lab6 · Step 2 · CAP-LAB6-02-prd</div>
+    <h1>Lab6 · Step 2 — <span class="hl">경량 스킬 PRD</span> 5섹션 (한 번에)</h1>
+    <p class="subtitle">코드/노드를 만들기 <strong>전에</strong> <span class="kbd2">/n8n-automation-prd</span> 로 트리거·입력·처리·출력·예외 5섹션을 <strong>한 턴에</strong> 받습니다. 비는 칸만 채워요.</p>
     <div class="img-ph" style="margin-top:14px">
       <span class="ph-tag">① AI 프롬프트 · Claude Code · CAP-LAB6-02-prd</span>
       <span class="ph-title">내 업무 PRD 호출</span>
-      <div style="position:relative;margin-top:8px;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:14px 16px;font-family:'SFMono-Regular',Consolas,monospace;font-size:13.5px;color:var(--accent2);line-height:1.7;white-space:pre-wrap;word-break:break-all" id="cc-l6s2">/superpowers:brainstorming
+      <div style="position:relative;margin-top:8px;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:14px 16px;font-family:'SFMono-Regular',Consolas,monospace;font-size:13.5px;color:var(--accent2);line-height:1.7;white-space:pre-wrap;word-break:break-all" id="cc-l6s2">/n8n-automation-prd
 
-  주제: "내가 매주 반복하는 ___ 업무를 자동화하고 싶어.
-        트리거·입력·처리·출력·예외를 하나씩 물어봐줘."</div>
+  "내가 매주 반복하는 ___ 업무를 자동화하고 싶어."
+  → 5섹션 PRD를 한 번에 + 비는 칸만 질문</div>
       <button type="button" class="btn btn-secondary" style="align-self:flex-start;margin-top:8px" onclick="(function(b){try{navigator.clipboard.writeText(document.getElementById('cc-l6s2').innerText);b.innerHTML='&#10003; 복사됨';setTimeout(function(){b.innerHTML='⧉ 복사';},1500);}catch(e){}})(this)"><i data-lucide="copy"><span class="ico-fb">⧉</span></i> 복사</button>
     </div>
     <ul class="priority-list">
-      <li><span class="priority-badge p3">②</span><span><span class="pl-title">5섹션 채우기</span> — ①트리거 ②입력 ③처리(변환/판단·AI?) ④출력·알림 ⑤예외·한도 를 워크북 표에 직접 적기.</span></li>
+      <li><span class="priority-badge p3">②</span><span><span class="pl-title">5섹션 채우기</span> — ①트리거 ②입력 ③처리(변환/판단·AI?) ④출력·알림 ⑤예외·한도 를 워크북 표에 직접 적기(스킬이 준 <code>(추정)</code> 칸 확인).</span></li>
       <li><span class="priority-badge p3">③</span><span><span class="pl-title">처리 칸 힌트</span> — 숫자 임계값이면 <strong>IF/Filter</strong>로 충분, 자유 텍스트 분류면 <strong>Anthropic Chat Model</strong>(회사 키). "판단=무조건 AI"는 오개념.</span></li>
     </ul>
     <div class="warn-box">
-      <i data-lucide="shield"><span class="ico-fb">🛡️</span></i>
-      <p><strong>✅ 확인 포인트 / HARD-GATE:</strong> PRD 5섹션이 채워졌으면 통과. <strong>PRD가 승인되기 전엔 워크플로를 빌드하지 않습니다</strong> — PRD가 명확해야 AI도 맞는 노드를 만들어요(가비지 인·가비지 아웃). 산출물은 <span class="kbd2">docs/superpowers/specs/</span>에 자동 저장.</p>
+      <i data-lucide="git-commit-horizontal"><span class="ico-fb">🚦</span></i>
+      <p><strong>✅ 확인 포인트 / 단계 게이트:</strong> PRD 5섹션이 채워졌으면 통과. <strong>설계 확정 → JSON 초안 → 실제 생성</strong>을 끊어서 진행 — 한 번의 OK로 실제 생성까지 가지 않아요(기본 import). 원하면 "이 PRD를 .md로 저장해줘"로 파일화.</p>
     </div>
-    <aside class="kit-notes" hidden>Lab6 Step2=brainstorming PRD 5섹션, 질문 하나씩(HARD-GATE: 승인 전 빌드 금지). 처리 칸 핵심 오개념 교정: 숫자 비교=IF, 자유 텍스트=AI. PRD는 specs/에 자동 저장. 워크북 표에 직접 적게.</aside>
+    <aside class="kit-notes" hidden>Lab6 Step2=경량 스킬 /n8n-automation-prd PRD 5섹션, 한 턴에+비는 칸만(단계 게이트: 설계확정→JSON초안→실제생성, 기본 import). 처리 칸 핵심 오개념 교정: 숫자 비교=IF, 자유 텍스트=AI. 원하면 .md 저장. 워크북 표에 직접 적게.</aside>
   </div>
 
   <!-- Lab6 · Step 3 — 노드별 빌드 -->

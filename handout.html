@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
 <script>(function(){try{var p=localStorage.getItem("theme-pref")||"system";var d=p==="dark"||(p==="system"&&matchMedia("(prefers-color-scheme: dark)").matches);document.documentElement.setAttribute("data-theme",d?"dark":"light");}catch(e){document.documentElement.setAttribute("data-theme","dark");}})();</script>
-<title>n8n + Claude Code · 핸드아웃</title>
+<title>핸드아웃 — n8n + Claude Code</title>
 <style>
   /* ── theme tokens (dark default + light override) ── */
   :root{
@@ -71,7 +71,7 @@
 </head>
 <body>
 <button id="themeToggle" class="theme-toggle" type="button" aria-label="테마 전환" title="테마: 시스템"><span class="tt-ico" aria-hidden="true">🖥</span><span class="tt-label">시스템</span></button>
-<div class="topbar"><span class="badge">n8n 자동화 강의</span><span class="t">n8n + Claude Code · 핸드아웃</span></div>
+<div class="topbar"><span class="badge">n8n 자동화 강의</span><span class="t">핸드아웃 — n8n + Claude Code</span></div>
 <main class="doc">
 <h1>핸드아웃 — n8n + Claude Code 자동화 (AI-native · self-host)</h1>
 <blockquote>
@@ -133,12 +133,15 @@ GENERIC_TIMEZONE=Asia/Seoul npx n8n      # 첫 실행은 1~5분 다운로드(정
 <li>Claude Code가 못 하는 것: 브라우저 열기·Owner 정보 입력·Node 설치 승인은 <strong>내가</strong>.</li>
 <li>⚠️ Node 범위·npx 동작·Wizard UI는 버전 따라 변동 — 강사가 당일 확인.</li>
 </ul>
-<h2>2. 무엇을 자동화할지 먼저 (brainstorming PRD)</h2>
-<p><code>/superpowers:brainstorming</code> → 질문 하나씩 답하며 <strong>자동화 PRD 5섹션</strong>:</p>
+<h2>2. 무엇을 자동화할지 먼저 (경량 스킬 PRD)</h2>
+<p><code>/n8n-automation-prd</code> → 5섹션 PRD를 <strong>한 번에</strong>(비는 칸만 채움) <strong>자동화 PRD 5섹션</strong>:</p>
 <ol>
 <li>트리거(언제) 2. 입력(무엇을) 3. 처리(변환·AI 판단) 4. 출력(어디로) 5. 예외·한도(실패·재시도·비용·개인정보)
-→ ★<strong>PRD 승인 전엔 워크플로 안 만든다(HARD-GATE).</strong> PRD가 명확해야 AI도 맞는 노드를 만든다.</li>
+→ ★<strong>단계 게이트: 설계 확정 → JSON 초안 → 실제 생성(실습 기본 import).</strong> 한 번의 OK로 실제 생성까지 가지 않는다. PRD가 명확해야 AI도 맞는 노드를 만든다. <em>정말 크고 복잡한 설계만</em> <code>/superpowers:brainstorming</code>.</li>
 </ol>
+<ul>
+<li><strong>우리 회사 예시 3개:</strong> ⓐ방송 실적 리포트(스케줄·집계) ⓑ경쟁사 가격 모니터링(HTTP·IF) ⓒ고객 리뷰 VOC AI 분류(Anthropic·IF).</li>
+</ul>
 <h2>3. PRD → n8n 6레이어</h2>
 <p>트리거 / 수집 / 가공 / <strong>AI 판단</strong> / 액션·알림 / 에러핸들링.</p>
 <h2>4. AI-native 빌드 (Claude Code + n8n-MCP)</h2>
