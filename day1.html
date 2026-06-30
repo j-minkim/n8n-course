@@ -1653,10 +1653,9 @@ flowchart LR
       <li><span class="priority-badge p4">2</span><div><b>자격증명</b> — Credential = <b>Sign in with Google</b>(OAuth2) 연결 → 문서/탭에서 <b>편성표</b> 선택.</div></li>
       <li><span class="priority-badge p5">3</span><div><b>실행해 확인</b> — 노드 <b>Test step</b> → 오늘 편성표 행(시간·방송명·담당자·담당자메일)이 테이블로 보이는지.</div></li>
     </ul>
-    <figure class="img-slot">
-      <i data-lucide="image"><span class="ico-fb">🖼️</span></i>
-      <div class="img-slot-title">[CAP-LAB2-S5 · 강사 dry-run 캡처] Google Sheets Get Row(s) 실행 결과 테이블</div>
-      <div class="img-slot-meta">무엇: <b>편성표 시트를 읽어 행이 테이블로 출력</b>된 화면 / 시점: Lab2 dry-run / alt: "Google Sheets 편성표 읽기 결과"</div>
+    <figure style="margin:14px 0;text-align:center;">
+      <img src="captures/cap-lab2-s5.png" alt="Google Sheets Get Row(s) 실행 결과 — 편성표 5행(시간·방송명·담당자·담당자메일·상품군) OUTPUT 테이블" style="max-width:100%;border-radius:10px;border:1px solid var(--line,#233047);" loading="lazy">
+      <figcaption class="img-slot-meta">[CAP-LAB2-S5] <b>편성표 읽기</b> 노드 <b>Execute step</b> → OUTPUT에 편성표 5행이 테이블로(시간·방송명·담당자·담당자메일·상품군). ★Gmail 표현식은 이 <b>헤더명과 정확히</b> 맞춰야 함 — 예: <code>{{ $json['담당자메일'] }}</code>.</figcaption>
     </figure>
     <div class="danger-box">
       <i data-lucide="alert-triangle"><span class="ico-fb">⚠️</span></i>
