@@ -1723,11 +1723,16 @@ flowchart LR
       <li><span class="priority-badge p3">1</span><div><b>② 클릭경로</b> — 세 노드를 <b>선으로 연결</b> → 상단 <b>Execute Workflow</b>로 전체 수동 실행.</div></li>
       <li><span class="priority-badge p4">2</span><div><b>메일 확인</b> — 받은편지함에서 "오늘 편성표 …" 메일 1통 확인.</div></li>
     </ul>
-    <figure class="img-slot">
-      <i data-lucide="image"><span class="ico-fb">🖼️</span></i>
-      <div class="img-slot-title">[CAP-LAB2-S7 · 강사 dry-run 캡처] 3노드 전부 녹색 + 받은편지함 메일 1통</div>
-      <div class="img-slot-meta">무엇: <b>Schedule→Sheets→Gmail 3노드 녹색 + 받은편지함 "오늘 편성표" 메일</b> / 시점: Lab2 dry-run / alt: "편성표 메일 발송 성공"</div>
-    </figure>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start;margin:12px 0;">
+      <figure style="margin:0;text-align:center;">
+        <img src="captures/cap-lab2-s7-run.png" alt="Gmail 노드 Execute step 성공 — OUTPUT 1 item, labelIds SENT·INBOX, 표현식 전부 정상(시간·방송명·상품군)" style="max-width:100%;border-radius:10px;border:1px solid var(--line,#233047);" loading="lazy">
+        <figcaption class="img-slot-meta">① 실행 성공 — OUTPUT에 <b>SENT·INBOX</b>(발송됨). 표현식이 헤더(시간·방송명·상품군)와 맞아 빨간 줄이 사라짐.</figcaption>
+      </figure>
+      <figure style="margin:0;text-align:center;">
+        <img src="captures/cap-lab2-s7-mail.png" alt="받은편지함 도착 메일 — [편성표] 9:00 방송 안내, 본문에 담당자·시간·방송명·상품군 실제 값" style="max-width:100%;border-radius:10px;border:1px solid var(--line,#233047);" loading="lazy">
+        <figcaption class="img-slot-meta">② 받은편지함 도착 — <b>[편성표] 9:00 방송 안내</b>, 본문에 <code>{{ }}</code>가 아니라 <b>실제 값</b>(김민지·9:00·주방 브랜드워크·주방).</figcaption>
+      </figure>
+    </div>
     <div class="success-box">
       <i data-lucide="party-popper"><span class="ico-fb">🎉</span></i>
       <p><span class="t">④ ✅ 확인 포인트(Lab2 통과):</span> 노드 3개 전부 <b>녹색</b> + 메일 본문에 <code>{{ }}</code> 글자가 아니라 <b>실제 값</b>이 들어가고 + 메일 1통이 도착하면 <b>Lab2 완료</b>.</p>
