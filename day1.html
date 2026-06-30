@@ -1688,6 +1688,32 @@ flowchart LR
       <aside class="kit-notes" hidden>Step6=Gmail Send 노드 표현식. To={{ $json.담당자메일 }}, Subject=오늘 편성표 - {{ $json.방송명 }}, 본문 조합. 표현식 토글(=) 켜기. 글자 그대로 나옴=토글 꺼짐/오타. 한글·공백 필드=대괄호 표기. AI 표현식은 실행 검증.</aside>
   </div>
 
+  <!-- L2-S6b 막힘 카드: "이러면 에러" (필드명 환각 + 구문 깨짐) -->
+  <div class="slide" data-title="Lab2 · 이러면 에러 (표현식)" data-chapter="M3 · 기초+첫 워크플로">
+    <div class="slide-label"><i data-lucide="bug"><span class="ico-fb">🐞</span></i> M3 · Lab2 막힘 카드 — "이러면 에러"</div>
+    <h1>표현식이 <span class="hl2">이렇게 뜨면 에러</span>입니다 — 왜 그럴까</h1>
+    <p class="subtitle">AI가 만든 JSON을 그대로 믿고 쓰면 자주 나오는 두 가지. 실제 강사 화면입니다.</p>
+    <figure style="margin:12px 0;text-align:center;">
+      <img src="captures/cap-lab2-error-field.png" alt="Gmail 노드 표현식 에러 — Subject에 ERROR invalid syntax, 본문 필드명 불일치로 빨갛게 표시" style="max-width:100%;border-radius:10px;border:1px solid var(--line,#233047);" loading="lazy">
+      <figcaption class="img-slot-meta">Gmail 노드 — Subject <code>{{ $json['시간']'] }}</code> → <b>[ERROR: invalid syntax]</b>, 본문 <code>$json['날짜']</code>·<code>$json['방송']</code>이 빨갛게(시트에 없는 필드).</figcaption>
+    </figure>
+    <div class="grid-2">
+      <div class="card warn-card">
+        <div class="card-title">원인 ① 필드명 환각</div>
+        <div class="card-body">AI가 시트 헤더를 <b>추측</b>(날짜·방송)했는데 실제 헤더는 <b>시간·방송명</b> → 없는 키라 <b>빈값</b>. AI 표현식은 <b>가설</b>일 뿐입니다.</div>
+      </div>
+      <div class="card warn-card">
+        <div class="card-title">원인 ② 손으로 고치다 깨짐</div>
+        <div class="card-body"><code>$json['날짜']</code>를 손으로 <code>시간</code>으로 바꾸다 <code>$json['시간']<b>']</b></code>처럼 따옴표·대괄호가 남음 → <b>구문 오류</b>.</div>
+      </div>
+    </div>
+    <div class="success-box">
+      <i data-lucide="check-circle"><span class="ico-fb">✅</span></i>
+      <p><span class="t">고치는 법:</span> Sheets 노드를 <b>먼저 Execute</b> → 왼쪽 <b>INPUT 패널의 실제 필드를 드래그</b>(타이핑 ✗)하면 <code>{{ $json['시간'] }}</code>이 정확히 들어갑니다. = 강의의 <b>"노드별 순차 빌드 + 즉시 실행 검증"</b> 그대로예요.</p>
+    </div>
+      <aside class="kit-notes" hidden>막힘 카드 "이러면 에러". 원인①=AI 필드명 환각(날짜/방송 추측 vs 실제 시간/방송명)→빈값. 원인②=한글 키 대괄호식을 손으로 고치다 ']' 남아 invalid syntax. 고치는 법=Sheets 먼저 실행→INPUT 필드 드래그(타이핑X)→정확한 표현식. 노드별 순차 빌드+즉시 실행의 근거 사례. 실제 강사 dry-run 화면.</aside>
+  </div>
+
   <!-- L2-S7 실행 → 녹색·메일 도착 -->
   <div class="slide" data-title="Lab2 · Step 7 — 실행·메일 도착 확인" data-chapter="M3 · 기초+첫 워크플로">
     <div class="slide-label"><i data-lucide="check-check"><span class="ico-fb">✅</span></i> M3 · Lab2 Step 7 (완료)</div>
