@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
 <script>(function(){try{var p=localStorage.getItem("theme-pref")||"system";var d=p==="dark"||(p==="system"&&matchMedia("(prefers-color-scheme: dark)").matches);document.documentElement.setAttribute("data-theme",d?"dark":"light");}catch(e){document.documentElement.setAttribute("data-theme","dark");}})();</script>
-<title>Google 크리덴셜 가이드</title>
+<title>Google 크리덴셜(OAuth) 설정 가이드</title>
 <style>
   /* ── theme tokens (dark default + light override) ── */
   :root{
@@ -71,7 +71,7 @@
 </head>
 <body>
 <button id="themeToggle" class="theme-toggle" type="button" aria-label="테마 전환" title="테마: 시스템"><span class="tt-ico" aria-hidden="true">🖥</span><span class="tt-label">시스템</span></button>
-<div class="topbar"><span class="badge">n8n 자동화 강의</span><span class="t">Google 크리덴셜 가이드</span></div>
+<div class="topbar"><span class="badge">n8n 자동화 강의</span><span class="t">Google 크리덴셜(OAuth) 설정 가이드</span></div>
 <main class="doc">
 <h1>Google 크리덴셜(OAuth) 설정 — self-host n8n</h1>
 <blockquote>
@@ -99,6 +99,10 @@
 <li>n8n Credential 화면에 <strong>Client ID·Secret 붙여넣기 → Sign in with Google → 동의</strong>.</li>
 <li>Gmail도 같은 방식(같은 OAuth 클라이언트 재사용 가능 — Gmail API Enable 필요).</li>
 </ol>
+<p><img src="captures/cap-google-oauth-client.png" alt="OAuth 클라이언트 생성됨 — 클라이언트 ID와 보안 비밀번호(마스킹 처리)"></p>
+<blockquote>
+<p>▲ <strong>7단계 화면</strong> — OAuth 클라이언트를 만들면 뜨는 <em>&quot;OAuth 클라이언트 생성됨&quot;</em> 창. 여기서 <strong>클라이언트 ID·클라이언트 보안 비밀번호를 복사</strong>해 n8n Credential 화면에 붙여넣어요. ★<strong>이 창을 닫으면 보안 비밀번호를 다시 못 봅니다</strong> → 즉시 복사하거나 <em>JSON 다운로드</em>. ⚠️ 실제 값은 비밀번호이니 화면 공유·캡처·깃 커밋 금지(이 예시는 마스킹된 화면).</p>
+</blockquote>
 <h2>★핵심 2 — 강의 운영 권장(공용 계정)</h2>
 <ul>
 <li>비개발자 각자 OAuth 설정은 <strong>10~20분+</strong> 걸리고 막히기 쉬워요. → <strong>강사가 OAuth 완료한 공용 데모 계정</strong> 1개를 준비하고, 수강생은 그 자격증명을 공유받아 쓰는 게 현실적(런북 §1.3 대체 핸즈온).</li>
