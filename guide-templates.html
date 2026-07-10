@@ -75,9 +75,17 @@
 <main class="doc">
 <h1>홈앤쇼핑 n8n + Claude 템플릿 카탈로그</h1>
 <h3>&quot;처음부터 만들지 말고, 내 업무에 가까운 걸 골라 시작하세요&quot;</h3>
-<p>각 템플릿은 <strong>실제 n8n에서 import·실행 검증</strong>됐어요. 본인 업무에 가까운 것을 <strong>import → 시트·수신자만 바꾸면 절반은 완성</strong>, 거기서 본인 것으로 확장하면 됩니다.</p>
+<p>각 템플릿은 <strong>실제 n8n에서 import·구조 검증</strong>됐어요(실행은 자격증명 연결 후 재검증). 본인 업무에 가까운 것을 <strong>import → 시트·수신자·자격증명만 맞추면 절반은 완성</strong>, 거기서 본인 것으로 확장하면 됩니다.</p>
+<blockquote>
+<p>💡 <strong>다건 행 처리 팁</strong>: 시트에 여러 행을 매번 처리하려면 해당 Code 노드 설정을 <strong>Run Once for Each Item</strong>으로 바꾸고 <code>return</code>을 단일 객체(<code>return {json:{...}}</code>)로 수정하세요(기본값은 첫 행만 처리).</p>
+</blockquote>
 <p><strong>📥 다운로드</strong>: 강의 사이트 → <strong>실습 파일</strong> 페이지 → 카테고리 zip → n8n <code>⋮ → Import from File</code>
-<strong>⚙️ 공통 준비</strong>: Google 크리덴셜(연결됨) · AI(★) 템플릿은 <strong>회사 Anthropic 키</strong>(Header Auth 이름 <code>x-api-key</code>) · <code>YOUR_...</code> 자리(시트 ID·수신자) 교체</p>
+<strong>⚙️ 공통 준비</strong>: Google 크리덴셜(연결됨) · AI(★) 템플릿은 <strong>회사 Anthropic 키</strong>(Header Auth 이름 <code>x-api-key</code>) · <code>YOUR_...</code> 자리(시트 ID·수신자) 교체
+<strong>🤖 AI 모델</strong>: 템플릿은 <code>claude-sonnet-5</code>(현행)로 설정 — 필요 시 최신 모델로 교체.
+<strong>✅ 검증 수준</strong>: 전 템플릿 <strong>n8n import·구조 검증</strong> 완료. 실제 실행은 <strong>자격증명 연결 후 재검증</strong>하세요.</p>
+<blockquote>
+<p>⚠️ <strong>네이버 검색 API 종료 예정(2026-07-31)</strong>: 「가격경쟁력 진단」이 쓰는 네이버 검색 API가 종료 예정입니다 → 그때까지는 동작하나, 이후엔 <strong>NAVER API HUB</strong>로 이전 필요.</p>
+</blockquote>
 <hr>
 <h2>🧑‍💼 MD · 상품기획이라면</h2>
 <h3>⭐ 방송상품 가격경쟁력 진단 (★AI)</h3>
@@ -114,9 +122,9 @@
 <li><strong>주의</strong>: 5분마다 도니 <strong>방송 시간대에만 Active</strong>. 실시간은 Slack 권장.</li>
 <li><strong>필요한 것</strong>: Anthropic 키·<code>방송현황</code> 시트(상품·목표매출·총방송분·경과분·누적매출)</li>
 </ul>
-<h3>✅ 방송 D-1 사고방지 체크</h3>
+<h3>✅ 방송 D-1 사고방지 체크 (★AI)</h3>
 <ul>
-<li><strong>뭘 하나</strong>: 매일 밤 <strong>내일 편성표를 재고·가격세팅·혜택·협력사 물량·자막 준비와 대조</strong>해, 미비 항목만 담당자에게 알림. &quot;하나 빠뜨려 방송 사고&quot;를 예방. (규칙 기반 — AI 없이도 동작, 조치 안내만 Claude)</li>
+<li><strong>뭘 하나</strong>: 매일 밤 <strong>내일 편성표를 재고·가격세팅·혜택·협력사 물량·자막 준비와 대조</strong>해, 미비 항목만 담당자에게 알림. &quot;하나 빠뜨려 방송 사고&quot;를 예방. (미비 판정은 규칙 기반, <strong>조치 안내는 Claude가 작성</strong>)</li>
 <li><strong>필요한 것</strong>: <code>내일편성</code> 시트(방송명·예상판매량·현재재고·가격/혜택/물량/자막 여부)</li>
 </ul>
 <h3>편성표 아침 알림</h3>
@@ -156,6 +164,10 @@
 <p>재고가 임계 이하인 상품을 골라 구매담당에게 발주 알림.</p>
 <h3>신규 주문 알림</h3>
 <p>주문 수신(웹훅) 즉시 담당자에게 알림 메일.</p>
+<h3>경쟁사 가격 모니터링</h3>
+<p>경쟁사 상품 페이지를 매일 확인해 우리보다 싸지면 MD에게 알림. ⚠️ 대상 사이트 <strong>robots·약관 확인 필수</strong>(무단 크롤링 주의) — <strong>가격 비교는 실무 「가격경쟁력 진단」(네이버 공식 API)이 더 안전·정확</strong>하니 그쪽을 권장.</p>
+<h3>홈쇼핑 뉴스 아침 브리핑 (★AI)</h3>
+<p>홈쇼핑·유통 뉴스 RSS를 <strong>Claude가 3줄 브리핑</strong>해 아침에 발송. (실무 「업계 트렌드 브리핑」의 간단 버전)</p>
 <h3>업계 트렌드·신상품 브리핑 (★AI)</h3>
 <p>홈쇼핑·유통 뉴스를 <strong>Claude가 경쟁사 신상품·트렌드·소싱 힌트</strong>로 요약해 MD에게.</p>
 <hr>

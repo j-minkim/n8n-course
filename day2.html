@@ -1777,22 +1777,22 @@ flowchart LR
   <!-- ===== [reflow] B6 실무 템플릿 시드 ===== -->
 <div class="slide" data-title="홈앤쇼핑 템플릿에서 시작" data-chapter="B6 · 나만의 자동화">
     <div class="slide-label"><i data-lucide="plug"><span class="ico-fb">🔌</span></i> B6 · 템플릿에서 시작</div>
-    <h1>맨땅에서 말고 — <span class="hl">검증된 홈앤쇼핑 템플릿</span>에서 시작</h1>
-    <p class="subtitle">본인 업무에 가까운 템플릿 1개를 <b>import</b> → 시트·수신자만 바꾸면 절반은 완성. 거기서 본인 것으로 확장합니다.</p>
+    <h1>맨땅에서 말고 — <span class="hl">홈앤쇼핑 실무 템플릿</span>에서 시작</h1>
+    <p class="subtitle">본인 업무에 가까운 템플릿 1개를 <b>import</b> → 시트·수신자·자격증명만 맞추면 절반은 완성. 거기서 본인 것으로 확장합니다.</p>
     <div class="bento">
-      <div class="card highlight"><div class="card-icon"><i data-lucide="search"><span class="ico-fb">🔎</span></i></div><div class="card-title">경쟁사 조사 (3)</div><div class="card-body">가격경쟁력 진단(네이버 최저가)·경쟁 편성·업계 트렌드 브리핑</div></div>
+      <div class="card highlight"><div class="card-icon"><i data-lucide="search"><span class="ico-fb">🔎</span></i></div><div class="card-title">경쟁사 조사 (3)</div><div class="card-body">가격경쟁력 진단(네이버 후보 최저가)·경쟁 편성·업계 트렌드 브리핑</div></div>
       <div class="card highlight"><div class="card-icon"><i data-lucide="tv"><span class="ico-fb">📺</span></i></div><div class="card-title">방송 운영 (3)</div><div class="card-body">실적 페이스메이커·방송 결과 리포트·반품 사유 AI 분류</div></div>
       <div class="card highlight"><div class="card-icon"><i data-lucide="briefcase"><span class="ico-fb">💼</span></i></div><div class="card-title">MD·운영 지원 (4)</div><div class="card-body">협력사 발주 메일·방송 D-1 체크·콜센터 폭주 경보·자막 카피 생성</div></div>
     </div>
     <div class="success-box">
       <i data-lucide="download"><span class="ico-fb">⬇️</span></i>
-      <p><span class="t">받는 곳:</span> 강의 사이트 <b>실습 파일</b> 페이지 → 카테고리 zip 다운로드 → n8n <code>⋮ → Import from File</code>. (기본 10종 + 실무 10종, 모두 실제 n8n import 검증됨)</p>
+      <p><span class="t">받는 곳:</span> 강의 사이트 <b>실습 파일</b> 페이지 → 카테고리 zip 다운로드 → n8n <code>⋮ → Import from File</code>. (기본 10종 + 실무 10종 · <b>구조·import 검증됨</b> — 자격증명 연결 후 실행 재검증)</p>
     </div>
     <div class="warn-box">
       <i data-lucide="git-fork"><span class="ico-fb">🍴</span></i>
-      <p><span class="t">두 경로:</span> ⓐ 본인 PRD로 처음부터 · ⓑ <b>가까운 템플릿 골라 확장</b>(권장) — Google 크리덴셜만 있으면 시트 계열은 바로 돌고, AI 템플릿은 회사 Anthropic 키만 넣으면 됩니다.</p>
+      <p><span class="t">두 경로:</span> ⓐ 본인 PRD로 처음부터 · ⓑ <b>가까운 템플릿 골라 확장</b>(권장) — 템플릿별 <b>필수 자격증명만 연결</b>: 시트 계열=Google, AI 계열=회사 Anthropic 키, 가격진단=네이버 API. (자격증명·`YOUR_...` 채우면 동작)</p>
     </div>
-      <aside class="kit-notes" hidden>나만의 자동화를 '맨땅'이 아니라 검증된 홈앤쇼핑 템플릿 20종에서 시작(비개발자 90분 완주율↑). 본인 업무에 가까운 것 골라 import→시트/수신자 교체→확장. 다운로드=강의 사이트 실습파일 페이지. 두 경로: 처음부터 vs 템플릿 확장(권장). 이게 B6~B7의 시드.</aside>
+      <aside class="kit-notes" hidden>나만의 자동화를 '맨땅'이 아니라 구조·import 검증된 홈앤쇼핑 템플릿 20종에서 시작(실행은 자격증명 연결 후 재검증)(비개발자 90분 완주율↑). 본인 업무에 가까운 것 골라 import→시트/수신자 교체→확장. 다운로드=강의 사이트 실습파일 페이지. 두 경로: 처음부터 vs 템플릿 확장(권장). 이게 B6~B7의 시드.</aside>
   </div>
 
   <!-- ===== [reflow] B6 템플릿 스포트라이트 (실제 예시) ===== -->
@@ -1813,13 +1813,13 @@ flowchart LR
     </div>
     <div class="success-box">
       <i data-lucide="check-circle"><span class="ico-fb">✅</span></i>
-      <p><span class="t">실제 라이브 검증:</span> "쿠쿠 압력밥솥"으로 돌리니 네이버 최저가 <b>139,900원</b>을 정확히 잡아냈어요(초기엔 '내솥손잡이 4,500원' 같은 <b>부품 오탐</b>이 나와서, 연관도 정렬+이상치 제거로 고친 버전). — 이렇게 각 템플릿은 <b>진짜 업무 고민</b>을 풉니다.</p>
+      <p><span class="t">라이브 테스트 사례:</span> "쿠쿠 압력밥솥"으로 돌렸을 때 <b>정확도순 상위 20건 중 이상치(부품·액세서리) 제거 후 후보 최저가 ~14만원대</b>가 잡혔어요. (필터 없이는 '내솥손잡이 4,500원' 같은 <b>부품 오탐</b>이 섞임 — 중앙값 40% 미만 제거 휴리스틱으로 완화). — 이렇게 각 템플릿은 <b>진짜 업무 고민</b>을 풉니다.</p>
     </div>
     <div class="warn-box">
       <i data-lucide="book-open"><span class="ico-fb">📖</span></i>
-      <p><span class="t">나머지 19종은?</span> <b>템플릿 카탈로그</b>(강의 사이트)에 역할별로 "뭘 하나 / 누구 업무 / 필요한 것"이 다 적혀 있어요. 내 업무에 가까운 걸 골라 시작하세요.</p>
+      <p><span class="t">나머지 19종은?</span> <b>템플릿 카탈로그</b>(강의 사이트)에 역할별로 "뭘 하나 / 누구 업무 / 필요한 것"이 정리돼 있어요. 내 업무에 가까운 걸 골라 시작하세요.</p>
     </div>
-      <aside class="kit-notes" hidden>템플릿을 이름 리스트로 두면 아무도 안 봄 → 대표 1개(가격경쟁력 진단)를 실제 흐름+라이브 결과(밥솥 139,900원, 부품 오탐 수정 스토리)로 구체화. "진짜 업무 고민을 푼다"를 각인. 나머지는 카탈로그 페이지로 유도. 이 슬라이드가 템플릿 실습의 동기 후크.</aside>
+      <aside class="kit-notes" hidden>템플릿을 이름 리스트로 두면 아무도 안 봄 → 대표 1개(가격경쟁력 진단)를 실제 흐름+라이브 테스트 사례(이상치 제거 후 후보 최저가)로 구체화. "진짜 업무 고민을 푼다"를 각인. 나머지는 카탈로그 페이지로 유도. 이 슬라이드가 템플릿 실습의 동기 후크.</aside>
   </div>
 
 <div class="slide" data-title="자동화 PRD (경량 스킬)" data-chapter="B6 · 나만의 자동화">
