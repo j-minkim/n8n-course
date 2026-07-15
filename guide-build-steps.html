@@ -1,0 +1,1534 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<script>(function(){try{var p=localStorage.getItem("theme-pref")||"system";var d=p==="dark"||(p==="system"&&matchMedia("(prefers-color-scheme: dark)").matches);document.documentElement.setAttribute("data-theme",d?"dark":"light");}catch(e){document.documentElement.setAttribute("data-theme","dark");}})();</script>
+<title>홈앤쇼핑 실무 템플릿 스텝바이스텝 빌드 가이드</title>
+<style>
+  /* ── theme tokens (dark default + light override) ── */
+  :root{
+    color-scheme:dark;
+    --bg:#0b0f17; --fg:#e6edf3; --card-bg:#121826;
+    --topbar-bg:rgba(11,15,23,.92); --line:#233047; --line2:#1f2a3c; --cell:#2a3850;
+    --accent:#60a5fa; --h2:#dbeafe; --h3:#bfdbfe; --h4:#93c5fd;
+    --code-bg:#111827; --pre-bg:#0e1420; --quote-bg:#101826; --quote-fg:#cbd5e1; --quote-bd:#3b82f6;
+    --th-bg:#152032; --th-fg:#dbeafe; --tr-even:#0f1827; --strong:#fde68a;
+  }
+  :root[data-theme="light"]{
+    color-scheme:light;
+    --bg:#f7f8fa; --fg:#1f2533; --card-bg:#ffffff;
+    --topbar-bg:rgba(247,248,250,.92); --line:#d7dce6; --line2:#e3e7ef; --cell:#cfd6e2;
+    --accent:#2563eb; --h2:#1e3a8a; --h3:#2456b8; --h4:#3b6fd4;
+    --code-bg:#eef1f6; --pre-bg:#f1f4f9; --quote-bg:#eef3fb; --quote-fg:#44506a; --quote-bd:#2563eb;
+    --th-bg:#e9eef6; --th-fg:#1e3a8a; --tr-even:#f3f6fb; --strong:#b45309;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body { background:var(--bg); color:var(--fg); line-height:1.75; word-break:keep-all; overflow-wrap:anywhere;
+    transition:background-color .25s,color .25s;
+    font-family:-apple-system,BlinkMacSystemFont,"Pretendard","Apple SD Gothic Neo","Segoe UI",Roboto,sans-serif; }
+  /* ── theme toggle (system/light/dark) ── */
+  .theme-toggle{position:fixed;top:10px;right:14px;z-index:2000;display:inline-flex;align-items:center;gap:6px;
+    padding:7px 11px;border-radius:999px;border:1px solid var(--line);background:var(--card-bg);color:var(--fg);
+    font:600 12px/1 inherit;cursor:pointer;opacity:.85;transition:opacity .2s,border-color .2s,background-color .25s,color .25s}
+  .theme-toggle:hover{opacity:1;border-color:var(--accent)}
+  .theme-toggle .tt-ico{font-size:14px;line-height:1}
+  @media print{.theme-toggle{display:none!important}}
+  @media(max-width:760px){.theme-toggle .tt-label{display:none}}
+  .topbar { position:sticky; top:0; z-index:10; background:var(--topbar-bg); backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line2); padding:12px 64px 12px 20px; display:flex; gap:10px; align-items:center; }
+  .topbar .badge { font-size:11px; color:var(--accent); border:1px solid var(--line); border-radius:999px; padding:3px 9px; }
+  .topbar .t { font-size:14px; font-weight:700; }
+  main.doc { max-width:880px; margin:0 auto; padding:32px 22px 96px; }
+  h1,h2,h3,h4 { line-height:1.35; font-weight:800; margin:1.6em 0 .6em; }
+  h1 { font-size:26px; border-bottom:2px solid var(--line); padding-bottom:.3em; }
+  h2 { font-size:21px; color:var(--h2); border-bottom:1px solid var(--line2); padding-bottom:.25em; }
+  h3 { font-size:17px; color:var(--h3); }
+  h4 { font-size:15px; color:var(--h4); }
+  p, li { font-size:15px; }
+  a { color:var(--accent); }
+  hr { border:0; border-top:1px solid var(--line); margin:2em 0; }
+  blockquote { margin:1em 0; padding:.6em 1em; border-left:3px solid var(--quote-bd); background:var(--quote-bg);
+    border-radius:0 8px 8px 0; color:var(--quote-fg); }
+  blockquote p { margin:.3em 0; }
+  code { background:var(--code-bg); border:1px solid var(--line); border-radius:5px; padding:.1em .4em; font-size:.9em;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; }
+  pre { background:var(--pre-bg); border:1px solid var(--line); border-radius:10px; padding:14px 16px; overflow:auto; }
+  pre code { background:none; border:0; padding:0; font-size:13px; line-height:1.6; }
+  table { border-collapse:collapse; width:100%; margin:1.1em 0; font-size:14px; display:block; overflow-x:auto; }
+  th, td { border:1px solid var(--cell); padding:8px 10px; text-align:left; vertical-align:top; }
+  th { background:var(--th-bg); font-weight:700; color:var(--th-fg); }
+  tr:nth-child(even) td { background:var(--tr-even); }
+  ul, ol { padding-left:1.4em; }
+  li { margin:.3em 0; }
+  li input[type=checkbox] { transform:scale(1.15); margin-right:.5em; accent-color:var(--accent); }
+  ul:has(li input[type=checkbox]) { list-style:none; padding-left:.2em; }
+  strong { color:var(--strong); }
+  img { max-width:100%; }
+</style>
+</head>
+<body>
+<button id="themeToggle" class="theme-toggle" type="button" aria-label="테마 전환" title="테마: 시스템"><span class="tt-ico" aria-hidden="true">🖥</span><span class="tt-label">시스템</span></button>
+<div class="topbar"><span class="badge">n8n 자동화 강의</span><span class="t">홈앤쇼핑 실무 템플릿 스텝바이스텝 빌드 가이드</span></div>
+<main class="doc">
+<h1>홈앤쇼핑 실무 템플릿 10종 — 스텝바이스텝 빌드 가이드</h1>
+<h3>&quot;import 버튼 말고, 노드 하나씩 직접 쌓아보기&quot;</h3>
+<p>이 문서는 <a href="49-%ED%99%88%EC%95%A4%EC%87%BC%ED%95%91-%ED%85%9C%ED%94%8C%EB%A6%BF-%EC%B9%B4%ED%83%88%EB%A1%9C%EA%B7%B8.md">실무 템플릿 카탈로그</a>의 <strong>L5 실무 10종</strong>을 <strong>빈 캔버스에서부터 노드 하나씩</strong> 만드는 방법입니다. <code>⋮ → Import from File</code>로 한 번에 불러오는 대신, <strong>어떤 노드를 검색해서 추가하고, 어떤 속성을 채우고, 어떻게 연결하는지</strong> 전부 순서대로 보여줍니다. 완성된 JSON은 <a href="assets/%ED%99%88%EC%95%A4%EC%87%BC%ED%95%91-%EC%8B%A4%EB%AC%B4%ED%85%9C%ED%94%8C%EB%A6%BF/">assets/홈앤쇼핑-실무템플릿/</a>에서 언제든 열어 정답을 대조할 수 있어요.</p>
+<blockquote>
+<p>💡 <strong>왜 손으로 만들어보나요?</strong> import는 &quot;동작하는 걸 보는 것&quot;이고, 직접 만들기는 &quot;왜 이 노드가 이 자리에 있는지 이해하는 것&quot;입니다. 본인 업무로 확장하려면 후자가 필요합니다.</p>
+</blockquote>
+<hr>
+<h2>0. 시작 전에 — 공통 조작법 (한 번만 읽으면 전체 적용)</h2>
+<h3>0-1. 노드 추가하기</h3>
+<p>캔버스 오른쪽 위 <strong>＋</strong> 버튼(또는 캔버스 빈 곳 더블클릭) → 노드 패널이 열림 → 검색창에 노드 이름 입력(예: &quot;Schedule Trigger&quot;) → 목록에서 클릭 → 캔버스에 노드가 놓입니다.</p>
+<h3>0-2. 노드 연결하기</h3>
+<p>한 노드의 **오른쪽 끝 원(●, 출력)**을 클릭한 채로 드래그해서 다음 노드의 **왼쪽 끝 원(●, 입력)**에 놓으면 선이 이어집니다. (Import한 파일을 보면 이미 이 선들이 그려져 있어요 — 직접 만들 땐 이 선을 우리가 긋는 것입니다.)</p>
+<h3>0-3. 노드 속성 설정 열기</h3>
+<p>노드를 <strong>더블클릭</strong>하면 오른쪽(또는 중앙)에 설정 패널이 열립니다. 여기서 각 필드를 채웁니다.</p>
+<h3>0-4. 표현식(Expression) 모드 — 가장 중요한 습관</h3>
+<p>필드 오른쪽의 <strong><code>=</code> 토글 버튼</strong>을 켜야 <code>{{ }}</code> 안의 내용이 실제 값으로 치환됩니다. <strong>토글이 꺼진 채로 <code>{{ $json.상품명 }}</code>을 입력하면 문자 그대로 저장돼 동작하지 않습니다.</strong> 이 가이드에서 &quot;표현식 토글(=) 켜고&quot;라고 나오면 반드시 켜세요.</p>
+<h3>0-5. <code>$(&#39;노드명&#39;)</code> 문법</h3>
+<p>표현식 안에서 <strong>바로 이전 노드가 아닌, 더 앞선 노드의 값</strong>을 가져올 때 씁니다. 예: <code>$(&#39;발주 필요만&#39;).item.json[&#39;상품명&#39;]</code> = &quot;발주 필요만&quot; 노드가 넘긴 데이터에서 상품명 필드를 가져옴. 노드 이름은 <strong>정확히 일치</strong>해야 합니다(오타 나면 빨간 에러).</p>
+<h3>0-6. 자격증명 미리 만들어두기 (템플릿마다 반복 사용)</h3>
+<p><strong>Google Sheets / Gmail</strong> — 노드 설정에서 Credential 드롭다운 → <strong>Create New Credential</strong> → <strong>Sign in with Google</strong> → 팝업에서 로그인·권한 승인. 한 번 만들면 이후 모든 템플릿에서 재사용.</p>
+<p><strong>Claude(HTTP Request) — Header Auth</strong> — HTTP Request 노드에서 Authentication을 <strong>Generic Credential Type</strong> → <strong>Header Auth</strong>로 설정 → Credential 드롭다운 → <strong>Create New Credential</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>필드</th>
+<th>값</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Name</td>
+<td><code>x-api-key</code></td>
+</tr>
+<tr>
+<td>Value</td>
+<td>회사 Anthropic API 키</td>
+</tr>
+</tbody></table>
+<p>한 번 만들면 이후 모든 Claude(HTTP) 노드에서 이 크리덴셜을 재사용합니다.</p>
+<h3>0-7. 노드 테스트하기</h3>
+<p>설정 패널 아래 <strong>Test step</strong>(또는 캔버스에서 노드 우클릭 → Execute Node) 클릭 → 입력 데이터가 있으면 그걸 사용해 실행 → 오른쪽에 출력 결과가 표에/JSON으로 표시됩니다. <strong>노드 하나 만들 때마다 바로 테스트</strong>하세요 — 마지막에 한 번에 돌리면 어디서 깨졌는지 찾기 어렵습니다.</p>
+<h3>0-8. 이 문서 읽는 법</h3>
+<p>템플릿마다 <strong>Step 1 → Step N</strong>이 실제 캔버스에 노드를 놓는 순서입니다. 각 Step은:</p>
+<ul>
+<li><strong>어떤 노드를 검색해서 추가하나</strong></li>
+<li><strong>속성을 뭘로 채우나</strong> (표현식은 그대로 복사해서 붙여넣기)</li>
+<li><strong>어디에 연결하나</strong></li>
+</ul>
+<p>를 담고 있습니다. 완료 후 마지막 Step에서 전체 테스트 방법을 안내합니다.</p>
+<hr>
+<h2>🆚 경쟁사 조사 (3종)</h2>
+<h3>01. ⭐ 방송상품 가격경쟁력 진단</h3>
+<blockquote>
+<p>방송 예정 상품이 인터넷 최저가보다 비싼지 매일 아침 자동 점검하고, 비싸면 Claude가 방송 대응 소구점을 제안합니다.</p>
+</blockquote>
+<p><strong>받는 사람:</strong> MD · <strong>시트:</strong> <strong>방송예정상품</strong> 탭 헤더: <code>상품명 · 우리방송가</code></p>
+<ul>
+<li><strong>★네이버쇼핑 API</strong>: developers.naver.com → 애플리케이션 등록 → 검색 API(쇼핑) 사용 설정 → Client ID/Secret 발급 (무료 쿼터 있음)</li>
+</ul>
+<p><strong>노드 순서 (총 7개):</strong> 매일 07:30 → 방송예정 상품 읽기 → 네이버쇼핑 최저가 조회 → 최저가 비교 → 가격 열위만 → Claude 대응 소구점 → MD 가격진단 메일</p>
+<h4>Step 1 — <code>매일 07:30</code> 추가</h4>
+<ul>
+<li><p><strong>검색어:</strong> <code>Schedule Trigger</code></p>
+</li>
+<li><p><strong>속성 설정:</strong> Trigger Interval → Days 선택 → Hour = <code>7</code>, Minute = <code>30</code></p>
+<p>(n8n 인스턴스 타임존이 이미 <code>Asia/Seoul</code>이면 이게 곧 한국시간입니다 — 1일차 설치 때 <code>GENERIC_TIMEZONE=Asia/Seoul</code>로 띄운 그 설정)</p>
+</li>
+<li><p><strong>연결:</strong> 이 노드가 시작점입니다(입력 연결 없음).</p>
+</li>
+</ul>
+<h4>Step 2 — <code>방송예정 상품 읽기</code> 추가</h4>
+<ul>
+<li><p><strong>검색어:</strong> <code>Google Sheets</code></p>
+</li>
+<li><p><strong>속성 설정:</strong></p>
+<ul>
+<li><p>Credential: 0-6에서 만든 Google 계정 선택</p>
+</li>
+<li><p>Resource = <code>Sheet Within Document</code> (기본값)</p>
+</li>
+<li><p>Operation = <strong><code>Get Row(s)</code></strong> (기본값, 바꿀 필요 없음)</p>
+</li>
+<li><p>Document → By URL 또는 By ID → 본인 구글시트 ID 붙여넣기 (원본엔 <code>YOUR_GOOGLE_SHEET_ID</code> 자리)</p>
+</li>
+<li><p>Sheet → <strong><code>방송예정상품</code></strong> 탭 선택 (드롭다운에 없으면 <code>gid=0</code>으로 첫 탭 지정)</p>
+</li>
+</ul>
+</li>
+<li><p><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</p>
+</li>
+</ul>
+<h4>Step 3 — <code>네이버쇼핑 최저가 조회</code> 추가</h4>
+<ul>
+<li><p><strong>검색어:</strong> <code>HTTP Request</code></p>
+</li>
+<li><p><strong>속성 설정:</strong></p>
+<ul>
+<li><p>Method = <strong><code>GET</code></strong></p>
+</li>
+<li><p>URL: 표현식 토글(=) 켜고 → <code>https://openapi.naver.com/v1/search/shop.json?query={{ encodeURIComponent($json[&#39;상품명&#39;]) }}&amp;display=20&amp;sort=sim</code></p>
+</li>
+<li><p>Authentication = <strong><code>None</code></strong> (인증은 헤더로 직접 넣음 — 아래)</p>
+</li>
+<li><p>Send Headers = <strong>On</strong> → Add Header 2번:</p>
+<ul>
+<li><p><code>X-Naver-Client-Id</code> = <code>YOUR_NAVER_CLIENT_ID</code></p>
+</li>
+<li><p><code>X-Naver-Client-Secret</code> = <code>YOUR_NAVER_CLIENT_SECRET</code></p>
+</li>
+</ul>
+</li>
+<li><p>Send Body = <strong>Off</strong> (GET 요청이라 바디 없음, 값은 URL과 헤더로 전달)</p>
+</li>
+</ul>
+</li>
+<li><p><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</p>
+</li>
+<li><p><strong>테스트 포인트:</strong> Test step에서 <code>items</code> 배열에 상품 목록(<code>title</code>·<code>lprice</code>·<code>mallName</code>)이 들어있는지 확인. 401/403 에러면 네이버 Client ID/Secret을 다시 확인하세요.</p>
+</li>
+</ul>
+<h4>Step 4 — <code>최저가 비교</code> 추가</h4>
+<ul>
+<li><p><strong>검색어:</strong> <code>Code</code></p>
+</li>
+<li><p><strong>속성 설정:</strong> Mode = <strong><code>Run Once for All Items</code></strong> (기본값, 바꾸지 않음) → JavaScript 편집창에 아래 코드를 그대로 붙여넣기:</p>
+</li>
+</ul>
+<pre><code class="language-javascript">const clean=s=&gt;String(s||&#39;&#39;).replace(/&lt;[^&gt;]+&gt;/g,&#39;&#39;);
+let items=($json.items||[]).map(it=&gt;({title:clean(it.title),price:Number(it.lprice)||0,mall:it.mallName})).filter(x=&gt;x.price&gt;0);
+// ★액세서리·부품 이상치 제거: 가격 중앙값의 40% 미만은 버림(부품이 진짜 상품 최저가로 잡히는 것 방지)
+const ps=items.map(x=&gt;x.price).sort((a,b)=&gt;a-b);
+const median=ps.length?ps[Math.floor(ps.length/2)]:0;
+items=items.filter(x=&gt;x.price&gt;=median*0.4);
+items.sort((a,b)=&gt;a.price-b.price);
+const low=items[0]||{price:0,mall:&#39;-&#39;,title:&#39;-&#39;};
+const mine=Number(String($(&#39;방송예정 상품 읽기&#39;).item.json[&#39;우리방송가&#39;]||0).replace(/[,\s]/g,&#39;&#39;))||0;
+const gap=mine-low.price;
+return [{json:{상품명:$(&#39;방송예정 상품 읽기&#39;).item.json[&#39;상품명&#39;],우리방송가:mine,최저가:low.price,최저가몰:low.mall,가격차:gap,열위:String(gap&gt;0)}}];
+</code></pre>
+<ul>
+<li><p><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</p>
+</li>
+<li><p><strong>테스트 포인트:</strong> Test step 눌러서 출력 JSON에 기대한 필드(위 코드의 <code>return</code>에 있는 키들)가 정확히 나오는지 확인하세요. 여기서 필드명 오타가 나면 다음 노드부터 전부 빈 값이 됩니다.</p>
+</li>
+</ul>
+<h4>Step 5 — <code>가격 열위만</code> 추가</h4>
+<ul>
+<li><p><strong>검색어:</strong> <code>If</code></p>
+</li>
+<li><p><strong>속성 설정:</strong> Add Condition 클릭 →</p>
+<ul>
+<li><p>왼쪽 값(Value): 표현식 토글(=) 켜고 → <code>{{ $json[&#39;열위&#39;] }}</code></p>
+</li>
+<li><p>연산자(Operator): <strong>문자열 › is equal to (같다)</strong></p>
+</li>
+<li><p>오른쪽 값(Value): <code>true</code></p>
+</li>
+</ul>
+</li>
+<li><p><strong>동작 방식:</strong> If는 조건에 따라 출력이 <strong>True/False 두 갈래</strong>로 갈립니다. 이 템플릿에서는 <strong>True 쪽 출력만</strong> 다음 노드에 연결하세요(False는 그냥 끝).</p>
+</li>
+<li><p><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</p>
+</li>
+</ul>
+<h4>Step 6 — <code>Claude 대응 소구점</code> 추가</h4>
+<ul>
+<li><p><strong>검색어:</strong> <code>HTTP Request</code></p>
+</li>
+<li><p><strong>속성 설정:</strong></p>
+<ul>
+<li><p>Method = <strong><code>POST</code></strong></p>
+</li>
+<li><p>URL = <code>https://api.anthropic.com/v1/messages</code></p>
+</li>
+<li><p>Authentication = <strong><code>Generic Credential Type</code></strong> → Generic Auth Type = <strong><code>Header Auth</code></strong> → Credential = 0-6에서 만든 <code>x-api-key</code> 크리덴셜 선택</p>
+</li>
+<li><p>Send Headers = <strong>On</strong> → Add Header 2번:</p>
+<ul>
+<li><p><code>anthropic-version</code> = <code>2023-06-01</code></p>
+</li>
+<li><p><code>content-type</code> = <code>application/json</code></p>
+</li>
+</ul>
+</li>
+<li><p>Send Body = <strong>On</strong> → Body Content Type = <strong><code>JSON</code></strong> → Specify Body = <strong><code>Using JSON</code></strong> → 필드의 표현식 토글(=) 켜고 아래를 그대로 붙여넣기:</p>
+</li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-text">{{ JSON.stringify({ model: &#39;claude-sonnet-5&#39;, max_tokens: 400, messages: [{ role: &#39;user&#39;, content: &#39;홈쇼핑 방송 상품의 가격 경쟁력 진단이다. 아래 정보를 보고, 인터넷 최저가보다 비쌀 때 방송에서 쓸 대응 소구점 2가지(예: 방송한정가·추가 사은품·무이자·차별화 포인트)를 한국어 3줄로 제안해줘.\n상품: &#39; + $json[&#39;상품명&#39;] + &#39; / 우리 방송가: &#39; + $json[&#39;우리방송가&#39;] + &#39;원 / 인터넷 최저가: &#39; + $json[&#39;최저가&#39;] + &#39;원(&#39; + $json[&#39;최저가몰&#39;] + &#39;) / 가격차: &#39; + $json[&#39;가격차&#39;] + &#39;원&#39; }] }) }}
+</code></pre>
+<ul>
+<li><p><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</p>
+</li>
+<li><p><strong>테스트 포인트:</strong> Test step에서 <code>content[0].text</code>에 Claude의 응답 문장이 들어있는지 확인. <code>invalid x-api-key</code> 에러면 크리덴셜 값을 다시 확인하세요.</p>
+</li>
+</ul>
+<h4>Step 7 — <code>MD 가격진단 메일</code> 추가</h4>
+<ul>
+<li><p><strong>검색어:</strong> <code>Gmail</code></p>
+</li>
+<li><p><strong>속성 설정:</strong></p>
+<ul>
+<li><p>Credential: 0-6에서 만든 Gmail 계정 선택</p>
+</li>
+<li><p>Operation = <strong><code>Send</code></strong> (기본값)</p>
+</li>
+<li><p>To: 표현식 토글 <strong>끄고</strong> → <code>YOUR_MD@example.com</code> (본인 이메일로 교체해서 테스트)</p>
+</li>
+<li><p>Subject: 표현식 토글(=) 켜고 → <code>[가격경쟁력] {{ $(&#39;최저가 비교&#39;).item.json[&#39;상품명&#39;] }} — 최저가 대비 {{ $(&#39;최저가 비교&#39;).item.json[&#39;가격차&#39;] }}원 비쌈</code></p>
+</li>
+<li><p>Email Type = <strong><code>Text</code></strong></p>
+</li>
+<li><p>Message: 표현식 토글(=) 켜고 →</p>
+</li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-text">■ {{ $(&#39;최저가 비교&#39;).item.json[&#39;상품명&#39;] }}
+- 우리 방송가: {{ $(&#39;최저가 비교&#39;).item.json[&#39;우리방송가&#39;] }}원
+- 인터넷 최저가: {{ $(&#39;최저가 비교&#39;).item.json[&#39;최저가&#39;] }}원 ({{ $(&#39;최저가 비교&#39;).item.json[&#39;최저가몰&#39;] }})
+- 가격차: {{ $(&#39;최저가 비교&#39;).item.json[&#39;가격차&#39;] }}원
+
+[대응 소구점 제안]
+{{ $json.content[0].text }}
+</code></pre>
+<ul>
+<li><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</li>
+</ul>
+<p><strong>✅ 완성 후 테스트:</strong> 트리거 노드에서 <strong>Test step</strong>(또는 Execute Workflow) → 마지막 노드까지 전부 초록불이 뜨는지 확인. 안 뜨면 그 노드를 더블클릭해 에러 메시지를 읽고, 표현식 토글(=)이 켜져 있는지부터 확인하세요.</p>
+<p><strong>🔍 정답 대조:</strong> <code>assets/홈앤쇼핑-실무템플릿/경쟁사조사/L5-01-방송상품-가격경쟁력진단.json</code>를 에디터에 import해서 본인이 만든 것과 비교할 수 있습니다.</p>
+<hr>
+<h3>02. 경쟁 홈쇼핑 편성 모니터링</h3>
+<blockquote>
+<p>경쟁사 오늘 편성(시트 입력)을 Claude가 카테고리·시간대로 요약하고 우리 차별화 슬롯을 제안합니다. (무단 크롤링 대신 시트 기반)</p>
+</blockquote>
+<p><strong>받는 사람:</strong> MD · <strong>시트:</strong> <strong>경쟁사편성</strong> 탭 헤더: <code>채널 · 시간 · 상품 · 카테고리</code></p>
+<p><strong>노드 순서 (총 5개):</strong> 매일 08:00 → 경쟁사 편성 읽기 → 채널별 편성 묶기 → Claude 편성 브리핑 → MD 편성 브리핑</p>
+<h4>Step 1 — <code>매일 08:00</code> 추가</h4>
+<ul>
+<li><p><strong>검색어:</strong> <code>Schedule Trigger</code></p>
+</li>
+<li><p><strong>속성 설정:</strong> Trigger Interval → Days 선택 → Hour = <code>8</code>, Minute = <code>00</code></p>
+<p>(n8n 인스턴스 타임존이 이미 <code>Asia/Seoul</code>이면 이게 곧 한국시간입니다 — 1일차 설치 때 <code>GENERIC_TIMEZONE=Asia/Seoul</code>로 띄운 그 설정)</p>
+</li>
+<li><p><strong>연결:</strong> 이 노드가 시작점입니다(입력 연결 없음).</p>
+</li>
+</ul>
+<h4>Step 2 — <code>경쟁사 편성 읽기</code> 추가</h4>
+<ul>
+<li><p><strong>검색어:</strong> <code>Google Sheets</code></p>
+</li>
+<li><p><strong>속성 설정:</strong></p>
+<ul>
+<li><p>Credential: 0-6에서 만든 Google 계정 선택</p>
+</li>
+<li><p>Resource = <code>Sheet Within Document</code> (기본값)</p>
+</li>
+<li><p>Operation = <strong><code>Get Row(s)</code></strong> (기본값, 바꿀 필요 없음)</p>
+</li>
+<li><p>Document → By URL 또는 By ID → 본인 구글시트 ID 붙여넣기 (원본엔 <code>YOUR_GOOGLE_SHEET_ID</code> 자리)</p>
+</li>
+<li><p>Sheet → <strong><code>경쟁사편성</code></strong> 탭 선택 (드롭다운에 없으면 <code>gid=0</code>으로 첫 탭 지정)</p>
+</li>
+</ul>
+</li>
+<li><p><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</p>
+</li>
+</ul>
+<h4>Step 3 — <code>채널별 편성 묶기</code> 추가</h4>
+<ul>
+<li><p><strong>검색어:</strong> <code>Code</code></p>
+</li>
+<li><p><strong>속성 설정:</strong> Mode = <strong><code>Run Once for All Items</code></strong> (기본값, 바꾸지 않음) → JavaScript 편집창에 아래 코드를 그대로 붙여넣기:</p>
+</li>
+</ul>
+<pre><code class="language-javascript">const items=$input.all();
+const by={};
+for(const it of items){const ch=it.json[&#39;채널&#39;]||&#39;경쟁사&#39;;(by[ch]=by[ch]||[]).push(`${it.json[&#39;시간&#39;]||&#39;&#39;} ${it.json[&#39;상품&#39;]||&#39;&#39;} (${it.json[&#39;카테고리&#39;]||&#39;&#39;})`);}
+const brief=Object.entries(by).map(([k,v])=&gt;`[${k}]\n`+v.join(&#39;\n&#39;)).join(&#39;\n\n&#39;);
+return [{json:{brief}}];
+</code></pre>
+<ul>
+<li><p><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</p>
+</li>
+<li><p><strong>테스트 포인트:</strong> Test step 눌러서 출력 JSON에 기대한 필드(위 코드의 <code>return</code>에 있는 키들)가 정확히 나오는지 확인하세요. 여기서 필드명 오타가 나면 다음 노드부터 전부 빈 값이 됩니다.</p>
+</li>
+</ul>
+<h4>Step 4 — <code>Claude 편성 브리핑</code> 추가</h4>
+<ul>
+<li><p><strong>검색어:</strong> <code>HTTP Request</code></p>
+</li>
+<li><p><strong>속성 설정:</strong></p>
+<ul>
+<li><p>Method = <strong><code>POST</code></strong></p>
+</li>
+<li><p>URL = <code>https://api.anthropic.com/v1/messages</code></p>
+</li>
+<li><p>Authentication = <strong><code>Generic Credential Type</code></strong> → Generic Auth Type = <strong><code>Header Auth</code></strong> → Credential = 0-6에서 만든 <code>x-api-key</code> 크리덴셜 선택</p>
+</li>
+<li><p>Send Headers = <strong>On</strong> → Add Header 2번:</p>
+<ul>
+<li><p><code>anthropic-version</code> = <code>2023-06-01</code></p>
+</li>
+<li><p><code>content-type</code> = <code>application/json</code></p>
+</li>
+</ul>
+</li>
+<li><p>Send Body = <strong>On</strong> → Body Content Type = <strong><code>JSON</code></strong> → Specify Body = <strong><code>Using JSON</code></strong> → 필드의 표현식 토글(=) 켜고 아래를 그대로 붙여넣기:</p>
+</li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-text">{{ JSON.stringify({ model: &#39;claude-sonnet-5&#39;, max_tokens: 600, messages: [{ role: &#39;user&#39;, content: &#39;경쟁 홈쇼핑들의 오늘 편성 목록이다(채널·시간·상품·카테고리). 카테고리 분포와 시간대 특징을 3줄로 요약하고, 우리가 차별화할 슬롯 아이디어 2가지를 제안해줘.\n&#39; + $json[&#39;brief&#39;] }] }) }}
+</code></pre>
+<ul>
+<li><p><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</p>
+</li>
+<li><p><strong>테스트 포인트:</strong> Test step에서 <code>content[0].text</code>에 Claude의 응답 문장이 들어있는지 확인. <code>invalid x-api-key</code> 에러면 크리덴셜 값을 다시 확인하세요.</p>
+</li>
+</ul>
+<h4>Step 5 — <code>MD 편성 브리핑</code> 추가</h4>
+<ul>
+<li><p><strong>검색어:</strong> <code>Gmail</code></p>
+</li>
+<li><p><strong>속성 설정:</strong></p>
+<ul>
+<li><p>Credential: 0-6에서 만든 Gmail 계정 선택</p>
+</li>
+<li><p>Operation = <strong><code>Send</code></strong> (기본값)</p>
+</li>
+<li><p>To: 표현식 토글 <strong>끄고</strong> → <code>YOUR_MD@example.com</code> (본인 이메일로 교체해서 테스트)</p>
+</li>
+<li><p>Subject: 표현식 토글(=) 켜고 → <code>[경쟁편성] 오늘 경쟁 홈쇼핑 편성 브리핑</code></p>
+</li>
+<li><p>Email Type = <strong><code>Text</code></strong></p>
+</li>
+<li><p>Message: 표현식 토글(=) 켜고 →</p>
+</li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-text">{{ $json.content[0].text }}
+</code></pre>
+<ul>
+<li><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</li>
+</ul>
+<p><strong>✅ 완성 후 테스트:</strong> 트리거 노드에서 <strong>Test step</strong>(또는 Execute Workflow) → 마지막 노드까지 전부 초록불이 뜨는지 확인. 안 뜨면 그 노드를 더블클릭해 에러 메시지를 읽고, 표현식 토글(=)이 켜져 있는지부터 확인하세요.</p>
+<p><strong>🔍 정답 대조:</strong> <code>assets/홈앤쇼핑-실무템플릿/경쟁사조사/L5-02-경쟁홈쇼핑-편성모니터링.json</code>를 에디터에 import해서 본인이 만든 것과 비교할 수 있습니다.</p>
+<hr>
+<h3>03. 업계 트렌드·신상품 브리핑</h3>
+<blockquote>
+<p>홈쇼핑·유통 뉴스를 Claude가 경쟁사 신상품·트렌드·소싱 힌트로 요약해 MD에게 보내고 아카이브에 기록합니다.</p>
+</blockquote>
+<p><strong>받는 사람:</strong> MD · <strong>시트:</strong> <strong>트렌드로그</strong> 탭: 헤더 없이 시작해도 됨(자동 매핑 저장)</p>
+<p><strong>노드 순서 (총 6개):</strong> 매일 08:30 → 홈쇼핑 뉴스 RSS → 상위 뉴스 정리 → Claude 트렌드 브리핑 → MD 트렌드 브리핑 → 브리핑 아카이브</p>
+<h4>Step 1 — <code>매일 08:30</code> 추가</h4>
+<ul>
+<li><p><strong>검색어:</strong> <code>Schedule Trigger</code></p>
+</li>
+<li><p><strong>속성 설정:</strong> Trigger Interval → Days 선택 → Hour = <code>8</code>, Minute = <code>30</code></p>
+<p>(n8n 인스턴스 타임존이 이미 <code>Asia/Seoul</code>이면 이게 곧 한국시간입니다 — 1일차 설치 때 <code>GENERIC_TIMEZONE=Asia/Seoul</code>로 띄운 그 설정)</p>
+</li>
+<li><p><strong>연결:</strong> 이 노드가 시작점입니다(입력 연결 없음).</p>
+</li>
+</ul>
+<h4>Step 2 — <code>홈쇼핑 뉴스 RSS</code> 추가</h4>
+<ul>
+<li><p><strong>검색어:</strong> <code>RSS Read</code></p>
+</li>
+<li><p><strong>속성 설정:</strong> URL = <code>https://news.google.com/rss/search?q=%ED%99%88%EC%87%BC%ED%95%91%20%EC%9C%A0%ED%86%B5%20%EC%8B%A0%EC%83%81%ED%92%88%20%EA%B8%B0%ED%9A%8D%EC%A0%84&amp;hl=ko&amp;gl=KR&amp;ceid=KR:ko</code></p>
+</li>
+<li><p><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</p>
+</li>
+</ul>
+<h4>Step 3 — <code>상위 뉴스 정리</code> 추가</h4>
+<ul>
+<li><p><strong>검색어:</strong> <code>Code</code></p>
+</li>
+<li><p><strong>속성 설정:</strong> Mode = <strong><code>Run Once for All Items</code></strong> (기본값, 바꾸지 않음) → JavaScript 편집창에 아래 코드를 그대로 붙여넣기:</p>
+</li>
+</ul>
+<pre><code class="language-javascript">const items=$input.all().slice(0,8);
+const list=items.map((it,i)=&gt;`${i+1}. ${it.json.title}`).join(&#39;\n&#39;);
+return [{json:{뉴스:list}}];
+</code></pre>
+<ul>
+<li><p><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</p>
+</li>
+<li><p><strong>테스트 포인트:</strong> Test step 눌러서 출력 JSON에 기대한 필드(위 코드의 <code>return</code>에 있는 키들)가 정확히 나오는지 확인하세요. 여기서 필드명 오타가 나면 다음 노드부터 전부 빈 값이 됩니다.</p>
+</li>
+</ul>
+<h4>Step 4 — <code>Claude 트렌드 브리핑</code> 추가</h4>
+<ul>
+<li><p><strong>검색어:</strong> <code>HTTP Request</code></p>
+</li>
+<li><p><strong>속성 설정:</strong></p>
+<ul>
+<li><p>Method = <strong><code>POST</code></strong></p>
+</li>
+<li><p>URL = <code>https://api.anthropic.com/v1/messages</code></p>
+</li>
+<li><p>Authentication = <strong><code>Generic Credential Type</code></strong> → Generic Auth Type = <strong><code>Header Auth</code></strong> → Credential = 0-6에서 만든 <code>x-api-key</code> 크리덴셜 선택</p>
+</li>
+<li><p>Send Headers = <strong>On</strong> → Add Header 2번:</p>
+<ul>
+<li><p><code>anthropic-version</code> = <code>2023-06-01</code></p>
+</li>
+<li><p><code>content-type</code> = <code>application/json</code></p>
+</li>
+</ul>
+</li>
+<li><p>Send Body = <strong>On</strong> → Body Content Type = <strong><code>JSON</code></strong> → Specify Body = <strong><code>Using JSON</code></strong> → 필드의 표현식 토글(=) 켜고 아래를 그대로 붙여넣기:</p>
+</li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-text">{{ JSON.stringify({ model: &#39;claude-sonnet-5&#39;, max_tokens: 600, messages: [{ role: &#39;user&#39;, content: &#39;유통·홈쇼핑 업계 최신 뉴스 제목이다. (1) 경쟁사 신상품·기획전 (2) 소비 트렌드 (3) 우리 소싱/편성에 참고할 힌트 를 각 2줄로 한국어 브리핑해줘.\n&#39; + $json[&#39;뉴스&#39;] }] }) }}
+</code></pre>
+<ul>
+<li><p><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</p>
+</li>
+<li><p><strong>테스트 포인트:</strong> Test step에서 <code>content[0].text</code>에 Claude의 응답 문장이 들어있는지 확인. <code>invalid x-api-key</code> 에러면 크리덴셜 값을 다시 확인하세요.</p>
+</li>
+</ul>
+<h4>Step 5 — <code>MD 트렌드 브리핑</code> 추가</h4>
+<ul>
+<li><p><strong>검색어:</strong> <code>Gmail</code></p>
+</li>
+<li><p><strong>속성 설정:</strong></p>
+<ul>
+<li><p>Credential: 0-6에서 만든 Gmail 계정 선택</p>
+</li>
+<li><p>Operation = <strong><code>Send</code></strong> (기본값)</p>
+</li>
+<li><p>To: 표현식 토글 <strong>끄고</strong> → <code>YOUR_MD@example.com</code> (본인 이메일로 교체해서 테스트)</p>
+</li>
+<li><p>Subject: 표현식 토글(=) 켜고 → <code>[업계 브리핑] 경쟁사·트렌드·소싱 힌트</code></p>
+</li>
+<li><p>Email Type = <strong><code>Text</code></strong></p>
+</li>
+<li><p>Message: 표현식 토글(=) 켜고 →</p>
+</li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-text">{{ $json.content[0].text }}
+</code></pre>
+<ul>
+<li><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</li>
+</ul>
+<h4>Step 6 — <code>브리핑 아카이브</code> 추가</h4>
+<ul>
+<li><p><strong>검색어:</strong> <code>Google Sheets</code></p>
+</li>
+<li><p><strong>속성 설정:</strong></p>
+<ul>
+<li><p>Credential: 0-6에서 만든 Google 계정 선택</p>
+</li>
+<li><p>Resource = <code>Sheet Within Document</code> (기본값)</p>
+</li>
+<li><p>Operation = <strong><code>Append Row</code></strong></p>
+</li>
+<li><p>Document → By URL 또는 By ID → 본인 구글시트 ID 붙여넣기 (원본엔 <code>YOUR_GOOGLE_SHEET_ID</code> 자리)</p>
+</li>
+<li><p>Sheet → <strong><code>트렌드로그</code></strong> 탭 선택 (드롭다운에 없으면 새로 만들거나 <code>gid=0</code>으로 첫 탭 지정)</p>
+</li>
+<li><p>Mapping Column Mode = <strong><code>Map Automatically Below</code></strong> (들어오는 데이터의 필드명을 시트 헤더와 자동 매칭 — 시트 헤더를 입력 필드명과 똑같이 만들어두세요)</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>⚠️ 가지 나뉘는 지점(fan-out):</strong></p>
+<ul>
+<li><code>Claude 트렌드 브리핑</code>의 출력(●)에서 <strong>드래그를 두 번</strong> 해서 <code>MD 트렌드 브리핑</code> · <code>브리핑 아카이브</code> <strong>둘 다</strong>에 연결하세요(같은 출력에서 두 갈래로 나갑니다 — 다중출력).</li>
+</ul>
+<p><strong>✅ 완성 후 테스트:</strong> 트리거 노드에서 <strong>Test step</strong>(또는 Execute Workflow) → 마지막 노드까지 전부 초록불이 뜨는지 확인. 안 뜨면 그 노드를 더블클릭해 에러 메시지를 읽고, 표현식 토글(=)이 켜져 있는지부터 확인하세요.</p>
+<p><strong>🔍 정답 대조:</strong> <code>assets/홈앤쇼핑-실무템플릿/경쟁사조사/L5-03-업계트렌드-신상품브리핑.json</code>를 에디터에 import해서 본인이 만든 것과 비교할 수 있습니다.</p>
+<hr>
+<h2>📺 방송 운영 (3종)</h2>
+<h3>01. ⏱ 생방송 실적 페이스메이커</h3>
+<blockquote>
+<p>방송 중 5분마다 목표 페이스 대비 실적을 계산해 저조하면 Claude가 실시간 대응 멘트와 함께 긴급 알림을 보냅니다.</p>
+</blockquote>
+<p><strong>받는 사람:</strong> MD·PD · <strong>시트:</strong> <strong>방송현황</strong> 탭 헤더: <code>상품명 · 목표매출 · 총방송분 · 경과분 · 누적매출</code></p>
+<p><strong>노드 순서 (총 6개):</strong> 방송 중 5분마다 → 현재 방송실적 읽기 → 목표 페이스 계산 → 저조할 때만 → Claude 실시간 대응멘트 → MD·PD 긴급 알림</p>
+<h4>Step 1 — <code>방송 중 5분마다</code> 추가</h4>
+<ul>
+<li><p><strong>검색어:</strong> <code>Schedule Trigger</code></p>
+</li>
+<li><p><strong>속성 설정:</strong> Trigger Interval → Minutes 선택 → Minutes Between Triggers = <code>5</code></p>
+</li>
+<li><p><strong>연결:</strong> 이 노드가 시작점입니다(입력 연결 없음).</p>
+</li>
+</ul>
+<h4>Step 2 — <code>현재 방송실적 읽기</code> 추가</h4>
+<ul>
+<li><p><strong>검색어:</strong> <code>Google Sheets</code></p>
+</li>
+<li><p><strong>속성 설정:</strong></p>
+<ul>
+<li><p>Credential: 0-6에서 만든 Google 계정 선택</p>
+</li>
+<li><p>Resource = <code>Sheet Within Document</code> (기본값)</p>
+</li>
+<li><p>Operation = <strong><code>Get Row(s)</code></strong> (기본값, 바꿀 필요 없음)</p>
+</li>
+<li><p>Document → By URL 또는 By ID → 본인 구글시트 ID 붙여넣기 (원본엔 <code>YOUR_GOOGLE_SHEET_ID</code> 자리)</p>
+</li>
+<li><p>Sheet → <strong><code>방송현황</code></strong> 탭 선택 (드롭다운에 없으면 <code>gid=0</code>으로 첫 탭 지정)</p>
+</li>
+</ul>
+</li>
+<li><p><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</p>
+</li>
+</ul>
+<h4>Step 3 — <code>목표 페이스 계산</code> 추가</h4>
+<ul>
+<li><p><strong>검색어:</strong> <code>Code</code></p>
+</li>
+<li><p><strong>속성 설정:</strong> Mode = <strong><code>Run Once for All Items</code></strong> (기본값, 바꾸지 않음) → JavaScript 편집창에 아래 코드를 그대로 붙여넣기:</p>
+</li>
+</ul>
+<pre><code class="language-javascript">const r=$json;
+const num=v=&gt;Number(String(v||0).replace(/[,\s]/g,&#39;&#39;))||0;
+const 목표=num(r[&#39;목표매출&#39;]);
+const 총분=num(r[&#39;총방송분&#39;])||60;
+const 경과=num(r[&#39;경과분&#39;]);
+const 누적=num(r[&#39;누적매출&#39;]);
+const 예상=총분&gt;0?목표*(경과/총분):0;
+const 달성률=예상&gt;0?Math.round(누적/예상*100):100;
+return [{json:{상품명:r[&#39;상품명&#39;],목표,누적,경과분:경과,달성률,저조:String(달성률&lt;80)}}];
+</code></pre>
+<ul>
+<li><p><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</p>
+</li>
+<li><p><strong>테스트 포인트:</strong> Test step 눌러서 출력 JSON에 기대한 필드(위 코드의 <code>return</code>에 있는 키들)가 정확히 나오는지 확인하세요. 여기서 필드명 오타가 나면 다음 노드부터 전부 빈 값이 됩니다.</p>
+</li>
+</ul>
+<h4>Step 4 — <code>저조할 때만</code> 추가</h4>
+<ul>
+<li><p><strong>검색어:</strong> <code>If</code></p>
+</li>
+<li><p><strong>속성 설정:</strong> Add Condition 클릭 →</p>
+<ul>
+<li><p>왼쪽 값(Value): 표현식 토글(=) 켜고 → <code>{{ $json[&#39;저조&#39;] }}</code></p>
+</li>
+<li><p>연산자(Operator): <strong>문자열 › is equal to (같다)</strong></p>
+</li>
+<li><p>오른쪽 값(Value): <code>true</code></p>
+</li>
+</ul>
+</li>
+<li><p><strong>동작 방식:</strong> If는 조건에 따라 출력이 <strong>True/False 두 갈래</strong>로 갈립니다. 이 템플릿에서는 <strong>True 쪽 출력만</strong> 다음 노드에 연결하세요(False는 그냥 끝).</p>
+</li>
+<li><p><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</p>
+</li>
+</ul>
+<h4>Step 5 — <code>Claude 실시간 대응멘트</code> 추가</h4>
+<ul>
+<li><p><strong>검색어:</strong> <code>HTTP Request</code></p>
+</li>
+<li><p><strong>속성 설정:</strong></p>
+<ul>
+<li><p>Method = <strong><code>POST</code></strong></p>
+</li>
+<li><p>URL = <code>https://api.anthropic.com/v1/messages</code></p>
+</li>
+<li><p>Authentication = <strong><code>Generic Credential Type</code></strong> → Generic Auth Type = <strong><code>Header Auth</code></strong> → Credential = 0-6에서 만든 <code>x-api-key</code> 크리덴셜 선택</p>
+</li>
+<li><p>Send Headers = <strong>On</strong> → Add Header 2번:</p>
+<ul>
+<li><p><code>anthropic-version</code> = <code>2023-06-01</code></p>
+</li>
+<li><p><code>content-type</code> = <code>application/json</code></p>
+</li>
+</ul>
+</li>
+<li><p>Send Body = <strong>On</strong> → Body Content Type = <strong><code>JSON</code></strong> → Specify Body = <strong><code>Using JSON</code></strong> → 필드의 표현식 토글(=) 켜고 아래를 그대로 붙여넣기:</p>
+</li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-text">{{ JSON.stringify({ model: &#39;claude-sonnet-5&#39;, max_tokens: 350, messages: [{ role: &#39;user&#39;, content: &#39;홈쇼핑 생방송이 목표 페이스보다 저조하다. 즉시 쓸 실시간 대응 2가지를 각 한 문장으로 제안해줘(예: 매진임박·수량한정 자막, 방송한정 추가 사은품 언급, 무이자 강조). 방송 진행자가 바로 읽을 수 있는 멘트로.\n상품: &#39; + $json[&#39;상품명&#39;] + &#39; / 현재 목표 대비 달성률: &#39; + $json[&#39;달성률&#39;] + &#39;% / 경과 &#39; + $json[&#39;경과분&#39;] + &#39;분&#39; }] }) }}
+</code></pre>
+<ul>
+<li><p><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</p>
+</li>
+<li><p><strong>테스트 포인트:</strong> Test step에서 <code>content[0].text</code>에 Claude의 응답 문장이 들어있는지 확인. <code>invalid x-api-key</code> 에러면 크리덴셜 값을 다시 확인하세요.</p>
+</li>
+</ul>
+<h4>Step 6 — <code>MD·PD 긴급 알림</code> 추가</h4>
+<ul>
+<li><p><strong>검색어:</strong> <code>Gmail</code></p>
+</li>
+<li><p><strong>속성 설정:</strong></p>
+<ul>
+<li><p>Credential: 0-6에서 만든 Gmail 계정 선택</p>
+</li>
+<li><p>Operation = <strong><code>Send</code></strong> (기본값)</p>
+</li>
+<li><p>To: 표현식 토글 <strong>끄고</strong> → <code>YOUR_MDPD@example.com</code> (본인 이메일로 교체해서 테스트)</p>
+</li>
+<li><p>Subject: 표현식 토글(=) 켜고 → <code>[생방송] {{ $(&#39;목표 페이스 계산&#39;).item.json[&#39;상품명&#39;] }} 목표 대비 {{ $(&#39;목표 페이스 계산&#39;).item.json[&#39;달성률&#39;] }}% 저조</code></p>
+</li>
+<li><p>Email Type = <strong><code>Text</code></strong></p>
+</li>
+<li><p>Message: 표현식 토글(=) 켜고 →</p>
+</li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-text">⚠️ 생방송 실적 저조
+- 상품: {{ $(&#39;목표 페이스 계산&#39;).item.json[&#39;상품명&#39;] }}
+- 목표 대비: {{ $(&#39;목표 페이스 계산&#39;).item.json[&#39;달성률&#39;] }}% (경과 {{ $(&#39;목표 페이스 계산&#39;).item.json[&#39;경과분&#39;] }}분)
+
+[실시간 대응 멘트]
+{{ $json.content[0].text }}
+</code></pre>
+<ul>
+<li><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</li>
+</ul>
+<p><strong>✅ 완성 후 테스트:</strong> 트리거 노드에서 <strong>Test step</strong>(또는 Execute Workflow) → 마지막 노드까지 전부 초록불이 뜨는지 확인. 안 뜨면 그 노드를 더블클릭해 에러 메시지를 읽고, 표현식 토글(=)이 켜져 있는지부터 확인하세요.</p>
+<p><strong>🔍 정답 대조:</strong> <code>assets/홈앤쇼핑-실무템플릿/방송운영/L5-01-생방송-실적페이스메이커.json</code>를 에디터에 import해서 본인이 만든 것과 비교할 수 있습니다.</p>
+<hr>
+<h3>02. 방송 결과 리포트 자동 초안</h3>
+<blockquote>
+<p>방송 종료 후 매출·주문·콜·반품 지표를 모아 Claude가 &#39;잘된 점/아쉬운 점/개선안&#39; 리포트 초안을 써서 MD에게 보내고 아카이브합니다.</p>
+</blockquote>
+<p><strong>받는 사람:</strong> MD · <strong>시트:</strong> <strong>방송결과</strong> 탭 헤더: <code>방송명 · 목표매출 · 매출 · 주문건수 · 콜인입 · 콜포기율 · 반품건수</code></p>
+<p><strong>노드 순서 (총 6개):</strong> 방송 종료 후 23:30 → 방송결과 지표 읽기 → 지표 정리 → Claude 리포트 작성 → MD 리포트 초안 → 리포트 아카이브</p>
+<h4>Step 1 — <code>방송 종료 후 23:30</code> 추가</h4>
+<ul>
+<li><p><strong>검색어:</strong> <code>Schedule Trigger</code></p>
+</li>
+<li><p><strong>속성 설정:</strong> Trigger Interval → Days 선택 → Hour = <code>23</code>, Minute = <code>30</code></p>
+<p>(n8n 인스턴스 타임존이 이미 <code>Asia/Seoul</code>이면 이게 곧 한국시간입니다 — 1일차 설치 때 <code>GENERIC_TIMEZONE=Asia/Seoul</code>로 띄운 그 설정)</p>
+</li>
+<li><p><strong>연결:</strong> 이 노드가 시작점입니다(입력 연결 없음).</p>
+</li>
+</ul>
+<h4>Step 2 — <code>방송결과 지표 읽기</code> 추가</h4>
+<ul>
+<li><p><strong>검색어:</strong> <code>Google Sheets</code></p>
+</li>
+<li><p><strong>속성 설정:</strong></p>
+<ul>
+<li><p>Credential: 0-6에서 만든 Google 계정 선택</p>
+</li>
+<li><p>Resource = <code>Sheet Within Document</code> (기본값)</p>
+</li>
+<li><p>Operation = <strong><code>Get Row(s)</code></strong> (기본값, 바꿀 필요 없음)</p>
+</li>
+<li><p>Document → By URL 또는 By ID → 본인 구글시트 ID 붙여넣기 (원본엔 <code>YOUR_GOOGLE_SHEET_ID</code> 자리)</p>
+</li>
+<li><p>Sheet → <strong><code>방송결과</code></strong> 탭 선택 (드롭다운에 없으면 <code>gid=0</code>으로 첫 탭 지정)</p>
+</li>
+</ul>
+</li>
+<li><p><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</p>
+</li>
+</ul>
+<h4>Step 3 — <code>지표 정리</code> 추가</h4>
+<ul>
+<li><p><strong>검색어:</strong> <code>Code</code></p>
+</li>
+<li><p><strong>속성 설정:</strong> Mode = <strong><code>Run Once for All Items</code></strong> (기본값, 바꾸지 않음) → JavaScript 편집창에 아래 코드를 그대로 붙여넣기:</p>
+</li>
+</ul>
+<pre><code class="language-javascript">const r=$json;
+const num=v=&gt;Number(String(v||0).replace(/[,\s]/g,&#39;&#39;))||0;
+const 목표=num(r[&#39;목표매출&#39;]),매출=num(r[&#39;매출&#39;]);
+const 달성률=목표&gt;0?Math.round(매출/목표*100):0;
+const 주문=num(r[&#39;주문건수&#39;]),반품=num(r[&#39;반품건수&#39;]);
+const 반품률=주문&gt;0?Math.round(반품/주문*100):0;
+const metrics=`방송: ${r[&#39;방송명&#39;]||&#39;-&#39;}\n목표매출 ${목표.toLocaleString()} / 매출 ${매출.toLocaleString()} (달성률 ${달성률}%)\n주문 ${주문}건 / 콜인입 ${r[&#39;콜인입&#39;]||&#39;-&#39;} / 콜포기율 ${r[&#39;콜포기율&#39;]||&#39;-&#39;} / 반품 ${반품}건(반품률 ${반품률}%)`;
+return [{json:{방송명:r[&#39;방송명&#39;],달성률,metrics}}];
+</code></pre>
+<ul>
+<li><p><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</p>
+</li>
+<li><p><strong>테스트 포인트:</strong> Test step 눌러서 출력 JSON에 기대한 필드(위 코드의 <code>return</code>에 있는 키들)가 정확히 나오는지 확인하세요. 여기서 필드명 오타가 나면 다음 노드부터 전부 빈 값이 됩니다.</p>
+</li>
+</ul>
+<h4>Step 4 — <code>Claude 리포트 작성</code> 추가</h4>
+<ul>
+<li><p><strong>검색어:</strong> <code>HTTP Request</code></p>
+</li>
+<li><p><strong>속성 설정:</strong></p>
+<ul>
+<li><p>Method = <strong><code>POST</code></strong></p>
+</li>
+<li><p>URL = <code>https://api.anthropic.com/v1/messages</code></p>
+</li>
+<li><p>Authentication = <strong><code>Generic Credential Type</code></strong> → Generic Auth Type = <strong><code>Header Auth</code></strong> → Credential = 0-6에서 만든 <code>x-api-key</code> 크리덴셜 선택</p>
+</li>
+<li><p>Send Headers = <strong>On</strong> → Add Header 2번:</p>
+<ul>
+<li><p><code>anthropic-version</code> = <code>2023-06-01</code></p>
+</li>
+<li><p><code>content-type</code> = <code>application/json</code></p>
+</li>
+</ul>
+</li>
+<li><p>Send Body = <strong>On</strong> → Body Content Type = <strong><code>JSON</code></strong> → Specify Body = <strong><code>Using JSON</code></strong> → 필드의 표현식 토글(=) 켜고 아래를 그대로 붙여넣기:</p>
+</li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-text">{{ JSON.stringify({ model: &#39;claude-sonnet-5&#39;, max_tokens: 800, messages: [{ role: &#39;user&#39;, content: &#39;다음은 오늘 홈쇼핑 방송 결과 지표다. MD가 팀에 공유할 방송 결과 리포트 초안을 아래 4개 소제목으로 한국어로 작성해줘: [요약] [잘된 점] [아쉬운 점] [다음 방송 개선안]. 사실 기반으로 간결하게.\n&#39; + $json[&#39;metrics&#39;] }] }) }}
+</code></pre>
+<ul>
+<li><p><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</p>
+</li>
+<li><p><strong>테스트 포인트:</strong> Test step에서 <code>content[0].text</code>에 Claude의 응답 문장이 들어있는지 확인. <code>invalid x-api-key</code> 에러면 크리덴셜 값을 다시 확인하세요.</p>
+</li>
+</ul>
+<h4>Step 5 — <code>MD 리포트 초안</code> 추가</h4>
+<ul>
+<li><p><strong>검색어:</strong> <code>Gmail</code></p>
+</li>
+<li><p><strong>속성 설정:</strong></p>
+<ul>
+<li><p>Credential: 0-6에서 만든 Gmail 계정 선택</p>
+</li>
+<li><p>Operation = <strong><code>Send</code></strong> (기본값)</p>
+</li>
+<li><p>To: 표현식 토글 <strong>끄고</strong> → <code>YOUR_MD@example.com</code> (본인 이메일로 교체해서 테스트)</p>
+</li>
+<li><p>Subject: 표현식 토글(=) 켜고 → <code>[방송리포트] {{ $(&#39;지표 정리&#39;).item.json[&#39;방송명&#39;] }} (달성률 {{ $(&#39;지표 정리&#39;).item.json[&#39;달성률&#39;] }}%)</code></p>
+</li>
+<li><p>Email Type = <strong><code>Text</code></strong></p>
+</li>
+<li><p>Message: 표현식 토글(=) 켜고 →</p>
+</li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-text">{{ $(&#39;지표 정리&#39;).item.json[&#39;metrics&#39;] }}
+
+─────────────
+{{ $json.content[0].text }}
+</code></pre>
+<ul>
+<li><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</li>
+</ul>
+<h4>Step 6 — <code>리포트 아카이브</code> 추가</h4>
+<ul>
+<li><p><strong>검색어:</strong> <code>Google Sheets</code></p>
+</li>
+<li><p><strong>속성 설정:</strong></p>
+<ul>
+<li><p>Credential: 0-6에서 만든 Google 계정 선택</p>
+</li>
+<li><p>Resource = <code>Sheet Within Document</code> (기본값)</p>
+</li>
+<li><p>Operation = <strong><code>Append Row</code></strong></p>
+</li>
+<li><p>Document → By URL 또는 By ID → 본인 구글시트 ID 붙여넣기 (원본엔 <code>YOUR_GOOGLE_SHEET_ID</code> 자리)</p>
+</li>
+<li><p>Sheet → <strong><code>방송리포트로그</code></strong> 탭 선택 (드롭다운에 없으면 새로 만들거나 <code>gid=0</code>으로 첫 탭 지정)</p>
+</li>
+<li><p>Mapping Column Mode = <strong><code>Map Automatically Below</code></strong> (들어오는 데이터의 필드명을 시트 헤더와 자동 매칭 — 시트 헤더를 입력 필드명과 똑같이 만들어두세요)</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>⚠️ 가지 나뉘는 지점(fan-out):</strong></p>
+<ul>
+<li><code>Claude 리포트 작성</code>의 출력(●)에서 <strong>드래그를 두 번</strong> 해서 <code>MD 리포트 초안</code> · <code>리포트 아카이브</code> <strong>둘 다</strong>에 연결하세요(같은 출력에서 두 갈래로 나갑니다 — 다중출력).</li>
+</ul>
+<p><strong>✅ 완성 후 테스트:</strong> 트리거 노드에서 <strong>Test step</strong>(또는 Execute Workflow) → 마지막 노드까지 전부 초록불이 뜨는지 확인. 안 뜨면 그 노드를 더블클릭해 에러 메시지를 읽고, 표현식 토글(=)이 켜져 있는지부터 확인하세요.</p>
+<p><strong>🔍 정답 대조:</strong> <code>assets/홈앤쇼핑-실무템플릿/방송운영/L5-02-방송결과-리포트초안.json</code>를 에디터에 import해서 본인이 만든 것과 비교할 수 있습니다.</p>
+<hr>
+<h3>03. 🔁 반품 사유 AI 분류 → 상품개선 루프</h3>
+<blockquote>
+<p>반품 데이터를 Claude가 사유 분류하고 특정 상품의 반복 이슈를 감지해 MD·품질팀에 알림 + 개선이슈 로그에 기록합니다.</p>
+</blockquote>
+<p><strong>받는 사람:</strong> MD·품질팀 · <strong>시트:</strong> <strong>반품데이터</strong> 탭 헤더: <code>상품명 · 반품사유</code></p>
+<p><strong>노드 순서 (총 6개):</strong> 매일 09:00 → 반품 데이터 읽기 → 상품별 반품 묶기 → Claude 사유분류·개선제안 → MD·품질팀 알림 → 개선이슈 로그</p>
+<h4>Step 1 — <code>매일 09:00</code> 추가</h4>
+<ul>
+<li><p><strong>검색어:</strong> <code>Schedule Trigger</code></p>
+</li>
+<li><p><strong>속성 설정:</strong> Trigger Interval → Days 선택 → Hour = <code>9</code>, Minute = <code>00</code></p>
+<p>(n8n 인스턴스 타임존이 이미 <code>Asia/Seoul</code>이면 이게 곧 한국시간입니다 — 1일차 설치 때 <code>GENERIC_TIMEZONE=Asia/Seoul</code>로 띄운 그 설정)</p>
+</li>
+<li><p><strong>연결:</strong> 이 노드가 시작점입니다(입력 연결 없음).</p>
+</li>
+</ul>
+<h4>Step 2 — <code>반품 데이터 읽기</code> 추가</h4>
+<ul>
+<li><p><strong>검색어:</strong> <code>Google Sheets</code></p>
+</li>
+<li><p><strong>속성 설정:</strong></p>
+<ul>
+<li><p>Credential: 0-6에서 만든 Google 계정 선택</p>
+</li>
+<li><p>Resource = <code>Sheet Within Document</code> (기본값)</p>
+</li>
+<li><p>Operation = <strong><code>Get Row(s)</code></strong> (기본값, 바꿀 필요 없음)</p>
+</li>
+<li><p>Document → By URL 또는 By ID → 본인 구글시트 ID 붙여넣기 (원본엔 <code>YOUR_GOOGLE_SHEET_ID</code> 자리)</p>
+</li>
+<li><p>Sheet → <strong><code>반품데이터</code></strong> 탭 선택 (드롭다운에 없으면 <code>gid=0</code>으로 첫 탭 지정)</p>
+</li>
+</ul>
+</li>
+<li><p><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</p>
+</li>
+</ul>
+<h4>Step 3 — <code>상품별 반품 묶기</code> 추가</h4>
+<ul>
+<li><p><strong>검색어:</strong> <code>Code</code></p>
+</li>
+<li><p><strong>속성 설정:</strong> Mode = <strong><code>Run Once for All Items</code></strong> (기본값, 바꾸지 않음) → JavaScript 편집창에 아래 코드를 그대로 붙여넣기:</p>
+</li>
+</ul>
+<pre><code class="language-javascript">const items=$input.all();
+const byProd={};
+for(const it of items){const p=it.json[&#39;상품명&#39;]||&#39;미상&#39;;(byProd[p]=byProd[p]||[]).push(String(it.json[&#39;반품사유&#39;]||&#39;&#39;));}
+const text=Object.entries(byProd).map(([k,v])=&gt;`■ ${k} (${v.length}건)\n`+v.map(x=&gt;`- ${x}`).join(&#39;\n&#39;)).join(&#39;\n\n&#39;);
+return [{json:{반품목록:text,건수:items.length}}];
+</code></pre>
+<ul>
+<li><p><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</p>
+</li>
+<li><p><strong>테스트 포인트:</strong> Test step 눌러서 출력 JSON에 기대한 필드(위 코드의 <code>return</code>에 있는 키들)가 정확히 나오는지 확인하세요. 여기서 필드명 오타가 나면 다음 노드부터 전부 빈 값이 됩니다.</p>
+</li>
+</ul>
+<h4>Step 4 — <code>Claude 사유분류·개선제안</code> 추가</h4>
+<ul>
+<li><p><strong>검색어:</strong> <code>HTTP Request</code></p>
+</li>
+<li><p><strong>속성 설정:</strong></p>
+<ul>
+<li><p>Method = <strong><code>POST</code></strong></p>
+</li>
+<li><p>URL = <code>https://api.anthropic.com/v1/messages</code></p>
+</li>
+<li><p>Authentication = <strong><code>Generic Credential Type</code></strong> → Generic Auth Type = <strong><code>Header Auth</code></strong> → Credential = 0-6에서 만든 <code>x-api-key</code> 크리덴셜 선택</p>
+</li>
+<li><p>Send Headers = <strong>On</strong> → Add Header 2번:</p>
+<ul>
+<li><p><code>anthropic-version</code> = <code>2023-06-01</code></p>
+</li>
+<li><p><code>content-type</code> = <code>application/json</code></p>
+</li>
+</ul>
+</li>
+<li><p>Send Body = <strong>On</strong> → Body Content Type = <strong><code>JSON</code></strong> → Specify Body = <strong><code>Using JSON</code></strong> → 필드의 표현식 토글(=) 켜고 아래를 그대로 붙여넣기:</p>
+</li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-text">{{ JSON.stringify({ model: &#39;claude-sonnet-5&#39;, max_tokens: 900, messages: [{ role: &#39;user&#39;, content: &#39;다음은 상품별 반품 사유 목록이다. (1) 사유를 사이즈·품질·오배송·단순변심·기타로 분류해 상품별 건수를 집계하고, (2) 같은 상품에서 반복되는 이슈(3건 이상 등)를 콕 집어, (3) MD·협력사에 전달할 상품개선 제안을 한국어로 작성해줘.\n&#39; + $json[&#39;반품목록&#39;] }] }) }}
+</code></pre>
+<ul>
+<li><p><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</p>
+</li>
+<li><p><strong>테스트 포인트:</strong> Test step에서 <code>content[0].text</code>에 Claude의 응답 문장이 들어있는지 확인. <code>invalid x-api-key</code> 에러면 크리덴셜 값을 다시 확인하세요.</p>
+</li>
+</ul>
+<h4>Step 5 — <code>MD·품질팀 알림</code> 추가</h4>
+<ul>
+<li><p><strong>검색어:</strong> <code>Gmail</code></p>
+</li>
+<li><p><strong>속성 설정:</strong></p>
+<ul>
+<li><p>Credential: 0-6에서 만든 Gmail 계정 선택</p>
+</li>
+<li><p>Operation = <strong><code>Send</code></strong> (기본값)</p>
+</li>
+<li><p>To: 표현식 토글 <strong>끄고</strong> → <code>YOUR_QUALITY@example.com</code> (본인 이메일로 교체해서 테스트)</p>
+</li>
+<li><p>Subject: 표현식 토글(=) 켜고 → <code>[반품분석] 상품개선 제안 ({{ $(&#39;상품별 반품 묶기&#39;).item.json[&#39;건수&#39;] }}건 분석)</code></p>
+</li>
+<li><p>Email Type = <strong><code>Text</code></strong></p>
+</li>
+<li><p>Message: 표현식 토글(=) 켜고 →</p>
+</li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-text">총 {{ $(&#39;상품별 반품 묶기&#39;).item.json[&#39;건수&#39;] }}건 반품 분석 결과입니다.
+
+{{ $json.content[0].text }}
+</code></pre>
+<ul>
+<li><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</li>
+</ul>
+<h4>Step 6 — <code>개선이슈 로그</code> 추가</h4>
+<ul>
+<li><p><strong>검색어:</strong> <code>Google Sheets</code></p>
+</li>
+<li><p><strong>속성 설정:</strong></p>
+<ul>
+<li><p>Credential: 0-6에서 만든 Google 계정 선택</p>
+</li>
+<li><p>Resource = <code>Sheet Within Document</code> (기본값)</p>
+</li>
+<li><p>Operation = <strong><code>Append Row</code></strong></p>
+</li>
+<li><p>Document → By URL 또는 By ID → 본인 구글시트 ID 붙여넣기 (원본엔 <code>YOUR_GOOGLE_SHEET_ID</code> 자리)</p>
+</li>
+<li><p>Sheet → <strong><code>반품개선로그</code></strong> 탭 선택 (드롭다운에 없으면 새로 만들거나 <code>gid=0</code>으로 첫 탭 지정)</p>
+</li>
+<li><p>Mapping Column Mode = <strong><code>Map Automatically Below</code></strong> (들어오는 데이터의 필드명을 시트 헤더와 자동 매칭 — 시트 헤더를 입력 필드명과 똑같이 만들어두세요)</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>⚠️ 가지 나뉘는 지점(fan-out):</strong></p>
+<ul>
+<li><code>Claude 사유분류·개선제안</code>의 출력(●)에서 <strong>드래그를 두 번</strong> 해서 <code>MD·품질팀 알림</code> · <code>개선이슈 로그</code> <strong>둘 다</strong>에 연결하세요(같은 출력에서 두 갈래로 나갑니다 — 다중출력).</li>
+</ul>
+<p><strong>✅ 완성 후 테스트:</strong> 트리거 노드에서 <strong>Test step</strong>(또는 Execute Workflow) → 마지막 노드까지 전부 초록불이 뜨는지 확인. 안 뜨면 그 노드를 더블클릭해 에러 메시지를 읽고, 표현식 토글(=)이 켜져 있는지부터 확인하세요.</p>
+<p><strong>🔍 정답 대조:</strong> <code>assets/홈앤쇼핑-실무템플릿/방송운영/L5-03-반품사유-AI분류-개선루프.json</code>를 에디터에 import해서 본인이 만든 것과 비교할 수 있습니다.</p>
+<hr>
+<h2>🧑‍💼 MD·운영 지원 (4종)</h2>
+<h3>01. 협력사 발주 개인화 메일</h3>
+<blockquote>
+<p>재고 부족한 협력사마다 Claude가 벤더별 맞춤 발주확인 메일을 써서 담당자에게 개별 발송합니다.</p>
+</blockquote>
+<p><strong>받는 사람:</strong> 협력사 담당자 · <strong>시트:</strong> <strong>발주현황</strong> 탭 헤더: <code>협력사명 · 담당자 · 담당자메일 · 상품명 · 현재재고 · 발주필요수량</code></p>
+<p><strong>노드 순서 (총 5개):</strong> 매일 10:00 → 발주현황 읽기 → 발주 필요만 → Claude 발주메일 작성 → 협력사 발송</p>
+<h4>Step 1 — <code>매일 10:00</code> 추가</h4>
+<ul>
+<li><p><strong>검색어:</strong> <code>Schedule Trigger</code></p>
+</li>
+<li><p><strong>속성 설정:</strong> Trigger Interval → Days 선택 → Hour = <code>10</code>, Minute = <code>00</code></p>
+<p>(n8n 인스턴스 타임존이 이미 <code>Asia/Seoul</code>이면 이게 곧 한국시간입니다 — 1일차 설치 때 <code>GENERIC_TIMEZONE=Asia/Seoul</code>로 띄운 그 설정)</p>
+</li>
+<li><p><strong>연결:</strong> 이 노드가 시작점입니다(입력 연결 없음).</p>
+</li>
+</ul>
+<h4>Step 2 — <code>발주현황 읽기</code> 추가</h4>
+<ul>
+<li><p><strong>검색어:</strong> <code>Google Sheets</code></p>
+</li>
+<li><p><strong>속성 설정:</strong></p>
+<ul>
+<li><p>Credential: 0-6에서 만든 Google 계정 선택</p>
+</li>
+<li><p>Resource = <code>Sheet Within Document</code> (기본값)</p>
+</li>
+<li><p>Operation = <strong><code>Get Row(s)</code></strong> (기본값, 바꿀 필요 없음)</p>
+</li>
+<li><p>Document → By URL 또는 By ID → 본인 구글시트 ID 붙여넣기 (원본엔 <code>YOUR_GOOGLE_SHEET_ID</code> 자리)</p>
+</li>
+<li><p>Sheet → <strong><code>발주현황</code></strong> 탭 선택 (드롭다운에 없으면 <code>gid=0</code>으로 첫 탭 지정)</p>
+</li>
+</ul>
+</li>
+<li><p><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</p>
+</li>
+</ul>
+<h4>Step 3 — <code>발주 필요만</code> 추가</h4>
+<ul>
+<li><p><strong>검색어:</strong> <code>Filter</code></p>
+</li>
+<li><p><strong>속성 설정:</strong> Add Condition 클릭 →</p>
+<ul>
+<li><p>왼쪽 값(Value): 표현식 토글(=) 켜고 → <code>{{ Number($json[&#39;발주필요수량&#39;]) }}</code></p>
+</li>
+<li><p>연산자(Operator): <strong>숫자 › is greater than (크다)</strong></p>
+</li>
+<li><p>오른쪽 값(Value): <code>0</code></p>
+</li>
+</ul>
+</li>
+<li><p><strong>동작 방식:</strong> Filter는 조건을 <strong>통과한 아이템만</strong> 다음으로 넘기고, 나머지는 버립니다(출력 1개).</p>
+</li>
+<li><p><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</p>
+</li>
+</ul>
+<h4>Step 4 — <code>Claude 발주메일 작성</code> 추가</h4>
+<ul>
+<li><p><strong>검색어:</strong> <code>HTTP Request</code></p>
+</li>
+<li><p><strong>속성 설정:</strong></p>
+<ul>
+<li><p>Method = <strong><code>POST</code></strong></p>
+</li>
+<li><p>URL = <code>https://api.anthropic.com/v1/messages</code></p>
+</li>
+<li><p>Authentication = <strong><code>Generic Credential Type</code></strong> → Generic Auth Type = <strong><code>Header Auth</code></strong> → Credential = 0-6에서 만든 <code>x-api-key</code> 크리덴셜 선택</p>
+</li>
+<li><p>Send Headers = <strong>On</strong> → Add Header 2번:</p>
+<ul>
+<li><p><code>anthropic-version</code> = <code>2023-06-01</code></p>
+</li>
+<li><p><code>content-type</code> = <code>application/json</code></p>
+</li>
+</ul>
+</li>
+<li><p>Send Body = <strong>On</strong> → Body Content Type = <strong><code>JSON</code></strong> → Specify Body = <strong><code>Using JSON</code></strong> → 필드의 표현식 토글(=) 켜고 아래를 그대로 붙여넣기:</p>
+</li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-text">{{ JSON.stringify({ model: &#39;claude-sonnet-5&#39;, max_tokens: 500, messages: [{ role: &#39;user&#39;, content: &#39;홈쇼핑 MD가 협력사에 보내는 발주 확인 메일 본문을 정중한 한국어로 작성해줘(3~5문장, 인사+발주내역+회신요청). 서명은 넣지 마.\n협력사: &#39; + $(&#39;발주 필요만&#39;).item.json[&#39;협력사명&#39;] + &#39; / 담당자: &#39; + $(&#39;발주 필요만&#39;).item.json[&#39;담당자&#39;] + &#39; / 상품: &#39; + $(&#39;발주 필요만&#39;).item.json[&#39;상품명&#39;] + &#39; / 발주필요수량: &#39; + $(&#39;발주 필요만&#39;).item.json[&#39;발주필요수량&#39;] }] }) }}
+</code></pre>
+<ul>
+<li><p><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</p>
+</li>
+<li><p><strong>테스트 포인트:</strong> Test step에서 <code>content[0].text</code>에 Claude의 응답 문장이 들어있는지 확인. <code>invalid x-api-key</code> 에러면 크리덴셜 값을 다시 확인하세요.</p>
+</li>
+</ul>
+<h4>Step 5 — <code>협력사 발송</code> 추가</h4>
+<ul>
+<li><p><strong>검색어:</strong> <code>Gmail</code></p>
+</li>
+<li><p><strong>속성 설정:</strong></p>
+<ul>
+<li><p>Credential: 0-6에서 만든 Gmail 계정 선택</p>
+</li>
+<li><p>Operation = <strong><code>Send</code></strong> (기본값)</p>
+</li>
+<li><p>To: 표현식 토글(=) 켜고 → <code>{{ $(&#39;발주 필요만&#39;).item.json[&#39;담당자메일&#39;] }}</code></p>
+</li>
+<li><p>Subject: 표현식 토글(=) 켜고 → <code>[발주 확인] {{ $(&#39;발주 필요만&#39;).item.json[&#39;상품명&#39;] }} {{ $(&#39;발주 필요만&#39;).item.json[&#39;발주필요수량&#39;] }}개</code></p>
+</li>
+<li><p>Email Type = <strong><code>Text</code></strong></p>
+</li>
+<li><p>Message: 표현식 토글(=) 켜고 →</p>
+</li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-text">{{ $json.content[0].text }}
+</code></pre>
+<ul>
+<li><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</li>
+</ul>
+<p><strong>✅ 완성 후 테스트:</strong> 트리거 노드에서 <strong>Test step</strong>(또는 Execute Workflow) → 마지막 노드까지 전부 초록불이 뜨는지 확인. 안 뜨면 그 노드를 더블클릭해 에러 메시지를 읽고, 표현식 토글(=)이 켜져 있는지부터 확인하세요.</p>
+<p><strong>🔍 정답 대조:</strong> <code>assets/홈앤쇼핑-실무템플릿/MD운영지원/L5-01-협력사-발주개인화메일.json</code>를 에디터에 import해서 본인이 만든 것과 비교할 수 있습니다.</p>
+<hr>
+<h3>02. ✅ 방송 D-1 사고방지 체크</h3>
+<blockquote>
+<p>매일 밤 내일 편성표를 재고·가격·혜택·물량·자막과 대조해 미비 항목만 Claude 조치안내와 함께 담당자에게 알립니다.</p>
+</blockquote>
+<p><strong>받는 사람:</strong> 방송 담당자 · <strong>시트:</strong> <strong>내일편성</strong> 탭 헤더: <code>방송명 · 예상판매량 · 현재재고 · 가격설정여부 · 혜택설정여부 · 물량확정여부 · 자막준비여부</code> (여부 칸은 Y/완료 등)</p>
+<p><strong>노드 순서 (총 6개):</strong> 매일 20:00 (방송 D-1) → 내일 편성 읽기 → 항목별 미비 판정 → 미비 있을 때만 → Claude 조치 안내 → 담당자 사고방지 알림</p>
+<h4>Step 1 — <code>매일 20:00 (방송 D-1)</code> 추가</h4>
+<ul>
+<li><p><strong>검색어:</strong> <code>Schedule Trigger</code></p>
+</li>
+<li><p><strong>속성 설정:</strong> Trigger Interval → Days 선택 → Hour = <code>20</code>, Minute = <code>00</code></p>
+<p>(n8n 인스턴스 타임존이 이미 <code>Asia/Seoul</code>이면 이게 곧 한국시간입니다 — 1일차 설치 때 <code>GENERIC_TIMEZONE=Asia/Seoul</code>로 띄운 그 설정)</p>
+</li>
+<li><p><strong>연결:</strong> 이 노드가 시작점입니다(입력 연결 없음).</p>
+</li>
+</ul>
+<h4>Step 2 — <code>내일 편성 읽기</code> 추가</h4>
+<ul>
+<li><p><strong>검색어:</strong> <code>Google Sheets</code></p>
+</li>
+<li><p><strong>속성 설정:</strong></p>
+<ul>
+<li><p>Credential: 0-6에서 만든 Google 계정 선택</p>
+</li>
+<li><p>Resource = <code>Sheet Within Document</code> (기본값)</p>
+</li>
+<li><p>Operation = <strong><code>Get Row(s)</code></strong> (기본값, 바꿀 필요 없음)</p>
+</li>
+<li><p>Document → By URL 또는 By ID → 본인 구글시트 ID 붙여넣기 (원본엔 <code>YOUR_GOOGLE_SHEET_ID</code> 자리)</p>
+</li>
+<li><p>Sheet → <strong><code>내일편성</code></strong> 탭 선택 (드롭다운에 없으면 <code>gid=0</code>으로 첫 탭 지정)</p>
+</li>
+</ul>
+</li>
+<li><p><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</p>
+</li>
+</ul>
+<h4>Step 3 — <code>항목별 미비 판정</code> 추가</h4>
+<ul>
+<li><p><strong>검색어:</strong> <code>Code</code></p>
+</li>
+<li><p><strong>속성 설정:</strong> Mode = <strong><code>Run Once for All Items</code></strong> (기본값, 바꾸지 않음) → JavaScript 편집창에 아래 코드를 그대로 붙여넣기:</p>
+</li>
+</ul>
+<pre><code class="language-javascript">const r=$json;
+const num=v=&gt;Number(String(v||0).replace(/[,\s]/g,&#39;&#39;))||0;
+const yes=v=&gt;[&#39;Y&#39;,&#39;y&#39;,&#39;O&#39;,&#39;o&#39;,&#39;예&#39;,&#39;완료&#39;,&#39;TRUE&#39;,&#39;true&#39;,true,1].includes(v);
+const miss=[];
+if(num(r[&#39;현재재고&#39;])&lt;num(r[&#39;예상판매량&#39;])) miss.push(`재고 부족(재고 ${r[&#39;현재재고&#39;]} &lt; 예상판매 ${r[&#39;예상판매량&#39;]})`);
+if(!yes(r[&#39;가격설정여부&#39;])) miss.push(&#39;가격 미설정&#39;);
+if(!yes(r[&#39;혜택설정여부&#39;])) miss.push(&#39;혜택 미설정&#39;);
+if(!yes(r[&#39;물량확정여부&#39;])) miss.push(&#39;협력사 물량 미확정&#39;);
+if(!yes(r[&#39;자막준비여부&#39;])) miss.push(&#39;자막 미준비&#39;);
+return [{json:{방송명:r[&#39;방송명&#39;],미비수:miss.length,미비:miss.join(&#39; / &#39;)||&#39;없음&#39;}}];
+</code></pre>
+<ul>
+<li><p><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</p>
+</li>
+<li><p><strong>테스트 포인트:</strong> Test step 눌러서 출력 JSON에 기대한 필드(위 코드의 <code>return</code>에 있는 키들)가 정확히 나오는지 확인하세요. 여기서 필드명 오타가 나면 다음 노드부터 전부 빈 값이 됩니다.</p>
+</li>
+</ul>
+<h4>Step 4 — <code>미비 있을 때만</code> 추가</h4>
+<ul>
+<li><p><strong>검색어:</strong> <code>If</code></p>
+</li>
+<li><p><strong>속성 설정:</strong> Add Condition 클릭 →</p>
+<ul>
+<li><p>왼쪽 값(Value): 표현식 토글(=) 켜고 → <code>{{ $json[&#39;미비수&#39;] }}</code></p>
+</li>
+<li><p>연산자(Operator): <strong>숫자 › is greater than (크다)</strong></p>
+</li>
+<li><p>오른쪽 값(Value): <code>0</code></p>
+</li>
+</ul>
+</li>
+<li><p><strong>동작 방식:</strong> If는 조건에 따라 출력이 <strong>True/False 두 갈래</strong>로 갈립니다. 이 템플릿에서는 <strong>True 쪽 출력만</strong> 다음 노드에 연결하세요(False는 그냥 끝).</p>
+</li>
+<li><p><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</p>
+</li>
+</ul>
+<h4>Step 5 — <code>Claude 조치 안내</code> 추가</h4>
+<ul>
+<li><p><strong>검색어:</strong> <code>HTTP Request</code></p>
+</li>
+<li><p><strong>속성 설정:</strong></p>
+<ul>
+<li><p>Method = <strong><code>POST</code></strong></p>
+</li>
+<li><p>URL = <code>https://api.anthropic.com/v1/messages</code></p>
+</li>
+<li><p>Authentication = <strong><code>Generic Credential Type</code></strong> → Generic Auth Type = <strong><code>Header Auth</code></strong> → Credential = 0-6에서 만든 <code>x-api-key</code> 크리덴셜 선택</p>
+</li>
+<li><p>Send Headers = <strong>On</strong> → Add Header 2번:</p>
+<ul>
+<li><p><code>anthropic-version</code> = <code>2023-06-01</code></p>
+</li>
+<li><p><code>content-type</code> = <code>application/json</code></p>
+</li>
+</ul>
+</li>
+<li><p>Send Body = <strong>On</strong> → Body Content Type = <strong><code>JSON</code></strong> → Specify Body = <strong><code>Using JSON</code></strong> → 필드의 표현식 토글(=) 켜고 아래를 그대로 붙여넣기:</p>
+</li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-text">{{ JSON.stringify({ model: &#39;claude-sonnet-5&#39;, max_tokens: 500, messages: [{ role: &#39;user&#39;, content: &#39;내일 홈쇼핑 방송 준비 점검에서 아래 미비 항목이 나왔다. 담당자가 오늘 밤 처리할 수 있게 우선순위를 매겨 조치 안내를 한국어 불릿으로 정리해줘.\n방송: &#39; + $json[&#39;방송명&#39;] + &#39; / 미비: &#39; + $json[&#39;미비&#39;] }] }) }}
+</code></pre>
+<ul>
+<li><p><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</p>
+</li>
+<li><p><strong>테스트 포인트:</strong> Test step에서 <code>content[0].text</code>에 Claude의 응답 문장이 들어있는지 확인. <code>invalid x-api-key</code> 에러면 크리덴셜 값을 다시 확인하세요.</p>
+</li>
+</ul>
+<h4>Step 6 — <code>담당자 사고방지 알림</code> 추가</h4>
+<ul>
+<li><p><strong>검색어:</strong> <code>Gmail</code></p>
+</li>
+<li><p><strong>속성 설정:</strong></p>
+<ul>
+<li><p>Credential: 0-6에서 만든 Gmail 계정 선택</p>
+</li>
+<li><p>Operation = <strong><code>Send</code></strong> (기본값)</p>
+</li>
+<li><p>To: 표현식 토글 <strong>끄고</strong> → <code>YOUR_STAFF@example.com</code> (본인 이메일로 교체해서 테스트)</p>
+</li>
+<li><p>Subject: 표현식 토글(=) 켜고 → <code>[방송 D-1] {{ $(&#39;항목별 미비 판정&#39;).item.json[&#39;방송명&#39;] }} 준비 미비 {{ $(&#39;항목별 미비 판정&#39;).item.json[&#39;미비수&#39;] }}건</code></p>
+</li>
+<li><p>Email Type = <strong><code>Text</code></strong></p>
+</li>
+<li><p>Message: 표현식 토글(=) 켜고 →</p>
+</li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-text">■ {{ $(&#39;항목별 미비 판정&#39;).item.json[&#39;방송명&#39;] }} 내일 방송 준비 미비
+{{ $(&#39;항목별 미비 판정&#39;).item.json[&#39;미비&#39;] }}
+
+[조치 안내]
+{{ $json.content[0].text }}
+</code></pre>
+<ul>
+<li><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</li>
+</ul>
+<p><strong>✅ 완성 후 테스트:</strong> 트리거 노드에서 <strong>Test step</strong>(또는 Execute Workflow) → 마지막 노드까지 전부 초록불이 뜨는지 확인. 안 뜨면 그 노드를 더블클릭해 에러 메시지를 읽고, 표현식 토글(=)이 켜져 있는지부터 확인하세요.</p>
+<p><strong>🔍 정답 대조:</strong> <code>assets/홈앤쇼핑-실무템플릿/MD운영지원/L5-02-방송D1-사고방지체크.json</code>를 에디터에 import해서 본인이 만든 것과 비교할 수 있습니다.</p>
+<hr>
+<h3>03. 📞 콜센터 폭주 조기경보</h3>
+<blockquote>
+<p>콜 대기·포기율이 임계를 넘으면 Claude 조치 제안과 함께 운영팀에 긴급 경보를 보냅니다.</p>
+</blockquote>
+<p><strong>받는 사람:</strong> 운영팀 · <strong>시트:</strong> <strong>콜현황</strong> 탭 헤더: <code>진행중방송 · 현재대기 · 콜포기율 · 상담원가동</code> (콜시스템 실시간 export)</p>
+<p><strong>노드 순서 (총 6개):</strong> 피크시간 3분마다 → 콜 현황 읽기 → 폭주 임계 판정 → 폭주일 때만 → Claude 조치 제안 → 운영팀 긴급 경보</p>
+<h4>Step 1 — <code>피크시간 3분마다</code> 추가</h4>
+<ul>
+<li><p><strong>검색어:</strong> <code>Schedule Trigger</code></p>
+</li>
+<li><p><strong>속성 설정:</strong> Trigger Interval → Minutes 선택 → Minutes Between Triggers = <code>3</code></p>
+</li>
+<li><p><strong>연결:</strong> 이 노드가 시작점입니다(입력 연결 없음).</p>
+</li>
+</ul>
+<h4>Step 2 — <code>콜 현황 읽기</code> 추가</h4>
+<ul>
+<li><p><strong>검색어:</strong> <code>Google Sheets</code></p>
+</li>
+<li><p><strong>속성 설정:</strong></p>
+<ul>
+<li><p>Credential: 0-6에서 만든 Google 계정 선택</p>
+</li>
+<li><p>Resource = <code>Sheet Within Document</code> (기본값)</p>
+</li>
+<li><p>Operation = <strong><code>Get Row(s)</code></strong> (기본값, 바꿀 필요 없음)</p>
+</li>
+<li><p>Document → By URL 또는 By ID → 본인 구글시트 ID 붙여넣기 (원본엔 <code>YOUR_GOOGLE_SHEET_ID</code> 자리)</p>
+</li>
+<li><p>Sheet → <strong><code>콜현황</code></strong> 탭 선택 (드롭다운에 없으면 <code>gid=0</code>으로 첫 탭 지정)</p>
+</li>
+</ul>
+</li>
+<li><p><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</p>
+</li>
+</ul>
+<h4>Step 3 — <code>폭주 임계 판정</code> 추가</h4>
+<ul>
+<li><p><strong>검색어:</strong> <code>Code</code></p>
+</li>
+<li><p><strong>속성 설정:</strong> Mode = <strong><code>Run Once for All Items</code></strong> (기본값, 바꾸지 않음) → JavaScript 편집창에 아래 코드를 그대로 붙여넣기:</p>
+</li>
+</ul>
+<pre><code class="language-javascript">const r=$json;
+const num=v=&gt;Number(String(v||0).replace(/[,%\s]/g,&#39;&#39;))||0;
+const 대기=num(r[&#39;현재대기&#39;]);
+const 포기율=num(r[&#39;콜포기율&#39;]);
+const 폭주=(대기&gt;=30)||(포기율&gt;=15);
+return [{json:{진행방송:r[&#39;진행중방송&#39;]||&#39;-&#39;,현재대기:대기,콜포기율:포기율,상담원가동:r[&#39;상담원가동&#39;]||&#39;-&#39;,폭주:String(폭주)}}];
+</code></pre>
+<ul>
+<li><p><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</p>
+</li>
+<li><p><strong>테스트 포인트:</strong> Test step 눌러서 출력 JSON에 기대한 필드(위 코드의 <code>return</code>에 있는 키들)가 정확히 나오는지 확인하세요. 여기서 필드명 오타가 나면 다음 노드부터 전부 빈 값이 됩니다.</p>
+</li>
+</ul>
+<h4>Step 4 — <code>폭주일 때만</code> 추가</h4>
+<ul>
+<li><p><strong>검색어:</strong> <code>If</code></p>
+</li>
+<li><p><strong>속성 설정:</strong> Add Condition 클릭 →</p>
+<ul>
+<li><p>왼쪽 값(Value): 표현식 토글(=) 켜고 → <code>{{ $json[&#39;폭주&#39;] }}</code></p>
+</li>
+<li><p>연산자(Operator): <strong>문자열 › is equal to (같다)</strong></p>
+</li>
+<li><p>오른쪽 값(Value): <code>true</code></p>
+</li>
+</ul>
+</li>
+<li><p><strong>동작 방식:</strong> If는 조건에 따라 출력이 <strong>True/False 두 갈래</strong>로 갈립니다. 이 템플릿에서는 <strong>True 쪽 출력만</strong> 다음 노드에 연결하세요(False는 그냥 끝).</p>
+</li>
+<li><p><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</p>
+</li>
+</ul>
+<h4>Step 5 — <code>Claude 조치 제안</code> 추가</h4>
+<ul>
+<li><p><strong>검색어:</strong> <code>HTTP Request</code></p>
+</li>
+<li><p><strong>속성 설정:</strong></p>
+<ul>
+<li><p>Method = <strong><code>POST</code></strong></p>
+</li>
+<li><p>URL = <code>https://api.anthropic.com/v1/messages</code></p>
+</li>
+<li><p>Authentication = <strong><code>Generic Credential Type</code></strong> → Generic Auth Type = <strong><code>Header Auth</code></strong> → Credential = 0-6에서 만든 <code>x-api-key</code> 크리덴셜 선택</p>
+</li>
+<li><p>Send Headers = <strong>On</strong> → Add Header 2번:</p>
+<ul>
+<li><p><code>anthropic-version</code> = <code>2023-06-01</code></p>
+</li>
+<li><p><code>content-type</code> = <code>application/json</code></p>
+</li>
+</ul>
+</li>
+<li><p>Send Body = <strong>On</strong> → Body Content Type = <strong><code>JSON</code></strong> → Specify Body = <strong><code>Using JSON</code></strong> → 필드의 표현식 토글(=) 켜고 아래를 그대로 붙여넣기:</p>
+</li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-text">{{ JSON.stringify({ model: &#39;claude-sonnet-5&#39;, max_tokens: 350, messages: [{ role: &#39;user&#39;, content: &#39;홈쇼핑 콜센터가 폭주 임계를 넘었다. 운영자가 즉시 취할 조치 2~3가지를 한국어 한 줄씩 제안해줘(예: 상담원 증원 호출, ARS/챗봇 유도, 방송 자막으로 모바일주문 안내).\n진행 방송: &#39; + $json[&#39;진행방송&#39;] + &#39; / 현재 대기 &#39; + $json[&#39;현재대기&#39;] + &#39;명 / 콜포기율 &#39; + $json[&#39;콜포기율&#39;] + &#39;%&#39; }] }) }}
+</code></pre>
+<ul>
+<li><p><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</p>
+</li>
+<li><p><strong>테스트 포인트:</strong> Test step에서 <code>content[0].text</code>에 Claude의 응답 문장이 들어있는지 확인. <code>invalid x-api-key</code> 에러면 크리덴셜 값을 다시 확인하세요.</p>
+</li>
+</ul>
+<h4>Step 6 — <code>운영팀 긴급 경보</code> 추가</h4>
+<ul>
+<li><p><strong>검색어:</strong> <code>Gmail</code></p>
+</li>
+<li><p><strong>속성 설정:</strong></p>
+<ul>
+<li><p>Credential: 0-6에서 만든 Gmail 계정 선택</p>
+</li>
+<li><p>Operation = <strong><code>Send</code></strong> (기본값)</p>
+</li>
+<li><p>To: 표현식 토글 <strong>끄고</strong> → <code>YOUR_OPS@example.com</code> (본인 이메일로 교체해서 테스트)</p>
+</li>
+<li><p>Subject: 표현식 토글(=) 켜고 → <code>[콜폭주] 대기 {{ $(&#39;폭주 임계 판정&#39;).item.json[&#39;현재대기&#39;] }}명 · 포기율 {{ $(&#39;폭주 임계 판정&#39;).item.json[&#39;콜포기율&#39;] }}%</code></p>
+</li>
+<li><p>Email Type = <strong><code>Text</code></strong></p>
+</li>
+<li><p>Message: 표현식 토글(=) 켜고 →</p>
+</li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-text">⚠️ 콜센터 폭주
+- 진행 방송: {{ $(&#39;폭주 임계 판정&#39;).item.json[&#39;진행방송&#39;] }}
+- 현재 대기: {{ $(&#39;폭주 임계 판정&#39;).item.json[&#39;현재대기&#39;] }}명 / 콜포기율 {{ $(&#39;폭주 임계 판정&#39;).item.json[&#39;콜포기율&#39;] }}%
+- 상담원 가동: {{ $(&#39;폭주 임계 판정&#39;).item.json[&#39;상담원가동&#39;] }}
+
+[조치]
+{{ $json.content[0].text }}
+</code></pre>
+<ul>
+<li><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</li>
+</ul>
+<p><strong>✅ 완성 후 테스트:</strong> 트리거 노드에서 <strong>Test step</strong>(또는 Execute Workflow) → 마지막 노드까지 전부 초록불이 뜨는지 확인. 안 뜨면 그 노드를 더블클릭해 에러 메시지를 읽고, 표현식 토글(=)이 켜져 있는지부터 확인하세요.</p>
+<p><strong>🔍 정답 대조:</strong> <code>assets/홈앤쇼핑-실무템플릿/MD운영지원/L5-03-콜센터-폭주경보.json</code>를 에디터에 import해서 본인이 만든 것과 비교할 수 있습니다.</p>
+<hr>
+<h3>04. ✍️ 방송 자막·상세 카피 생성기</h3>
+<blockquote>
+<p>상품 정보를 넣으면 Claude가 방송 자막 3안 + 상세페이지 문구 + 채팅 응대 멘트를 만들어 시트에 저장합니다.</p>
+</blockquote>
+<p><strong>받는 사람:</strong> 본인(수동 실행) · <strong>시트:</strong> <strong>카피요청</strong> 탭 헤더: <code>상품명 · 핵심특징 · 가격</code> → 결과는 <strong>카피결과</strong> 탭에 자동 추가</p>
+<p><strong>노드 순서 (총 5개):</strong> ▶ 실행 (수동) → 카피 요청 읽기 → Claude 카피 생성 → 결과 정리 → 카피 결과 저장</p>
+<h4>Step 1 — <code>▶ 실행 (수동)</code> 추가</h4>
+<ul>
+<li><p><strong>검색어:</strong> 없음 — 빈 캔버스를 열면 기본 제공되는 <strong>&quot;Trigger manually&quot;</strong> 노드를 그대로 사용(또는 노드 패널에서 <code>Manual Trigger</code> 검색)</p>
+</li>
+<li><p><strong>속성 설정:</strong> 없음(설정할 필드 없음)</p>
+</li>
+<li><p><strong>연결:</strong> 이 노드가 시작점입니다.</p>
+</li>
+</ul>
+<h4>Step 2 — <code>카피 요청 읽기</code> 추가</h4>
+<ul>
+<li><p><strong>검색어:</strong> <code>Google Sheets</code></p>
+</li>
+<li><p><strong>속성 설정:</strong></p>
+<ul>
+<li><p>Credential: 0-6에서 만든 Google 계정 선택</p>
+</li>
+<li><p>Resource = <code>Sheet Within Document</code> (기본값)</p>
+</li>
+<li><p>Operation = <strong><code>Get Row(s)</code></strong> (기본값, 바꿀 필요 없음)</p>
+</li>
+<li><p>Document → By URL 또는 By ID → 본인 구글시트 ID 붙여넣기 (원본엔 <code>YOUR_GOOGLE_SHEET_ID</code> 자리)</p>
+</li>
+<li><p>Sheet → <strong><code>카피요청</code></strong> 탭 선택 (드롭다운에 없으면 <code>gid=0</code>으로 첫 탭 지정)</p>
+</li>
+</ul>
+</li>
+<li><p><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</p>
+</li>
+</ul>
+<h4>Step 3 — <code>Claude 카피 생성</code> 추가</h4>
+<ul>
+<li><p><strong>검색어:</strong> <code>HTTP Request</code></p>
+</li>
+<li><p><strong>속성 설정:</strong></p>
+<ul>
+<li><p>Method = <strong><code>POST</code></strong></p>
+</li>
+<li><p>URL = <code>https://api.anthropic.com/v1/messages</code></p>
+</li>
+<li><p>Authentication = <strong><code>Generic Credential Type</code></strong> → Generic Auth Type = <strong><code>Header Auth</code></strong> → Credential = 0-6에서 만든 <code>x-api-key</code> 크리덴셜 선택</p>
+</li>
+<li><p>Send Headers = <strong>On</strong> → Add Header 2번:</p>
+<ul>
+<li><p><code>anthropic-version</code> = <code>2023-06-01</code></p>
+</li>
+<li><p><code>content-type</code> = <code>application/json</code></p>
+</li>
+</ul>
+</li>
+<li><p>Send Body = <strong>On</strong> → Body Content Type = <strong><code>JSON</code></strong> → Specify Body = <strong><code>Using JSON</code></strong> → 필드의 표현식 토글(=) 켜고 아래를 그대로 붙여넣기:</p>
+</li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-text">{{ JSON.stringify({ model: &#39;claude-sonnet-5&#39;, max_tokens: 900, messages: [{ role: &#39;user&#39;, content: &#39;홈쇼핑 방송/상세페이지 카피라이터다. 아래 상품 정보로 (1) 방송 자막 문구 3안(각 20자 내외, 자극적이지 않게) (2) 상세페이지 소개 문구 3문장 (3) 실시간 채팅 응대 멘트 2개 를 한국어로 만들어줘. 과장·허위·의료효능 표현 금지.\n상품: &#39; + $json[&#39;상품명&#39;] + &#39; / 핵심특징: &#39; + ($json[&#39;핵심특징&#39;]||&#39;&#39;) + &#39; / 가격: &#39; + ($json[&#39;가격&#39;]||&#39;&#39;) }] }) }}
+</code></pre>
+<ul>
+<li><p><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</p>
+</li>
+<li><p><strong>테스트 포인트:</strong> Test step에서 <code>content[0].text</code>에 Claude의 응답 문장이 들어있는지 확인. <code>invalid x-api-key</code> 에러면 크리덴셜 값을 다시 확인하세요.</p>
+</li>
+</ul>
+<h4>Step 4 — <code>결과 정리</code> 추가</h4>
+<ul>
+<li><p><strong>검색어:</strong> <code>Code</code></p>
+</li>
+<li><p><strong>속성 설정:</strong> Mode = <strong><code>Run Once for All Items</code></strong> (기본값, 바꾸지 않음) → JavaScript 편집창에 아래 코드를 그대로 붙여넣기:</p>
+</li>
+</ul>
+<pre><code class="language-javascript">return [{json:{상품명:$(&#39;카피 요청 읽기&#39;).item.json[&#39;상품명&#39;], 생성카피:$json.content[0].text}}];
+</code></pre>
+<ul>
+<li><p><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</p>
+</li>
+<li><p><strong>테스트 포인트:</strong> Test step 눌러서 출력 JSON에 기대한 필드(위 코드의 <code>return</code>에 있는 키들)가 정확히 나오는지 확인하세요. 여기서 필드명 오타가 나면 다음 노드부터 전부 빈 값이 됩니다.</p>
+</li>
+</ul>
+<h4>Step 5 — <code>카피 결과 저장</code> 추가</h4>
+<ul>
+<li><p><strong>검색어:</strong> <code>Google Sheets</code></p>
+</li>
+<li><p><strong>속성 설정:</strong></p>
+<ul>
+<li><p>Credential: 0-6에서 만든 Google 계정 선택</p>
+</li>
+<li><p>Resource = <code>Sheet Within Document</code> (기본값)</p>
+</li>
+<li><p>Operation = <strong><code>Append Row</code></strong></p>
+</li>
+<li><p>Document → By URL 또는 By ID → 본인 구글시트 ID 붙여넣기 (원본엔 <code>YOUR_GOOGLE_SHEET_ID</code> 자리)</p>
+</li>
+<li><p>Sheet → <strong><code>카피결과</code></strong> 탭 선택 (드롭다운에 없으면 새로 만들거나 <code>gid=0</code>으로 첫 탭 지정)</p>
+</li>
+<li><p>Mapping Column Mode = <strong><code>Map Automatically Below</code></strong> (들어오는 데이터의 필드명을 시트 헤더와 자동 매칭 — 시트 헤더를 입력 필드명과 똑같이 만들어두세요)</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>✅ 완성 후 테스트:</strong> 트리거 노드에서 <strong>Test step</strong>(또는 Execute Workflow) → 마지막 노드까지 전부 초록불이 뜨는지 확인. 안 뜨면 그 노드를 더블클릭해 에러 메시지를 읽고, 표현식 토글(=)이 켜져 있는지부터 확인하세요.</p>
+<p><strong>🔍 정답 대조:</strong> <code>assets/홈앤쇼핑-실무템플릿/MD운영지원/L5-04-방송자막-카피생성기.json</code>를 에디터에 import해서 본인이 만든 것과 비교할 수 있습니다.</p>
+<hr>
+
+</main>
+<script>
+(function(){
+  var root=document.documentElement, btn=document.getElementById("themeToggle");
+  var mq=window.matchMedia("(prefers-color-scheme: dark)");
+  var ICON={system:"🖥",light:"☀️",dark:"🌙"}, LABEL={system:"시스템",light:"라이트",dark:"다크"};
+  var cur="system"; try{cur=localStorage.getItem("theme-pref")||"system";}catch(e){}
+  function apply(){
+    var d=cur==="dark"||(cur==="system"&&mq.matches);
+    root.setAttribute("data-theme",d?"dark":"light");
+    if(btn){var i=btn.querySelector(".tt-ico"),l=btn.querySelector(".tt-label");
+      if(i)i.textContent=ICON[cur]; if(l)l.textContent=LABEL[cur]; btn.title="테마: "+LABEL[cur];}
+  }
+  apply();
+  if(btn)btn.addEventListener("click",function(){
+    var o=["system","light","dark"]; cur=o[(o.indexOf(cur)+1)%o.length];
+    try{localStorage.setItem("theme-pref",cur);}catch(e){}
+    apply();
+  });
+  if(mq.addEventListener)mq.addEventListener("change",function(){if(cur==="system")apply();});
+})();
+</script>
+</body>
+</html>
