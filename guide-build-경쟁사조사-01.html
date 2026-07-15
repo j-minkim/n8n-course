@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<script>(function(){try{var p=localStorage.getItem("theme-pref")||"system";var d=p==="dark"||(p==="system"&&matchMedia("(prefers-color-scheme: dark)").matches);document.documentElement.setAttribute("data-theme",d?"dark":"light");}catch(e){document.documentElement.setAttribute("data-theme","dark");}})();</script>
+<title>경쟁사조사-01 — 빌드 가이드</title>
+<style>
+  /* ── theme tokens (dark default + light override) ── */
+  :root{
+    color-scheme:dark;
+    --bg:#0b0f17; --fg:#e6edf3; --card-bg:#121826;
+    --topbar-bg:rgba(11,15,23,.92); --line:#233047; --line2:#1f2a3c; --cell:#2a3850;
+    --accent:#60a5fa; --h2:#dbeafe; --h3:#bfdbfe; --h4:#93c5fd;
+    --code-bg:#111827; --pre-bg:#0e1420; --quote-bg:#101826; --quote-fg:#cbd5e1; --quote-bd:#3b82f6;
+    --th-bg:#152032; --th-fg:#dbeafe; --tr-even:#0f1827; --strong:#fde68a;
+  }
+  :root[data-theme="light"]{
+    color-scheme:light;
+    --bg:#f7f8fa; --fg:#1f2533; --card-bg:#ffffff;
+    --topbar-bg:rgba(247,248,250,.92); --line:#d7dce6; --line2:#e3e7ef; --cell:#cfd6e2;
+    --accent:#2563eb; --h2:#1e3a8a; --h3:#2456b8; --h4:#3b6fd4;
+    --code-bg:#eef1f6; --pre-bg:#f1f4f9; --quote-bg:#eef3fb; --quote-fg:#44506a; --quote-bd:#2563eb;
+    --th-bg:#e9eef6; --th-fg:#1e3a8a; --tr-even:#f3f6fb; --strong:#b45309;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body { background:var(--bg); color:var(--fg); line-height:1.75; word-break:keep-all; overflow-wrap:anywhere;
+    transition:background-color .25s,color .25s;
+    font-family:-apple-system,BlinkMacSystemFont,"Pretendard","Apple SD Gothic Neo","Segoe UI",Roboto,sans-serif; }
+  /* ── theme toggle (system/light/dark) ── */
+  .theme-toggle{position:fixed;top:10px;right:14px;z-index:2000;display:inline-flex;align-items:center;gap:6px;
+    padding:7px 11px;border-radius:999px;border:1px solid var(--line);background:var(--card-bg);color:var(--fg);
+    font:600 12px/1 inherit;cursor:pointer;opacity:.85;transition:opacity .2s,border-color .2s,background-color .25s,color .25s}
+  .theme-toggle:hover{opacity:1;border-color:var(--accent)}
+  .theme-toggle .tt-ico{font-size:14px;line-height:1}
+  @media print{.theme-toggle{display:none!important}}
+  @media(max-width:760px){.theme-toggle .tt-label{display:none}}
+  .topbar { position:sticky; top:0; z-index:10; background:var(--topbar-bg); backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line2); padding:12px 64px 12px 20px; display:flex; gap:10px; align-items:center; }
+  .topbar .badge { font-size:11px; color:var(--accent); border:1px solid var(--line); border-radius:999px; padding:3px 9px; }
+  .topbar .t { font-size:14px; font-weight:700; }
+  main.doc { max-width:880px; margin:0 auto; padding:32px 22px 96px; }
+  h1,h2,h3,h4 { line-height:1.35; font-weight:800; margin:1.6em 0 .6em; }
+  h1 { font-size:26px; border-bottom:2px solid var(--line); padding-bottom:.3em; }
+  h2 { font-size:21px; color:var(--h2); border-bottom:1px solid var(--line2); padding-bottom:.25em; }
+  h3 { font-size:17px; color:var(--h3); }
+  h4 { font-size:15px; color:var(--h4); }
+  p, li { font-size:15px; }
+  a { color:var(--accent); }
+  hr { border:0; border-top:1px solid var(--line); margin:2em 0; }
+  blockquote { margin:1em 0; padding:.6em 1em; border-left:3px solid var(--quote-bd); background:var(--quote-bg);
+    border-radius:0 8px 8px 0; color:var(--quote-fg); }
+  blockquote p { margin:.3em 0; }
+  code { background:var(--code-bg); border:1px solid var(--line); border-radius:5px; padding:.1em .4em; font-size:.9em;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; }
+  pre { background:var(--pre-bg); border:1px solid var(--line); border-radius:10px; padding:14px 16px; overflow:auto; }
+  pre code { background:none; border:0; padding:0; font-size:13px; line-height:1.6; }
+  table { border-collapse:collapse; width:100%; margin:1.1em 0; font-size:14px; display:block; overflow-x:auto; }
+  th, td { border:1px solid var(--cell); padding:8px 10px; text-align:left; vertical-align:top; }
+  th { background:var(--th-bg); font-weight:700; color:var(--th-fg); }
+  tr:nth-child(even) td { background:var(--tr-even); }
+  ul, ol { padding-left:1.4em; }
+  li { margin:.3em 0; }
+  li input[type=checkbox] { transform:scale(1.15); margin-right:.5em; accent-color:var(--accent); }
+  ul:has(li input[type=checkbox]) { list-style:none; padding-left:.2em; }
+  strong { color:var(--strong); }
+  img { max-width:100%; }
+</style>
+</head>
+<body>
+<button id="themeToggle" class="theme-toggle" type="button" aria-label="테마 전환" title="테마: 시스템"><span class="tt-ico" aria-hidden="true">🖥</span><span class="tt-label">시스템</span></button>
+<div class="topbar"><span class="badge">n8n 자동화 강의</span><span class="t">경쟁사조사-01 — 빌드 가이드</span></div>
+<main class="doc">
+<h1>01. ⭐ 방송상품 가격경쟁력 진단</h1>
+<blockquote>
+<p>방송 예정 상품이 인터넷 최저가보다 비싼지 매일 아침 자동 점검하고, 비싸면 Claude가 방송 대응 소구점을 제안합니다.</p>
+</blockquote>
+<p><strong>받는 사람:</strong> MD · <strong>분류:</strong> 경쟁사 조사 · <strong>시트:</strong> <strong>방송예정상품</strong> 탭 헤더: <code>상품명 · 우리방송가</code></p>
+<ul>
+<li><strong>★네이버쇼핑 API</strong>: developers.naver.com → 애플리케이션 등록 → 검색 API(쇼핑) 사용 설정 → Client ID/Secret 발급 (무료 쿼터 있음)</li>
+</ul>
+<blockquote>
+<p>처음 만드는 필드 종류(노드 추가·연결·표현식 토글·크리덴셜)는 <a href="guide-build-common.html">공통 조작법</a>을 먼저 보세요.</p>
+</blockquote>
+<p><strong>노드 순서 (총 7개):</strong> 매일 07:30 → 방송예정 상품 읽기 → 네이버쇼핑 최저가 조회 → 최저가 비교 → 가격 열위만 → Claude 대응 소구점 → MD 가격진단 메일</p>
+<h4>Step 1 — <code>매일 07:30</code> 추가</h4>
+<ul>
+<li><strong>검색어:</strong> <code>Schedule Trigger</code></li>
+<li><strong>속성 설정:</strong> Trigger Interval → Days 선택 → Hour = <code>7</code>, Minute = <code>30</code>
+(n8n 인스턴스 타임존이 이미 <code>Asia/Seoul</code>이면 이게 곧 한국시간입니다 — 1일차 설치 때 <code>GENERIC_TIMEZONE=Asia/Seoul</code>로 띄운 그 설정)</li>
+<li><strong>연결:</strong> 이 노드가 시작점입니다(입력 연결 없음).</li>
+</ul>
+<h4>Step 2 — <code>방송예정 상품 읽기</code> 추가</h4>
+<ul>
+<li><strong>검색어:</strong> <code>Google Sheets</code></li>
+<li><strong>속성 설정:</strong><ul>
+<li>Credential: 공통 조작법에서 만든 Google 계정 선택</li>
+<li>Resource = <code>Sheet Within Document</code> (기본값)</li>
+<li>Operation = <strong><code>Get Row(s)</code></strong> (기본값, 바꿀 필요 없음)</li>
+<li>Document → By URL 또는 By ID → 본인 구글시트 ID 붙여넣기 (원본엔 <code>YOUR_GOOGLE_SHEET_ID</code> 자리)</li>
+<li>Sheet → <strong><code>방송예정상품</code></strong> 탭 선택 (드롭다운에 없으면 <code>gid=0</code>으로 첫 탭 지정)</li>
+</ul>
+</li>
+<li><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</li>
+</ul>
+<h4>Step 3 — <code>네이버쇼핑 최저가 조회</code> 추가</h4>
+<ul>
+<li><strong>검색어:</strong> <code>HTTP Request</code></li>
+<li><strong>속성 설정:</strong><ul>
+<li>Method = <strong><code>GET</code></strong></li>
+<li>URL: 표현식 토글(=) 켜고 → <code>https://openapi.naver.com/v1/search/shop.json?query={{ encodeURIComponent($json[&#39;상품명&#39;]) }}&amp;display=20&amp;sort=sim</code></li>
+<li>Authentication = <strong><code>None</code></strong> (인증은 헤더로 직접 넣음 — 아래)</li>
+<li>Send Headers = <strong>On</strong> → Add Header 2번:<ul>
+<li><code>X-Naver-Client-Id</code> = <code>YOUR_NAVER_CLIENT_ID</code></li>
+<li><code>X-Naver-Client-Secret</code> = <code>YOUR_NAVER_CLIENT_SECRET</code></li>
+</ul>
+</li>
+<li>Send Body = <strong>Off</strong> (GET 요청이라 바디 없음, 값은 URL과 헤더로 전달)</li>
+</ul>
+</li>
+<li><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</li>
+<li><strong>테스트 포인트:</strong> Test step에서 <code>items</code> 배열에 상품 목록(<code>title</code>·<code>lprice</code>·<code>mallName</code>)이 들어있는지 확인. 401/403 에러면 네이버 Client ID/Secret을 다시 확인하세요.</li>
+</ul>
+<h4>Step 4 — <code>최저가 비교</code> 추가</h4>
+<ul>
+<li><strong>검색어:</strong> <code>Code</code></li>
+<li><strong>속성 설정:</strong> Mode = <strong><code>Run Once for All Items</code></strong> (기본값, 바꾸지 않음) → JavaScript 편집창에 아래 코드를 그대로 붙여넣기:</li>
+</ul>
+<pre><code class="language-javascript">const clean=s=&gt;String(s||&#39;&#39;).replace(/&lt;[^&gt;]+&gt;/g,&#39;&#39;);
+let items=($json.items||[]).map(it=&gt;({title:clean(it.title),price:Number(it.lprice)||0,mall:it.mallName})).filter(x=&gt;x.price&gt;0);
+// ★액세서리·부품 이상치 제거: 가격 중앙값의 40% 미만은 버림(부품이 진짜 상품 최저가로 잡히는 것 방지)
+const ps=items.map(x=&gt;x.price).sort((a,b)=&gt;a-b);
+const median=ps.length?ps[Math.floor(ps.length/2)]:0;
+items=items.filter(x=&gt;x.price&gt;=median*0.4);
+items.sort((a,b)=&gt;a.price-b.price);
+const low=items[0]||{price:0,mall:&#39;-&#39;,title:&#39;-&#39;};
+const mine=Number(String($(&#39;방송예정 상품 읽기&#39;).item.json[&#39;우리방송가&#39;]||0).replace(/[,\s]/g,&#39;&#39;))||0;
+const gap=mine-low.price;
+return [{json:{상품명:$(&#39;방송예정 상품 읽기&#39;).item.json[&#39;상품명&#39;],우리방송가:mine,최저가:low.price,최저가몰:low.mall,가격차:gap,열위:String(gap&gt;0)}}];
+</code></pre>
+<ul>
+<li><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</li>
+<li><strong>테스트 포인트:</strong> Test step 눌러서 출력 JSON에 기대한 필드(위 코드의 <code>return</code>에 있는 키들)가 정확히 나오는지 확인하세요. 여기서 필드명 오타가 나면 다음 노드부터 전부 빈 값이 됩니다.</li>
+</ul>
+<h4>Step 5 — <code>가격 열위만</code> 추가</h4>
+<ul>
+<li><strong>검색어:</strong> <code>If</code></li>
+<li><strong>속성 설정:</strong> Add Condition 클릭 →<ul>
+<li>왼쪽 값(Value): 표현식 토글(=) 켜고 → <code>{{ $json[&#39;열위&#39;] }}</code></li>
+<li>연산자(Operator): <strong>문자열 › is equal to (같다)</strong></li>
+<li>오른쪽 값(Value): <code>true</code></li>
+</ul>
+</li>
+<li><strong>동작 방식:</strong> If는 조건에 따라 출력이 <strong>True/False 두 갈래</strong>로 갈립니다. 이 템플릿에서는 <strong>True 쪽 출력만</strong> 다음 노드에 연결하세요(False는 그냥 끝).</li>
+<li><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</li>
+</ul>
+<h4>Step 6 — <code>Claude 대응 소구점</code> 추가</h4>
+<ul>
+<li><strong>검색어:</strong> <code>HTTP Request</code></li>
+<li><strong>속성 설정:</strong><ul>
+<li>Method = <strong><code>POST</code></strong></li>
+<li>URL = <code>https://api.anthropic.com/v1/messages</code></li>
+<li>Authentication = <strong><code>Generic Credential Type</code></strong> → Generic Auth Type = <strong><code>Header Auth</code></strong> → Credential = 공통 조작법에서 만든 <code>x-api-key</code> 크리덴셜 선택</li>
+<li>Send Headers = <strong>On</strong> → Add Header 2번:<ul>
+<li><code>anthropic-version</code> = <code>2023-06-01</code></li>
+<li><code>content-type</code> = <code>application/json</code></li>
+</ul>
+</li>
+<li>Send Body = <strong>On</strong> → Body Content Type = <strong><code>JSON</code></strong> → Specify Body = <strong><code>Using JSON</code></strong> → 필드의 표현식 토글(=) 켜고 아래를 그대로 붙여넣기:</li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-text">{{ JSON.stringify({ model: &#39;claude-sonnet-5&#39;, max_tokens: 400, messages: [{ role: &#39;user&#39;, content: &#39;홈쇼핑 방송 상품의 가격 경쟁력 진단이다. 아래 정보를 보고, 인터넷 최저가보다 비쌀 때 방송에서 쓸 대응 소구점 2가지(예: 방송한정가·추가 사은품·무이자·차별화 포인트)를 한국어 3줄로 제안해줘.\n상품: &#39; + $json[&#39;상품명&#39;] + &#39; / 우리 방송가: &#39; + $json[&#39;우리방송가&#39;] + &#39;원 / 인터넷 최저가: &#39; + $json[&#39;최저가&#39;] + &#39;원(&#39; + $json[&#39;최저가몰&#39;] + &#39;) / 가격차: &#39; + $json[&#39;가격차&#39;] + &#39;원&#39; }] }) }}
+</code></pre>
+<ul>
+<li><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</li>
+<li><strong>테스트 포인트:</strong> Test step에서 <code>content[0].text</code>에 Claude의 응답 문장이 들어있는지 확인. <code>invalid x-api-key</code> 에러면 크리덴셜 값을 다시 확인하세요.</li>
+</ul>
+<h4>Step 7 — <code>MD 가격진단 메일</code> 추가</h4>
+<ul>
+<li><strong>검색어:</strong> <code>Gmail</code></li>
+<li><strong>속성 설정:</strong><ul>
+<li>Credential: 공통 조작법에서 만든 Gmail 계정 선택</li>
+<li>Operation = <strong><code>Send</code></strong> (기본값)</li>
+<li>To: 표현식 토글 <strong>끄고</strong> → <code>YOUR_MD@example.com</code> (본인 이메일로 교체해서 테스트)</li>
+<li>Subject: 표현식 토글(=) 켜고 → <code>[가격경쟁력] {{ $(&#39;최저가 비교&#39;).item.json[&#39;상품명&#39;] }} — 최저가 대비 {{ $(&#39;최저가 비교&#39;).item.json[&#39;가격차&#39;] }}원 비쌈</code></li>
+<li>Email Type = <strong><code>Text</code></strong></li>
+<li>Message: 표현식 토글(=) 켜고 →</li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-text">■ {{ $(&#39;최저가 비교&#39;).item.json[&#39;상품명&#39;] }}
+- 우리 방송가: {{ $(&#39;최저가 비교&#39;).item.json[&#39;우리방송가&#39;] }}원
+- 인터넷 최저가: {{ $(&#39;최저가 비교&#39;).item.json[&#39;최저가&#39;] }}원 ({{ $(&#39;최저가 비교&#39;).item.json[&#39;최저가몰&#39;] }})
+- 가격차: {{ $(&#39;최저가 비교&#39;).item.json[&#39;가격차&#39;] }}원
+
+[대응 소구점 제안]
+{{ $json.content[0].text }}
+</code></pre>
+<ul>
+<li><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</li>
+</ul>
+<p><strong>✅ 완성 후 테스트:</strong> 트리거 노드에서 <strong>Test step</strong>(또는 Execute Workflow) → 마지막 노드까지 전부 초록불이 뜨는지 확인. 안 뜨면 그 노드를 더블클릭해 에러 메시지를 읽고, 표현식 토글(=)이 켜져 있는지부터 확인하세요.</p>
+<p><strong>🔍 정답 대조:</strong> <code>assets/홈앤쇼핑-실무템플릿/경쟁사조사/L5-01-방송상품-가격경쟁력진단.json</code>를 에디터에 import해서 본인이 만든 것과 비교할 수 있습니다.</p>
+<hr>
+<div style="display:flex;gap:10px;margin:18px 0;align-items:stretch"><a href="guide-build-common.html" style="flex:1;text-decoration:none;padding:10px 14px;border:1px solid var(--line);border-radius:8px;color:var(--fg);background:var(--card-bg)">← 공통 조작법</a><a href="guide-build-index.html" style="padding:10px 16px;border:1px solid var(--accent);border-radius:8px;color:var(--accent);text-decoration:none;white-space:nowrap">☰ 전체 목록</a><a href="guide-build-경쟁사조사-02.html" style="flex:1;text-align:right;text-decoration:none;padding:10px 14px;border:1px solid var(--line);border-radius:8px;color:var(--fg);background:var(--card-bg)">경쟁 홈쇼핑 편성 모니터링 →</a></div>
+</main>
+<script>
+(function(){
+  var root=document.documentElement, btn=document.getElementById("themeToggle");
+  var mq=window.matchMedia("(prefers-color-scheme: dark)");
+  var ICON={system:"🖥",light:"☀️",dark:"🌙"}, LABEL={system:"시스템",light:"라이트",dark:"다크"};
+  var cur="system"; try{cur=localStorage.getItem("theme-pref")||"system";}catch(e){}
+  function apply(){
+    var d=cur==="dark"||(cur==="system"&&mq.matches);
+    root.setAttribute("data-theme",d?"dark":"light");
+    if(btn){var i=btn.querySelector(".tt-ico"),l=btn.querySelector(".tt-label");
+      if(i)i.textContent=ICON[cur]; if(l)l.textContent=LABEL[cur]; btn.title="테마: "+LABEL[cur];}
+  }
+  apply();
+  if(btn)btn.addEventListener("click",function(){
+    var o=["system","light","dark"]; cur=o[(o.indexOf(cur)+1)%o.length];
+    try{localStorage.setItem("theme-pref",cur);}catch(e){}
+    apply();
+  });
+  if(mq.addEventListener)mq.addEventListener("change",function(){if(cur==="system")apply();});
+})();
+</script>
+</body>
+</html>
