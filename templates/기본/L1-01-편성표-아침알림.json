@@ -1,0 +1,95 @@
+{
+  "name": "📋 매일 아침 편성표 알림",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "triggerAtHour": 9,
+              "triggerAtMinute": 0
+            }
+          ]
+        }
+      },
+      "id": "t1a",
+      "name": "매일 09:00",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_GOOGLE_SHEET_ID",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "편성표"
+        },
+        "options": {}
+      },
+      "id": "t1b",
+      "name": "편성표 읽기",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        460,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json['담당자메일'] }}",
+        "subject": "=[편성표] {{ $json['시간'] }} 방송 안내",
+        "emailType": "text",
+        "message": "=안녕하세요 {{ $json['담당자'] }}님,\n\n오늘 {{ $json['시간'] }} 편성 안내드립니다.\n- 방송: {{ $json['방송명'] }}\n- 상품군: {{ $json['상품군'] }}\n\n확인 부탁드립니다.",
+        "options": {}
+      },
+      "id": "t1c",
+      "name": "담당자에게 메일",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        680,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "매일 09:00": {
+      "main": [
+        [
+          {
+            "node": "편성표 읽기",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "편성표 읽기": {
+      "main": [
+        [
+          {
+            "node": "담당자에게 메일",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Seoul"
+  }
+}

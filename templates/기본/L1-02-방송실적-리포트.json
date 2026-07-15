@@ -1,0 +1,119 @@
+{
+  "name": "📺 방송 실적 리포트",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "triggerAtHour": 23,
+              "triggerAtMinute": 0
+            }
+          ]
+        }
+      },
+      "id": "t2a",
+      "name": "방송 종료 후 23:00",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_GOOGLE_SHEET_ID",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "방송매출"
+        },
+        "options": {}
+      },
+      "id": "t2b",
+      "name": "방송 매출 읽기",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        460,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const items=$input.all();\nconst byShow={};\nfor(const it of items){const s=it.json['방송명']||'미상';const rev=Number(String(it.json['매출']||0).replace(/[,\\s]/g,''))||0;byShow[s]=(byShow[s]||0)+rev;}\nconst lines=Object.entries(byShow).map(([k,v])=>`- ${k}: ${v.toLocaleString()}원`).join('\\n');\nconst total=Object.values(byShow).reduce((a,b)=>a+b,0);\nreturn [{json:{요약:lines, 총매출:total.toLocaleString()}}];"
+      },
+      "id": "t2c",
+      "name": "방송별 매출 집계",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        680,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "sendTo": "YOUR_MD@example.com",
+        "subject": "=[방송 실적] 오늘 매출 요약",
+        "emailType": "text",
+        "message": "=오늘 방송 실적입니다.\n\n{{ $json['요약'] }}\n\n총매출: {{ $json['총매출'] }}원",
+        "options": {}
+      },
+      "id": "t2d",
+      "name": "담당 MD에게 리포트",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        900,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "방송 종료 후 23:00": {
+      "main": [
+        [
+          {
+            "node": "방송 매출 읽기",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "방송 매출 읽기": {
+      "main": [
+        [
+          {
+            "node": "방송별 매출 집계",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "방송별 매출 집계": {
+      "main": [
+        [
+          {
+            "node": "담당 MD에게 리포트",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Seoul"
+  }
+}

@@ -1,0 +1,141 @@
+{
+  "name": "📊 일일매출 집계 다중발송",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "triggerAtHour": 18,
+              "triggerAtMinute": 0
+            }
+          ]
+        }
+      },
+      "id": "t3a",
+      "name": "매일 18:00",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_GOOGLE_SHEET_ID",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "일일매출"
+        },
+        "options": {}
+      },
+      "id": "t3b",
+      "name": "일일매출 읽기",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        460,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const items=$input.all();\nconst byCat={};\nfor(const it of items){const c=it.json['상품군']||'기타';const rev=Number(String(it.json['매출']||0).replace(/[,\\s]/g,''))||0;byCat[c]=(byCat[c]||0)+rev;}\nconst lines=Object.entries(byCat).map(([k,v])=>`- ${k}: ${v.toLocaleString()}원`).join('\\n');\nreturn [{json:{요약:lines}}];"
+      },
+      "id": "t3c",
+      "name": "상품군별 집계",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        680,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "sendTo": "YOUR_STAFF@example.com",
+        "subject": "=[일일매출] 상품군별 집계",
+        "emailType": "text",
+        "message": "=상품군별 매출\n\n{{ $json['요약'] }}",
+        "options": {}
+      },
+      "id": "t3d",
+      "name": "담당자 발송",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        900,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "sendTo": "YOUR_LEAD@example.com",
+        "subject": "=[일일매출] 상품군별 집계",
+        "emailType": "text",
+        "message": "=상품군별 매출\n\n{{ $json['요약'] }}",
+        "options": {}
+      },
+      "id": "t3e",
+      "name": "팀장 발송",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        900,
+        380
+      ]
+    }
+  ],
+  "connections": {
+    "매일 18:00": {
+      "main": [
+        [
+          {
+            "node": "일일매출 읽기",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "일일매출 읽기": {
+      "main": [
+        [
+          {
+            "node": "상품군별 집계",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "상품군별 집계": {
+      "main": [
+        [
+          {
+            "node": "담당자 발송",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "팀장 발송",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Seoul"
+  }
+}

@@ -1,0 +1,103 @@
+{
+  "name": "🛒 신규 주문 알림",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "home-shopping-order",
+        "options": {
+          "responseData": "firstEntryJson"
+        },
+        "authentication": "headerAuth"
+      },
+      "id": "t6a",
+      "name": "주문 수신 (Webhook)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a1",
+              "name": "주문번호",
+              "type": "string",
+              "value": "={{ $json.body['order_id'] }}"
+            },
+            {
+              "id": "a2",
+              "name": "상품",
+              "type": "string",
+              "value": "={{ $json.body['product'] }}"
+            },
+            {
+              "id": "a3",
+              "name": "금액",
+              "type": "string",
+              "value": "={{ $json.body['amount'] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "t6b",
+      "name": "주문 정리",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        460,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "sendTo": "YOUR_CS@example.com",
+        "subject": "=[신규주문] {{ $json['상품'] }}",
+        "emailType": "text",
+        "message": "=새 주문이 들어왔습니다.\n- 주문번호: {{ $json['주문번호'] }}\n- 상품: {{ $json['상품'] }}\n- 금액: {{ $json['금액'] }}",
+        "options": {}
+      },
+      "id": "t6c",
+      "name": "주문 알림 메일",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        680,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "주문 수신 (Webhook)": {
+      "main": [
+        [
+          {
+            "node": "주문 정리",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "주문 정리": {
+      "main": [
+        [
+          {
+            "node": "주문 알림 메일",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Seoul"
+  }
+}

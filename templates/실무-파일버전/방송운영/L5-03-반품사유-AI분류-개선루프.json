@@ -1,0 +1,226 @@
+{
+ "name": "🔁 반품 사유 AI 분류 → 상품개선 루프 · 파일버전",
+ "nodes": [
+  {
+   "parameters": {
+    "rule": {
+     "interval": [
+      {
+       "field": "days",
+       "triggerAtHour": 9,
+       "triggerAtMinute": 0
+      }
+     ]
+    }
+   },
+   "id": "b3a",
+   "name": "매일 09:00",
+   "type": "n8n-nodes-base.scheduleTrigger",
+   "typeVersion": 1.2,
+   "position": [
+    240,
+    300
+   ]
+  },
+  {
+   "id": "read_반품데이터",
+   "name": "반품데이터 파일 읽기",
+   "type": "n8n-nodes-base.readWriteFile",
+   "typeVersion": 1,
+   "position": [
+    440,
+    300
+   ],
+   "parameters": {
+    "fileSelector": "YOUR_DATA_DIR/반품데이터.csv",
+    "options": {}
+   }
+  },
+  {
+   "id": "ext_반품데이터",
+   "name": "반품 데이터 읽기",
+   "type": "n8n-nodes-base.extractFromFile",
+   "typeVersion": 1,
+   "position": [
+    640,
+    300
+   ],
+   "parameters": {
+        "operation": "csv",
+        "options": {
+          "enableBOM": true
+        }
+   }
+  },
+  {
+   "parameters": {
+    "jsCode": "const items=$input.all();\nconst byProd={};\nfor(const it of items){const p=it.json['상품명']||'미상';(byProd[p]=byProd[p]||[]).push(String(it.json['반품사유']||''));}\nconst text=Object.entries(byProd).map(([k,v])=>`■ ${k} (${v.length}건)\\n`+v.map(x=>`- ${x}`).join('\\n')).join('\\n\\n');\nreturn [{json:{반품목록:text,건수:items.length}}];"
+   },
+   "id": "b3c",
+   "name": "상품별 반품 묶기",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    840,
+    300
+   ]
+  },
+  {
+   "parameters": {
+    "method": "POST",
+    "url": "https://api.anthropic.com/v1/messages",
+    "authentication": "genericCredentialType",
+    "genericAuthType": "httpHeaderAuth",
+    "sendHeaders": true,
+    "headerParameters": {
+     "parameters": [
+      {
+       "name": "anthropic-version",
+       "value": "2023-06-01"
+      },
+      {
+       "name": "content-type",
+       "value": "application/json"
+      }
+     ]
+    },
+    "sendBody": true,
+    "specifyBody": "json",
+    "jsonBody": "={{ JSON.stringify({ model: 'claude-sonnet-5', max_tokens: 900, thinking: { type: 'disabled' }, messages: [{ role: 'user', content: '다음은 상품별 반품 사유 목록이다. (1) 사유를 사이즈·품질·오배송·단순변심·기타로 분류해 상품별 건수를 집계하고, (2) 같은 상품에서 반복되는 이슈(3건 이상 등)를 콕 집어, (3) MD·협력사에 전달할 상품개선 제안을 한국어로 작성해줘.\\n' + $json['반품목록'] }] }) }}",
+    "options": {}
+   },
+   "id": "b3d",
+   "name": "Claude 사유분류·개선제안",
+   "type": "n8n-nodes-base.httpRequest",
+   "typeVersion": 4.2,
+   "position": [
+    1040,
+    300
+   ]
+  },
+  {
+   "parameters": {
+    "sendTo": "YOUR_QUALITY@example.com",
+    "subject": "=[반품분석] 상품개선 제안 ({{ $('상품별 반품 묶기').item.json['건수'] }}건 분석)",
+    "emailType": "text",
+    "message": "=총 {{ $('상품별 반품 묶기').item.json['건수'] }}건 반품 분석 결과입니다.\n\n{{ $json.content[0].text }}",
+    "options": {}
+   },
+   "id": "b3e",
+   "name": "MD·품질팀 알림",
+   "type": "n8n-nodes-base.gmail",
+   "typeVersion": 2.1,
+   "position": [
+    1240,
+    220
+   ]
+  },
+  {
+   "id": "conv_반품개선로그",
+   "name": "반품개선로그 CSV 변환",
+   "type": "n8n-nodes-base.convertToFile",
+   "typeVersion": 1.1,
+   "position": [
+    1240,
+    400
+   ],
+   "parameters": {
+    "operation": "csv",
+    "options": {}
+   }
+  },
+  {
+   "id": "write_반품개선로그",
+   "name": "개선이슈 로그",
+   "type": "n8n-nodes-base.readWriteFile",
+   "typeVersion": 1,
+   "position": [
+    1440,
+    400
+   ],
+   "parameters": {
+    "operation": "write",
+    "fileName": "=YOUR_DATA_DIR/반품개선로그_{{ $now.format('yyyy-LL-dd_HHmm') }}.csv",
+    "dataPropertyName": "data",
+    "options": {}
+   }
+  }
+ ],
+ "connections": {
+  "매일 09:00": {
+   "main": [
+    [
+     {
+      "node": "반품데이터 파일 읽기",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "반품 데이터 읽기": {
+   "main": [
+    [
+     {
+      "node": "상품별 반품 묶기",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "상품별 반품 묶기": {
+   "main": [
+    [
+     {
+      "node": "Claude 사유분류·개선제안",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Claude 사유분류·개선제안": {
+   "main": [
+    [
+     {
+      "node": "MD·품질팀 알림",
+      "type": "main",
+      "index": 0
+     },
+     {
+      "node": "반품개선로그 CSV 변환",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "반품데이터 파일 읽기": {
+   "main": [
+    [
+     {
+      "node": "반품 데이터 읽기",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "반품개선로그 CSV 변환": {
+   "main": [
+    [
+     {
+      "node": "개선이슈 로그",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "settings": {
+  "executionOrder": "v1",
+  "timezone": "Asia/Seoul"
+ }
+}

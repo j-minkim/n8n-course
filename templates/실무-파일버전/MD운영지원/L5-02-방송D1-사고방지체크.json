@@ -1,0 +1,222 @@
+{
+ "name": "✅ 방송 D-1 사고방지 체크 · 파일버전",
+ "nodes": [
+  {
+   "parameters": {
+    "rule": {
+     "interval": [
+      {
+       "field": "days",
+       "triggerAtHour": 20,
+       "triggerAtMinute": 0
+      }
+     ]
+    }
+   },
+   "id": "s2a",
+   "name": "매일 20:00 (방송 D-1)",
+   "type": "n8n-nodes-base.scheduleTrigger",
+   "typeVersion": 1.2,
+   "position": [
+    240,
+    300
+   ]
+  },
+  {
+   "id": "read_내일편성",
+   "name": "내일편성 파일 읽기",
+   "type": "n8n-nodes-base.readWriteFile",
+   "typeVersion": 1,
+   "position": [
+    440,
+    300
+   ],
+   "parameters": {
+    "fileSelector": "YOUR_DATA_DIR/내일편성.csv",
+    "options": {}
+   }
+  },
+  {
+   "id": "ext_내일편성",
+   "name": "내일 편성 읽기",
+   "type": "n8n-nodes-base.extractFromFile",
+   "typeVersion": 1,
+   "position": [
+    640,
+    300
+   ],
+   "parameters": {
+        "operation": "csv",
+        "options": {
+          "enableBOM": true
+        }
+   }
+  },
+  {
+   "parameters": {
+    "jsCode": "const r=$json;\nconst num=v=>Number(String(v||0).replace(/[,\\s]/g,''))||0;\nconst yes=v=>['Y','y','O','o','예','완료','TRUE','true',true,1].includes(v);\nconst miss=[];\nif(num(r['현재재고'])<num(r['예상판매량'])) miss.push(`재고 부족(재고 ${r['현재재고']} < 예상판매 ${r['예상판매량']})`);\nif(!yes(r['가격설정여부'])) miss.push('가격 미설정');\nif(!yes(r['혜택설정여부'])) miss.push('혜택 미설정');\nif(!yes(r['물량확정여부'])) miss.push('협력사 물량 미확정');\nif(!yes(r['자막준비여부'])) miss.push('자막 미준비');\nreturn [{json:{방송명:r['방송명'],미비수:miss.length,미비:miss.join(' / ')||'없음'}}];"
+   },
+   "id": "s2c",
+   "name": "항목별 미비 판정",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    840,
+    300
+   ]
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "typeValidation": "loose"
+     },
+     "combinator": "and",
+     "conditions": [
+      {
+       "id": "c1",
+       "leftValue": "={{ $json['미비수'] }}",
+       "rightValue": "0",
+       "operator": {
+        "type": "number",
+        "operation": "gt"
+       }
+      }
+     ]
+    },
+    "options": {}
+   },
+   "id": "s2d",
+   "name": "미비 있을 때만",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2.2,
+   "position": [
+    1040,
+    300
+   ]
+  },
+  {
+   "parameters": {
+    "method": "POST",
+    "url": "https://api.anthropic.com/v1/messages",
+    "authentication": "genericCredentialType",
+    "genericAuthType": "httpHeaderAuth",
+    "sendHeaders": true,
+    "headerParameters": {
+     "parameters": [
+      {
+       "name": "anthropic-version",
+       "value": "2023-06-01"
+      },
+      {
+       "name": "content-type",
+       "value": "application/json"
+      }
+     ]
+    },
+    "sendBody": true,
+    "specifyBody": "json",
+    "jsonBody": "={{ JSON.stringify({ model: 'claude-sonnet-5', max_tokens: 500, thinking: { type: 'disabled' }, messages: [{ role: 'user', content: '내일 홈쇼핑 방송 준비 점검에서 아래 미비 항목이 나왔다. 담당자가 오늘 밤 처리할 수 있게 우선순위를 매겨 조치 안내를 한국어 불릿으로 정리해줘.\\n방송: ' + $json['방송명'] + ' / 미비: ' + $json['미비'] }] }) }}",
+    "options": {}
+   },
+   "id": "s2e",
+   "name": "Claude 조치 안내",
+   "type": "n8n-nodes-base.httpRequest",
+   "typeVersion": 4.2,
+   "position": [
+    1240,
+    220
+   ]
+  },
+  {
+   "parameters": {
+    "sendTo": "YOUR_STAFF@example.com",
+    "subject": "=[방송 D-1] {{ $('항목별 미비 판정').item.json['방송명'] }} 준비 미비 {{ $('항목별 미비 판정').item.json['미비수'] }}건",
+    "emailType": "text",
+    "message": "=■ {{ $('항목별 미비 판정').item.json['방송명'] }} 내일 방송 준비 미비\n{{ $('항목별 미비 판정').item.json['미비'] }}\n\n[조치 안내]\n{{ $json.content[0].text }}",
+    "options": {}
+   },
+   "id": "s2f",
+   "name": "담당자 사고방지 알림",
+   "type": "n8n-nodes-base.gmail",
+   "typeVersion": 2.1,
+   "position": [
+    1440,
+    220
+   ]
+  }
+ ],
+ "connections": {
+  "매일 20:00 (방송 D-1)": {
+   "main": [
+    [
+     {
+      "node": "내일편성 파일 읽기",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "내일 편성 읽기": {
+   "main": [
+    [
+     {
+      "node": "항목별 미비 판정",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "항목별 미비 판정": {
+   "main": [
+    [
+     {
+      "node": "미비 있을 때만",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "미비 있을 때만": {
+   "main": [
+    [
+     {
+      "node": "Claude 조치 안내",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Claude 조치 안내": {
+   "main": [
+    [
+     {
+      "node": "담당자 사고방지 알림",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "내일편성 파일 읽기": {
+   "main": [
+    [
+     {
+      "node": "내일 편성 읽기",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "settings": {
+  "executionOrder": "v1",
+  "timezone": "Asia/Seoul"
+ }
+}

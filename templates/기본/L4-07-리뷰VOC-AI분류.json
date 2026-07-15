@@ -1,0 +1,205 @@
+{
+  "name": "🗣️ 고객 리뷰 VOC AI 분류",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "triggerAtHour": 11,
+              "triggerAtMinute": 0
+            }
+          ]
+        }
+      },
+      "id": "t7a",
+      "name": "매일 11:00",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_GOOGLE_SHEET_ID",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "리뷰"
+        },
+        "options": {}
+      },
+      "id": "t7b",
+      "name": "신규 리뷰 읽기",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        440,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "anthropic-version",
+              "value": "2023-06-01"
+            },
+            {
+              "name": "content-type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ model: 'claude-sonnet-5', max_tokens: 400, thinking: { type: 'disabled' }, messages: [{ role: 'user', content: '다음 고객 리뷰를 긍정/부정/중립 중 하나로 분류하고 핵심 이슈를 한 줄로 요약해줘. \\'분류: X / 요약: Y\\' 형식으로만 답해.\\n리뷰: ' + ($json['리뷰']||'') }] }) }}",
+        "options": {}
+      },
+      "id": "t7c",
+      "name": "Claude 분류·요약",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        640,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const t=$json.content?.[0]?.text||'';\nconst cat=(t.match(/분류:\\s*(긍정|부정|중립)/)||[])[1]||'중립';\nreturn [{json:{분류:cat, 결과:t}}];"
+      },
+      "id": "t7d",
+      "name": "분류 결과 파싱",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        840,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "typeValidation": "loose"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $json['분류'] }}",
+              "rightValue": "부정",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "t7e",
+      "name": "부정만 통과",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1040,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "sendTo": "YOUR_TEAM@example.com",
+        "subject": "=[VOC] 부정 리뷰 감지",
+        "emailType": "text",
+        "message": "=부정 리뷰가 감지됐습니다.\n\n{{ $json['결과'] }}",
+        "options": {}
+      },
+      "id": "t7f",
+      "name": "담당팀 알림",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1240,
+        220
+      ]
+    }
+  ],
+  "connections": {
+    "매일 11:00": {
+      "main": [
+        [
+          {
+            "node": "신규 리뷰 읽기",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "신규 리뷰 읽기": {
+      "main": [
+        [
+          {
+            "node": "Claude 분류·요약",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Claude 분류·요약": {
+      "main": [
+        [
+          {
+            "node": "분류 결과 파싱",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "분류 결과 파싱": {
+      "main": [
+        [
+          {
+            "node": "부정만 통과",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "부정만 통과": {
+      "main": [
+        [
+          {
+            "node": "담당팀 알림",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Seoul"
+  }
+}

@@ -1,0 +1,199 @@
+{
+ "name": "📰 업계 트렌드·신상품 브리핑 · 파일버전",
+ "nodes": [
+  {
+   "parameters": {
+    "rule": {
+     "interval": [
+      {
+       "field": "days",
+       "triggerAtHour": 8,
+       "triggerAtMinute": 30
+      }
+     ]
+    }
+   },
+   "id": "c3a",
+   "name": "매일 08:30",
+   "type": "n8n-nodes-base.scheduleTrigger",
+   "typeVersion": 1.2,
+   "position": [
+    240,
+    300
+   ]
+  },
+  {
+   "parameters": {
+    "url": "https://news.google.com/rss/search?q=%ED%99%88%EC%87%BC%ED%95%91%20%EC%9C%A0%ED%86%B5%20%EC%8B%A0%EC%83%81%ED%92%88%20%EA%B8%B0%ED%9A%8D%EC%A0%84&hl=ko&gl=KR&ceid=KR:ko",
+    "options": {}
+   },
+   "id": "c3b",
+   "name": "홈쇼핑 뉴스 RSS",
+   "type": "n8n-nodes-base.rssFeedRead",
+   "typeVersion": 1.1,
+   "position": [
+    440,
+    300
+   ]
+  },
+  {
+   "parameters": {
+    "jsCode": "const items=$input.all().slice(0,8);\nconst list=items.map((it,i)=>`${i+1}. ${it.json.title}`).join('\\n');\nreturn [{json:{뉴스:list}}];"
+   },
+   "id": "c3c",
+   "name": "상위 뉴스 정리",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    640,
+    300
+   ]
+  },
+  {
+   "parameters": {
+    "method": "POST",
+    "url": "https://api.anthropic.com/v1/messages",
+    "authentication": "genericCredentialType",
+    "genericAuthType": "httpHeaderAuth",
+    "sendHeaders": true,
+    "headerParameters": {
+     "parameters": [
+      {
+       "name": "anthropic-version",
+       "value": "2023-06-01"
+      },
+      {
+       "name": "content-type",
+       "value": "application/json"
+      }
+     ]
+    },
+    "sendBody": true,
+    "specifyBody": "json",
+    "jsonBody": "={{ JSON.stringify({ model: 'claude-sonnet-5', max_tokens: 600, thinking: { type: 'disabled' }, messages: [{ role: 'user', content: '유통·홈쇼핑 업계 최신 뉴스 제목이다. (1) 경쟁사 신상품·기획전 (2) 소비 트렌드 (3) 우리 소싱/편성에 참고할 힌트 를 각 2줄로 한국어 브리핑해줘.\\n' + $json['뉴스'] }] }) }}",
+    "options": {}
+   },
+   "id": "c3d",
+   "name": "Claude 트렌드 브리핑",
+   "type": "n8n-nodes-base.httpRequest",
+   "typeVersion": 4.2,
+   "position": [
+    840,
+    300
+   ]
+  },
+  {
+   "parameters": {
+    "sendTo": "YOUR_MD@example.com",
+    "subject": "=[업계 브리핑] 경쟁사·트렌드·소싱 힌트",
+    "emailType": "text",
+    "message": "={{ $json.content[0].text }}",
+    "options": {}
+   },
+   "id": "c3e",
+   "name": "MD 트렌드 브리핑",
+   "type": "n8n-nodes-base.gmail",
+   "typeVersion": 2.1,
+   "position": [
+    1040,
+    300
+   ]
+  },
+  {
+   "id": "conv_트렌드로그",
+   "name": "트렌드로그 CSV 변환",
+   "type": "n8n-nodes-base.convertToFile",
+   "typeVersion": 1.1,
+   "position": [
+    1040,
+    440
+   ],
+   "parameters": {
+    "operation": "csv",
+    "options": {}
+   }
+  },
+  {
+   "id": "write_트렌드로그",
+   "name": "브리핑 아카이브",
+   "type": "n8n-nodes-base.readWriteFile",
+   "typeVersion": 1,
+   "position": [
+    1240,
+    440
+   ],
+   "parameters": {
+    "operation": "write",
+    "fileName": "=YOUR_DATA_DIR/트렌드로그_{{ $now.format('yyyy-LL-dd_HHmm') }}.csv",
+    "dataPropertyName": "data",
+    "options": {}
+   }
+  }
+ ],
+ "connections": {
+  "매일 08:30": {
+   "main": [
+    [
+     {
+      "node": "홈쇼핑 뉴스 RSS",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "홈쇼핑 뉴스 RSS": {
+   "main": [
+    [
+     {
+      "node": "상위 뉴스 정리",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "상위 뉴스 정리": {
+   "main": [
+    [
+     {
+      "node": "Claude 트렌드 브리핑",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Claude 트렌드 브리핑": {
+   "main": [
+    [
+     {
+      "node": "MD 트렌드 브리핑",
+      "type": "main",
+      "index": 0
+     },
+     {
+      "node": "트렌드로그 CSV 변환",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "트렌드로그 CSV 변환": {
+   "main": [
+    [
+     {
+      "node": "브리핑 아카이브",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "settings": {
+  "executionOrder": "v1",
+  "timezone": "Asia/Seoul"
+ }
+}

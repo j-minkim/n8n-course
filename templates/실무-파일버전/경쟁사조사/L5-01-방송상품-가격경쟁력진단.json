@@ -1,0 +1,222 @@
+{
+  "name": "🥇 방송상품 가격경쟁력 진단 · 파일버전",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "triggerAtHour": 7,
+              "triggerAtMinute": 30
+            }
+          ]
+        }
+      },
+      "id": "c1a",
+      "name": "매일 07:30",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "id": "read_방송예정상품",
+      "name": "방송예정상품 파일 읽기",
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        440,
+        300
+      ],
+      "parameters": {
+        "fileSelector": "YOUR_DATA_DIR/방송예정상품.csv",
+        "options": {}
+      }
+    },
+    {
+      "id": "ext_방송예정상품",
+      "name": "방송예정 상품 읽기",
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        640,
+        300
+      ],
+      "parameters": {
+        "operation": "csv",
+        "options": {
+          "enableBOM": true
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const n=v=>Number(String(v??0).replace(/[,\\s]/g,''))||0;\nconst mine=n($json['우리방송가']);\nconst compare=n($json['비교가격']);\nconst gap=mine-compare;\nreturn [{json:{상품명:$json['상품명'],우리방송가:mine,비교가격:compare,비교몰:$json['비교몰']||'사용자 입력',가격차:gap,열위:String(compare>0&&gap>0)}}];"
+      },
+      "id": "c1d",
+      "name": "비교가격 판단",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1040,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "typeValidation": "loose"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $json['열위'] }}",
+              "rightValue": "true",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "c1e",
+      "name": "가격 열위만",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "anthropic-version",
+              "value": "2023-06-01"
+            },
+            {
+              "name": "content-type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ model: 'claude-sonnet-5', max_tokens: 400, thinking: { type: 'disabled' }, messages: [{ role: 'user', content: '홈쇼핑 방송 상품의 가격 경쟁력 진단이다. 아래 정보를 보고, 사용자 입력 비교가보다 비쌀 때 방송에서 쓸 대응 소구점 2가지(예: 방송한정가·추가 사은품·무이자·차별화 포인트)를 한국어 3줄로 제안해줘.\\n상품: ' + $json['상품명'] + ' / 우리 방송가: ' + $json['우리방송가'] + '원 / 사용자 입력 비교가: ' + $json['비교가격'] + '원(' + $json['비교몰'] + ') / 가격차: ' + $json['가격차'] + '원' }] }) }}",
+        "options": {}
+      },
+      "id": "c1f",
+      "name": "Claude 대응 소구점",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1440,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "sendTo": "YOUR_MD@example.com",
+        "subject": "=[가격경쟁력] {{ $('비교가격 판단').item.json['상품명'] }} — 입력 비교가 대비 {{ $('비교가격 판단').item.json['가격차'] }}원 비쌈",
+        "emailType": "text",
+        "message": "=■ {{ $('비교가격 판단').item.json['상품명'] }}\n- 우리 방송가: {{ $('비교가격 판단').item.json['우리방송가'] }}원\n- 사용자 입력 비교가: {{ $('비교가격 판단').item.json['비교가격'] }}원 ({{ $('비교가격 판단').item.json['비교몰'] }})\n- 가격차: {{ $('비교가격 판단').item.json['가격차'] }}원\n\n[대응 소구점 제안]\n{{ $json.content[0].text }}",
+        "options": {}
+      },
+      "id": "c1g",
+      "name": "MD 가격진단 메일",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1640,
+        220
+      ]
+    }
+  ],
+  "connections": {
+    "매일 07:30": {
+      "main": [
+        [
+          {
+            "node": "방송예정상품 파일 읽기",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "방송예정 상품 읽기": {
+      "main": [
+        [
+          {
+            "node": "비교가격 판단",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "비교가격 판단": {
+      "main": [
+        [
+          {
+            "node": "가격 열위만",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "가격 열위만": {
+      "main": [
+        [
+          {
+            "node": "Claude 대응 소구점",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Claude 대응 소구점": {
+      "main": [
+        [
+          {
+            "node": "MD 가격진단 메일",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "방송예정상품 파일 읽기": {
+      "main": [
+        [
+          {
+            "node": "방송예정 상품 읽기",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Seoul"
+  }
+}

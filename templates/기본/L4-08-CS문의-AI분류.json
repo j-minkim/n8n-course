@@ -1,0 +1,140 @@
+{
+  "name": "💬 CS 문의 AI 분류·요약",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "cs-inquiry",
+        "options": {
+          "responseData": "firstEntryJson"
+        },
+        "authentication": "headerAuth"
+      },
+      "id": "t8a",
+      "name": "CS 문의 수신 (Webhook)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "anthropic-version",
+              "value": "2023-06-01"
+            },
+            {
+              "name": "content-type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ model: 'claude-sonnet-5', max_tokens: 300, thinking: { type: 'disabled' }, messages: [{ role: 'user', content: '다음 고객 문의를 카테고리(배송/환불/상품/기타) 중 하나로 분류하고 한 줄 요약해줘. \\'카테고리: X / 요약: Y\\' 형식.\\n문의: ' + ($json.body?.['message']||$json['문의']||'') }] }) }}",
+        "options": {}
+      },
+      "id": "t8b",
+      "name": "Claude 분류·요약",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        460,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{json:{문의:(($('CS 문의 수신 (Webhook)').item.json.body||{}).message)||'', 분석:$json.content[0].text}}];"
+      },
+      "id": "t8flat",
+      "name": "결과 정리",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        680,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "resource": "sheet",
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_GOOGLE_SHEET_ID",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "CS로그"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": null,
+          "matchingColumns": [],
+          "schema": []
+        },
+        "options": {}
+      },
+      "id": "t8c",
+      "name": "시트에 기록",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        880,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "CS 문의 수신 (Webhook)": {
+      "main": [
+        [
+          {
+            "node": "Claude 분류·요약",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Claude 분류·요약": {
+      "main": [
+        [
+          {
+            "node": "결과 정리",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "결과 정리": {
+      "main": [
+        [
+          {
+            "node": "시트에 기록",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Seoul"
+  }
+}

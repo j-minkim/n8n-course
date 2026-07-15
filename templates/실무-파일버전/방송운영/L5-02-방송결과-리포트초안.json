@@ -1,0 +1,226 @@
+{
+ "name": "📝 방송 결과 리포트 자동 초안 · 파일버전",
+ "nodes": [
+  {
+   "parameters": {
+    "rule": {
+     "interval": [
+      {
+       "field": "days",
+       "triggerAtHour": 23,
+       "triggerAtMinute": 30
+      }
+     ]
+    }
+   },
+   "id": "b2a",
+   "name": "방송 종료 후 23:30",
+   "type": "n8n-nodes-base.scheduleTrigger",
+   "typeVersion": 1.2,
+   "position": [
+    240,
+    300
+   ]
+  },
+  {
+   "id": "read_방송결과",
+   "name": "방송결과 파일 읽기",
+   "type": "n8n-nodes-base.readWriteFile",
+   "typeVersion": 1,
+   "position": [
+    440,
+    300
+   ],
+   "parameters": {
+    "fileSelector": "YOUR_DATA_DIR/방송결과.csv",
+    "options": {}
+   }
+  },
+  {
+   "id": "ext_방송결과",
+   "name": "방송결과 지표 읽기",
+   "type": "n8n-nodes-base.extractFromFile",
+   "typeVersion": 1,
+   "position": [
+    640,
+    300
+   ],
+   "parameters": {
+        "operation": "csv",
+        "options": {
+          "enableBOM": true
+        }
+   }
+  },
+  {
+   "parameters": {
+    "jsCode": "const r=$json;\nconst num=v=>Number(String(v||0).replace(/[,\\s]/g,''))||0;\nconst 목표=num(r['목표매출']),매출=num(r['매출']);\nconst 달성률=목표>0?Math.round(매출/목표*100):0;\nconst 주문=num(r['주문건수']),반품=num(r['반품건수']);\nconst 반품률=주문>0?Math.round(반품/주문*100):0;\nconst metrics=`방송: ${r['방송명']||'-'}\\n목표매출 ${목표.toLocaleString()} / 매출 ${매출.toLocaleString()} (달성률 ${달성률}%)\\n주문 ${주문}건 / 콜인입 ${r['콜인입']||'-'} / 콜포기율 ${r['콜포기율']||'-'} / 반품 ${반품}건(반품률 ${반품률}%)`;\nreturn [{json:{방송명:r['방송명'],달성률,metrics}}];"
+   },
+   "id": "b2c",
+   "name": "지표 정리",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    840,
+    300
+   ]
+  },
+  {
+   "parameters": {
+    "method": "POST",
+    "url": "https://api.anthropic.com/v1/messages",
+    "authentication": "genericCredentialType",
+    "genericAuthType": "httpHeaderAuth",
+    "sendHeaders": true,
+    "headerParameters": {
+     "parameters": [
+      {
+       "name": "anthropic-version",
+       "value": "2023-06-01"
+      },
+      {
+       "name": "content-type",
+       "value": "application/json"
+      }
+     ]
+    },
+    "sendBody": true,
+    "specifyBody": "json",
+    "jsonBody": "={{ JSON.stringify({ model: 'claude-sonnet-5', max_tokens: 800, thinking: { type: 'disabled' }, messages: [{ role: 'user', content: '다음은 오늘 홈쇼핑 방송 결과 지표다. MD가 팀에 공유할 방송 결과 리포트 초안을 아래 4개 소제목으로 한국어로 작성해줘: [요약] [잘된 점] [아쉬운 점] [다음 방송 개선안]. 사실 기반으로 간결하게.\\n' + $json['metrics'] }] }) }}",
+    "options": {}
+   },
+   "id": "b2d",
+   "name": "Claude 리포트 작성",
+   "type": "n8n-nodes-base.httpRequest",
+   "typeVersion": 4.2,
+   "position": [
+    1040,
+    300
+   ]
+  },
+  {
+   "parameters": {
+    "sendTo": "YOUR_MD@example.com",
+    "subject": "=[방송리포트] {{ $('지표 정리').item.json['방송명'] }} (달성률 {{ $('지표 정리').item.json['달성률'] }}%)",
+    "emailType": "text",
+    "message": "={{ $('지표 정리').item.json['metrics'] }}\n\n─────────────\n{{ $json.content[0].text }}",
+    "options": {}
+   },
+   "id": "b2e",
+   "name": "MD 리포트 초안",
+   "type": "n8n-nodes-base.gmail",
+   "typeVersion": 2.1,
+   "position": [
+    1240,
+    220
+   ]
+  },
+  {
+   "id": "conv_방송리포트로그",
+   "name": "방송리포트로그 CSV 변환",
+   "type": "n8n-nodes-base.convertToFile",
+   "typeVersion": 1.1,
+   "position": [
+    1240,
+    400
+   ],
+   "parameters": {
+    "operation": "csv",
+    "options": {}
+   }
+  },
+  {
+   "id": "write_방송리포트로그",
+   "name": "리포트 아카이브",
+   "type": "n8n-nodes-base.readWriteFile",
+   "typeVersion": 1,
+   "position": [
+    1440,
+    400
+   ],
+   "parameters": {
+    "operation": "write",
+    "fileName": "=YOUR_DATA_DIR/방송리포트로그_{{ $now.format('yyyy-LL-dd_HHmm') }}.csv",
+    "dataPropertyName": "data",
+    "options": {}
+   }
+  }
+ ],
+ "connections": {
+  "방송 종료 후 23:30": {
+   "main": [
+    [
+     {
+      "node": "방송결과 파일 읽기",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "방송결과 지표 읽기": {
+   "main": [
+    [
+     {
+      "node": "지표 정리",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "지표 정리": {
+   "main": [
+    [
+     {
+      "node": "Claude 리포트 작성",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Claude 리포트 작성": {
+   "main": [
+    [
+     {
+      "node": "MD 리포트 초안",
+      "type": "main",
+      "index": 0
+     },
+     {
+      "node": "방송리포트로그 CSV 변환",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "방송결과 파일 읽기": {
+   "main": [
+    [
+     {
+      "node": "방송결과 지표 읽기",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "방송리포트로그 CSV 변환": {
+   "main": [
+    [
+     {
+      "node": "리포트 아카이브",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "settings": {
+  "executionOrder": "v1",
+  "timezone": "Asia/Seoul"
+ }
+}

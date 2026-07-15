@@ -97,13 +97,13 @@
 <td><strong>L1</strong> 단일 선형</td>
 <td>트리거→읽기→내보내기 (분기·외부·AI 없음)</td>
 <td>편성표 아침알림·신규주문·방송실적 리포트</td>
-<td>1주차 복습</td>
+<td>Day1 복습</td>
 </tr>
 <tr>
 <td><strong>L2</strong> 분기·다중출력</td>
 <td>IF로 나누기 / 여러 곳 동시 발송</td>
 <td>재고부족 알림·일일매출 다중발송</td>
-<td>1주차 복습</td>
+<td>Day1 복습</td>
 </tr>
 <tr>
 <td><strong>L3</strong> 외부 API</td>
@@ -115,17 +115,17 @@
 <td><strong>L4</strong> AI 워크플로</td>
 <td>Claude 노드로 분류·요약·생성</td>
 <td>CS문의 분류·VOC 분류·뉴스 브리핑</td>
-<td><strong>B3~B4 AI 실전</strong></td>
+<td><strong>B5 AI 실전</strong></td>
 </tr>
 <tr>
 <td><strong>L5</strong> 실무 복합</td>
 <td>AI+분기+외부+다중 결합</td>
-<td>실무 10종(가격경쟁력 진단이 최상)</td>
-<td><strong>B5~B7 나만의 자동화</strong></td>
+<td>실무 10종</td>
+<td><strong>B6~B7 나만의 자동화</strong></td>
 </tr>
 </tbody></table>
 <blockquote>
-<p>💡 처음이면 <strong>L1</strong>부터 · AI가 처음이면 <strong>L4 「CS 문의 분류」</strong> · 도전은 <strong>L5 「가격경쟁력 진단」</strong>.</p>
+<p>💡 처음이면 Day1의 Lab import 파일 또는 보조(구글시트) L1부터 시작하세요. 파일(CSV) 기본 세트는 실무 확장용 L5 10종이므로 B6에서 <strong>가장 가까운 템플릿을 import한 뒤 입력 한 곳과 출력 한 곳만 바꾸는 방식</strong>으로 사용합니다.</p>
 </blockquote>
 <h1>홈앤쇼핑 n8n + Claude 템플릿 카탈로그</h1>
 <h3>&quot;처음부터 만들지 말고, 내 업무에 가까운 걸 골라 시작하세요&quot;</h3>
@@ -133,98 +133,158 @@
 <blockquote>
 <p>💡 <strong>다건 행 처리 팁</strong>: 시트에 여러 행을 매번 처리하려면 해당 Code 노드 설정을 <strong>Run Once for Each Item</strong>으로 바꾸고 <code>return</code>을 단일 객체(<code>return {json:{...}}</code>)로 수정하세요(기본값은 첫 행만 처리).</p>
 </blockquote>
-<p><strong>📥 바로 다운로드</strong> (n8n <code>⋮ → Import from File</code>로 불러오기): ★실무 10종 기본 = <a href="%ED%99%88%EC%95%A4%EC%87%BC%ED%95%91-%EC%8B%A4%EB%AC%B4%ED%85%9C%ED%94%8C%EB%A6%BF-%ED%8C%8C%EC%9D%BC%EB%B2%84%EC%A0%84.zip">파일(CSV) 버전 zip</a> — 크리덴셜 0개, <a href="guide-file-version.html">사용법·CSV 준비</a> · 보조(구글시트 버전) = <a href="%ED%99%88%EC%95%A4%EC%87%BC%ED%95%91-%EC%A0%84%EC%B2%B4%ED%85%9C%ED%94%8C%EB%A6%BF-20%EC%A2%85.zip">전체 20종</a> / <a href="%ED%99%88%EC%95%A4%EC%87%BC%ED%95%91-n8n-%ED%85%9C%ED%94%8C%EB%A6%BF.zip">기본 10종만</a> / <a href="%EA%B2%BD%EC%9F%81%EC%82%AC%EC%A1%B0%EC%82%AC-%ED%85%9C%ED%94%8C%EB%A6%BF.zip">경쟁사조사</a>·<a href="%EB%B0%A9%EC%86%A1%EC%9A%B4%EC%98%81-%ED%85%9C%ED%94%8C%EB%A6%BF.zip">방송운영</a>·<a href="MD%EC%9A%B4%EC%98%81%EC%A7%80%EC%9B%90-%ED%85%9C%ED%94%8C%EB%A6%BF.zip">MD운영지원</a> — 그 외 파일은 <a href="assets.html">실습 파일 전체 목록</a>
+<p><strong>📥 바로 다운로드</strong> (n8n <code>⋮ → Import from File</code>로 불러오기): ★실무 10종 기본 = <a href="%ED%99%88%EC%95%A4%EC%87%BC%ED%95%91-%EC%8B%A4%EB%AC%B4%ED%85%9C%ED%94%8C%EB%A6%BF-%ED%8C%8C%EC%9D%BC%EB%B2%84%EC%A0%84.zip">파일(CSV) 버전 zip</a> — <strong>Google OAuth 0개; AI 템플릿은 Anthropic 키 필요</strong>, <a href="guide-file-version.html">사용법·CSV 준비</a> · 보조(구글시트 버전) = <a href="%ED%99%88%EC%95%A4%EC%87%BC%ED%95%91-%EC%A0%84%EC%B2%B4%ED%85%9C%ED%94%8C%EB%A6%BF-20%EC%A2%85.zip">전체 20종</a> / <a href="%ED%99%88%EC%95%A4%EC%87%BC%ED%95%91-n8n-%ED%85%9C%ED%94%8C%EB%A6%BF.zip">기본 10종만</a> / <a href="%EA%B2%BD%EC%9F%81%EC%82%AC%EC%A1%B0%EC%82%AC-%ED%85%9C%ED%94%8C%EB%A6%BF.zip">경쟁사조사</a>·<a href="%EB%B0%A9%EC%86%A1%EC%9A%B4%EC%98%81-%ED%85%9C%ED%94%8C%EB%A6%BF.zip">방송운영</a>·<a href="MD%EC%9A%B4%EC%98%81%EC%A7%80%EC%9B%90-%ED%85%9C%ED%94%8C%EB%A6%BF.zip">MD운영지원</a> — 그 외 파일은 <a href="assets.html">실습 파일 전체 목록</a>
 <strong>🧱 직접 만들어보기</strong>: import 대신 노드 하나씩 손으로 쌓아보려면 → <a href="guide-build-index.html">실무 10종 스텝바이스텝 빌드 가이드</a> (템플릿별 개별 페이지, 노드 검색어·속성값·연결법까지 상세)
-<strong>⚙️ 공통 준비</strong>: ★기본(파일 버전) = CSV를 <code>~/.n8n-files</code>에 넣기만(크리덴셜 불필요) · 보조(시트 버전)일 때만 Google 크리덴셜 · AI(★) 템플릿은 <strong>회사 Anthropic 키</strong>(Header Auth 이름 <code>x-api-key</code>) · <code>YOUR_...</code> 자리(경로/시트 ID·수신자) 교체
+<strong>⚙️ 공통 준비</strong>: ★기본(파일 버전) = CSV를 <code>~/.n8n-files</code>에 넣으므로 <strong>Google OAuth는 불필요</strong> · 보조(시트 버전)일 때만 Google 크리덴셜 · AI(★) 템플릿은 <strong>본인의 개인 제한 Anthropic API 키</strong>(Header Auth 이름 <code>x-api-key</code>) · <code>YOUR_...</code> 자리(경로/시트 ID·수신자) 교체
 <strong>🤖 AI 모델</strong>: 템플릿은 <code>claude-sonnet-5</code>(현행)로 설정 — 필요 시 최신 모델로 교체.
 <strong>✅ 검증 수준</strong>: 전 템플릿 <strong>n8n import·구조 검증</strong> 완료. 실제 실행은 <strong>자격증명 연결 후 재검증</strong>하세요.</p>
 <blockquote>
-<p>⚠️ <strong>네이버 검색 API 종료 예정(2026-07-31)</strong>: 「가격경쟁력 진단」이 쓰는 네이버 검색 API가 종료 예정입니다 → 그때까지는 동작하나, 이후엔 <strong>NAVER API HUB</strong>로 이전 필요.</p>
+<p>⚠️ <strong>네이버 쇼핑 검색 API는 2026-07-31 종료</strong>되며, 2026-07-15 현재 NAVER API HUB에 같은 상품검색 대체 API가 없습니다. 「가격경쟁력 진단」은 외부 조회를 제거하고 사용자가 허용된 비교몰에서 확인한 <code>비교가격</code>·<code>비교몰</code>을 CSV/시트에 넣는 방식으로 개정했습니다.</p>
 </blockquote>
 <hr>
 <h2>🧑‍💼 MD · 상품기획이라면</h2>
 <h3><code>L5</code> ⭐ 방송상품 가격경쟁력 진단 (★AI)</h3>
+<blockquote>
+<p>📥 <strong>이것만 받기</strong>: <a href="templates/%EC%8B%A4%EB%AC%B4-%ED%8C%8C%EC%9D%BC%EB%B2%84%EC%A0%84/%EA%B2%BD%EC%9F%81%EC%82%AC%EC%A1%B0%EC%82%AC/L5-01-%EB%B0%A9%EC%86%A1%EC%83%81%ED%92%88-%EA%B0%80%EA%B2%A9%EA%B2%BD%EC%9F%81%EB%A0%A5%EC%A7%84%EB%8B%A8.json">워크플로 JSON(파일버전)</a> · <a href="templates/data/%EB%B0%A9%EC%86%A1%EC%98%88%EC%A0%95%EC%83%81%ED%92%88.csv">데모 CSV</a></p>
+</blockquote>
 <ul>
-<li><strong>뭘 하나</strong>: 방송 예정 상품이 <strong>인터넷 최저가보다 비싼지</strong> 매일 아침 자동 점검. 네이버쇼핑에서 상품 최저가를 찾아 우리 방송가와 비교하고, <strong>비싸면 Claude가 방송에서 쓸 대응 멘트</strong>(방송 한정가·추가 사은품·차별화 포인트)를 뽑아 MD에게 메일.</li>
+<li><strong>뭘 하나</strong>: 방송 예정 상품의 우리 방송가와 <strong>사용자가 입력한 비교가격</strong>을 매일 아침 점검하고, 우리 가격이 높으면 Claude가 대응 멘트를 뽑아 MD에게 메일.</li>
 <li><strong>왜 좋은가</strong>: 홈쇼핑 MD의 핵심 고민 — &quot;내 방송가가 인터넷보다 비싸면 안 팔린다&quot;를 그대로 자동화.</li>
-<li><strong>필요한 것</strong>: 네이버쇼핑 API 키(무료)·회사 Anthropic 키·<code>방송예정상품</code> 시트(상품명·우리방송가)</li>
+<li><strong>필요한 것</strong>: 본인의 개인 제한 Anthropic API 키·<code>방송예정상품</code> CSV/시트(상품명·우리방송가·비교가격·비교몰)</li>
 <li><strong>확장</strong>: 알림을 슬랙으로 / 경쟁 홈쇼핑 특정 몰만 비교 / 가격 추세 아카이브</li>
 </ul>
 <h3><code>L5</code> 방송 결과 리포트 자동 초안 (★AI)</h3>
+<blockquote>
+<p>📥 <strong>이것만 받기</strong>: <a href="templates/%EC%8B%A4%EB%AC%B4-%ED%8C%8C%EC%9D%BC%EB%B2%84%EC%A0%84/%EB%B0%A9%EC%86%A1%EC%9A%B4%EC%98%81/L5-02-%EB%B0%A9%EC%86%A1%EA%B2%B0%EA%B3%BC-%EB%A6%AC%ED%8F%AC%ED%8A%B8%EC%B4%88%EC%95%88.json">워크플로 JSON(파일버전)</a> · <a href="templates/data/%EB%B0%A9%EC%86%A1%EA%B2%B0%EA%B3%BC.csv">데모 CSV</a></p>
+</blockquote>
 <ul>
 <li><strong>뭘 하나</strong>: 방송 종료 후 매출·주문·콜·반품 지표를 모아 <strong>Claude가 &quot;잘된 점 / 아쉬운 점 / 다음 개선안&quot; 리포트 초안</strong>을 써서 MD에게. 매 방송 리포트 수작업을 없앰.</li>
 <li><strong>필요한 것</strong>: Anthropic 키·<code>방송결과</code> 시트(방송명·목표매출·매출·주문·콜·반품)</li>
 </ul>
 <h3><code>L5</code> 협력사 발주 개인화 메일 (★AI)</h3>
+<blockquote>
+<p>📥 <strong>이것만 받기</strong>: <a href="templates/%EC%8B%A4%EB%AC%B4-%ED%8C%8C%EC%9D%BC%EB%B2%84%EC%A0%84/MD%EC%9A%B4%EC%98%81%EC%A7%80%EC%9B%90/L5-01-%ED%98%91%EB%A0%A5%EC%82%AC-%EB%B0%9C%EC%A3%BC%EA%B0%9C%EC%9D%B8%ED%99%94%EB%A9%94%EC%9D%BC.json">워크플로 JSON(파일버전)</a> · <a href="templates/data/%EB%B0%9C%EC%A3%BC%ED%98%84%ED%99%A9.csv">데모 CSV</a></p>
+</blockquote>
 <ul>
 <li><strong>뭘 하나</strong>: 재고 부족한 협력사마다 <strong>Claude가 벤더별 맞춤 발주확인 메일</strong>을 써서 담당자에게 개별 발송. 수십 벤더에 비슷한 메일 반복을 없앰.</li>
 <li><strong>필요한 것</strong>: Anthropic 키·<code>발주현황</code> 시트(협력사·담당자메일·상품·발주필요수량)</li>
 </ul>
 <h3><code>L5</code> 방송 자막·상세 카피 생성기 (★AI)</h3>
+<blockquote>
+<p>📥 <strong>이것만 받기</strong>: <a href="templates/%EC%8B%A4%EB%AC%B4-%ED%8C%8C%EC%9D%BC%EB%B2%84%EC%A0%84/MD%EC%9A%B4%EC%98%81%EC%A7%80%EC%9B%90/L5-04-%EB%B0%A9%EC%86%A1%EC%9E%90%EB%A7%89-%EC%B9%B4%ED%94%BC%EC%83%9D%EC%84%B1%EA%B8%B0.json">워크플로 JSON(파일버전)</a> · <a href="templates/data/%EC%B9%B4%ED%94%BC%EC%9A%94%EC%B2%AD.csv">데모 CSV</a></p>
+</blockquote>
 <ul>
 <li><strong>뭘 하나</strong>: 상품 정보를 넣으면 <strong>Claude가 방송 자막 3안 + 상세페이지 문구 + 채팅 응대 멘트</strong>를 만들어 시트에 저장. (과장·의료효능 표현 금지 프롬프트 내장 — 송출 전 사람 검수)</li>
 <li><strong>필요한 것</strong>: Anthropic 키·<code>카피요청</code> 시트(상품명·핵심특징·가격)</li>
 </ul>
 <h3><code>L4</code> 주간 리포트 + AI 코멘트 (★AI)</h3>
+<blockquote>
+<p>📥 <strong>이것만 받기</strong>: <a href="templates/%EA%B8%B0%EB%B3%B8/L4-09-%EC%A3%BC%EA%B0%84%EB%A6%AC%ED%8F%AC%ED%8A%B8-AI%EC%BD%94%EB%A9%98%ED%8A%B8.json">워크플로 JSON</a> · <a href="assets/data/%EC%A3%BC%EA%B0%84%EB%A7%A4%EC%B6%9C.csv">데모 CSV</a></p>
+</blockquote>
 <ul>
 <li><strong>뭘 하나</strong>: 주간 상품군별 매출을 집계하고 <strong>Claude가 MD용 인사이트 코멘트</strong>를 붙여 팀에 발송.</li>
 </ul>
 <hr>
 <h2>📺 편성 · 생방송 운영이라면</h2>
 <h3><code>L5</code> ⏱ 생방송 실적 페이스메이커 (★AI)</h3>
+<blockquote>
+<p>📥 <strong>이것만 받기</strong>: <a href="templates/%EC%8B%A4%EB%AC%B4-%ED%8C%8C%EC%9D%BC%EB%B2%84%EC%A0%84/%EB%B0%A9%EC%86%A1%EC%9A%B4%EC%98%81/L5-01-%EC%83%9D%EB%B0%A9%EC%86%A1-%EC%8B%A4%EC%A0%81%ED%8E%98%EC%9D%B4%EC%8A%A4%EB%A9%94%EC%9D%B4%EC%BB%A4.json">워크플로 JSON(파일버전)</a> · <a href="templates/data/%EB%B0%A9%EC%86%A1%ED%98%84%ED%99%A9.csv">데모 CSV</a></p>
+</blockquote>
 <ul>
 <li><strong>뭘 하나</strong>: 방송 중 <strong>5분마다 목표 페이스 대비 실적</strong>을 계산해, 저조하면 <strong>Claude가 실시간 대응 멘트</strong>(매진임박 자막·추가 혜택 강조)와 함께 MD·PD에게 긴급 알림. 반응 지연으로 인한 매출 손실을 막음.</li>
 <li><strong>주의</strong>: 5분마다 도니 <strong>방송 시간대에만 Active</strong>. 실시간은 Slack 권장.</li>
 <li><strong>필요한 것</strong>: Anthropic 키·<code>방송현황</code> 시트(상품·목표매출·총방송분·경과분·누적매출)</li>
 </ul>
 <h3><code>L5</code> ✅ 방송 D-1 사고방지 체크 (★AI)</h3>
+<blockquote>
+<p>📥 <strong>이것만 받기</strong>: <a href="templates/%EC%8B%A4%EB%AC%B4-%ED%8C%8C%EC%9D%BC%EB%B2%84%EC%A0%84/MD%EC%9A%B4%EC%98%81%EC%A7%80%EC%9B%90/L5-02-%EB%B0%A9%EC%86%A1D1-%EC%82%AC%EA%B3%A0%EB%B0%A9%EC%A7%80%EC%B2%B4%ED%81%AC.json">워크플로 JSON(파일버전)</a> · <a href="templates/data/%EB%82%B4%EC%9D%BC%ED%8E%B8%EC%84%B1.csv">데모 CSV</a></p>
+</blockquote>
 <ul>
 <li><strong>뭘 하나</strong>: 매일 밤 <strong>내일 편성표를 재고·가격세팅·혜택·협력사 물량·자막 준비와 대조</strong>해, 미비 항목만 담당자에게 알림. &quot;하나 빠뜨려 방송 사고&quot;를 예방. (미비 판정은 규칙 기반, <strong>조치 안내는 Claude가 작성</strong>)</li>
 <li><strong>필요한 것</strong>: <code>내일편성</code> 시트(방송명·예상판매량·현재재고·가격/혜택/물량/자막 여부)</li>
 </ul>
 <h3><code>L1</code> 편성표 아침 알림</h3>
+<blockquote>
+<p>📥 <strong>이것만 받기</strong>: <a href="templates/%EA%B8%B0%EB%B3%B8/L1-01-%ED%8E%B8%EC%84%B1%ED%91%9C-%EC%95%84%EC%B9%A8%EC%95%8C%EB%A6%BC.json">워크플로 JSON</a> · <a href="assets/data/%ED%8E%B8%EC%84%B1%ED%91%9C.csv">데모 CSV</a></p>
+</blockquote>
 <ul>
 <li><strong>뭘 하나</strong>: 매일 아침 편성표를 읽어 방송별 담당자에게 자동 메일. (가장 기본형 — 첫 실습에 좋음)</li>
 </ul>
 <h3><code>L5</code> 경쟁 홈쇼핑 편성 모니터링 (★AI)</h3>
+<blockquote>
+<p>📥 <strong>이것만 받기</strong>: <a href="templates/%EC%8B%A4%EB%AC%B4-%ED%8C%8C%EC%9D%BC%EB%B2%84%EC%A0%84/%EA%B2%BD%EC%9F%81%EC%82%AC%EC%A1%B0%EC%82%AC/L5-02-%EA%B2%BD%EC%9F%81%ED%99%88%EC%87%BC%ED%95%91-%ED%8E%B8%EC%84%B1%EB%AA%A8%EB%8B%88%ED%84%B0%EB%A7%81.json">워크플로 JSON(파일버전)</a> · <a href="templates/data/%EA%B2%BD%EC%9F%81%EC%82%AC%ED%8E%B8%EC%84%B1.csv">데모 CSV</a></p>
+</blockquote>
 <ul>
 <li><strong>뭘 하나</strong>: 경쟁사 오늘 편성(시트에 입력)을 <strong>Claude가 카테고리·시간대로 요약 + 우리 차별화 슬롯</strong> 제안. (무단 크롤링 대신 시트 기반 — robots 안전)</li>
 </ul>
 <hr>
 <h2>📞 CS · 콜센터 · 품질이라면</h2>
 <h3><code>L5</code> 🔁 반품 사유 AI 분류 → 상품개선 루프 (★AI)</h3>
+<blockquote>
+<p>📥 <strong>이것만 받기</strong>: <a href="templates/%EC%8B%A4%EB%AC%B4-%ED%8C%8C%EC%9D%BC%EB%B2%84%EC%A0%84/%EB%B0%A9%EC%86%A1%EC%9A%B4%EC%98%81/L5-03-%EB%B0%98%ED%92%88%EC%82%AC%EC%9C%A0-AI%EB%B6%84%EB%A5%98-%EA%B0%9C%EC%84%A0%EB%A3%A8%ED%94%84.json">워크플로 JSON(파일버전)</a> · <a href="templates/data/%EB%B0%98%ED%92%88%EB%8D%B0%EC%9D%B4%ED%84%B0.csv">데모 CSV</a></p>
+</blockquote>
 <ul>
 <li><strong>뭘 하나</strong>: 반품 데이터를 <strong>Claude가 사유 분류(사이즈·품질·오배송·변심)하고, 특정 상품의 반복 이슈를 감지</strong>해 MD·품질팀에 알림. 쌓이기만 하던 VOC를 상품개선으로 연결.</li>
 <li><strong>필요한 것</strong>: Anthropic 키·<code>반품데이터</code> 시트(상품명·반품사유)</li>
 </ul>
 <h3><code>L4</code> 고객 리뷰 VOC AI 분류 (★AI)</h3>
+<blockquote>
+<p>📥 <strong>이것만 받기</strong>: <a href="templates/%EA%B8%B0%EB%B3%B8/L4-07-%EB%A6%AC%EB%B7%B0VOC-AI%EB%B6%84%EB%A5%98.json">워크플로 JSON</a></p>
+</blockquote>
 <ul>
 <li><strong>뭘 하나</strong>: 신규 리뷰를 <strong>Claude가 긍/부정 분류</strong>해 <strong>부정만 담당팀</strong>에 알림.</li>
 </ul>
 <h3><code>L4</code> CS 문의 AI 분류·요약 (★AI)</h3>
+<blockquote>
+<p>📥 <strong>이것만 받기</strong>: <a href="templates/%EA%B8%B0%EB%B3%B8/L4-08-CS%EB%AC%B8%EC%9D%98-AI%EB%B6%84%EB%A5%98.json">워크플로 JSON</a> · <a href="assets/data/CS%EB%AC%B8%EC%9D%98.csv">데모 CSV</a></p>
+</blockquote>
 <ul>
 <li><strong>뭘 하나</strong>: 고객 문의(웹훅 수신)를 <strong>Claude가 카테고리 분류·요약</strong>해 시트에 기록. (웹훅 필드: <code>message</code> · Active 켜려면 AI키+Sheets 둘 다 연결)</li>
 </ul>
 <h3><code>L5</code> 📞 콜센터 폭주 조기경보 (★AI)</h3>
+<blockquote>
+<p>📥 <strong>이것만 받기</strong>: <a href="templates/%EC%8B%A4%EB%AC%B4-%ED%8C%8C%EC%9D%BC%EB%B2%84%EC%A0%84/MD%EC%9A%B4%EC%98%81%EC%A7%80%EC%9B%90/L5-03-%EC%BD%9C%EC%84%BC%ED%84%B0-%ED%8F%AD%EC%A3%BC%EA%B2%BD%EB%B3%B4.json">워크플로 JSON(파일버전)</a> · <a href="templates/data/%EC%BD%9C%ED%98%84%ED%99%A9.csv">데모 CSV</a></p>
+</blockquote>
 <ul>
 <li><strong>뭘 하나</strong>: 콜 대기·포기율이 임계를 넘으면 <strong>Claude 조치 제안</strong>(상담 증원·ARS 유도)과 함께 운영팀에 긴급 경보. 콜포기=매출손실을 조기 인지.</li>
 </ul>
 <hr>
 <h2>🛒 공통 · 매출/재고/주문 (기본형)</h2>
 <h3><code>L1</code> 방송 실적 리포트</h3>
-<p>매일 방송 종료 후 매출 시트를 방송별로 집계해 담당 MD에게 메일.</p>
+<blockquote>
+<p>📥 <strong>이것만 받기</strong>: <a href="templates/%EA%B8%B0%EB%B3%B8/L1-02-%EB%B0%A9%EC%86%A1%EC%8B%A4%EC%A0%81-%EB%A6%AC%ED%8F%AC%ED%8A%B8.json">워크플로 JSON</a>
+매일 방송 종료 후 매출 시트를 방송별로 집계해 담당 MD에게 메일.</p>
+</blockquote>
 <h3><code>L2</code> 일일매출 집계 다중발송</h3>
-<p>일일매출을 상품군별로 집계해 담당자 + 팀장에게 <strong>동시 발송</strong>.</p>
+<blockquote>
+<p>📥 <strong>이것만 받기</strong>: <a href="templates/%EA%B8%B0%EB%B3%B8/L2-03-%EC%9D%BC%EC%9D%BC%EB%A7%A4%EC%B6%9C-%EB%8B%A4%EC%A4%91%EB%B0%9C%EC%86%A1.json">워크플로 JSON</a> · <a href="assets/data/%EC%9D%BC%EC%9D%BC%EB%A7%A4%EC%B6%9C.csv">데모 CSV</a>
+일일매출을 상품군별로 집계해 담당자 + 팀장에게 <strong>동시 발송</strong>.</p>
+</blockquote>
 <h3><code>L2</code> 재고 부족 알림</h3>
-<p>재고가 임계 이하인 상품을 골라 구매담당에게 발주 알림.</p>
+<blockquote>
+<p>📥 <strong>이것만 받기</strong>: <a href="templates/%EA%B8%B0%EB%B3%B8/L2-04-%EC%9E%AC%EA%B3%A0%EB%B6%80%EC%A1%B1-%EC%95%8C%EB%A6%BC.json">워크플로 JSON</a>
+재고가 임계 이하인 상품을 골라 구매담당에게 발주 알림.</p>
+</blockquote>
 <h3><code>L1</code> 신규 주문 알림</h3>
-<p>주문 수신(웹훅) 즉시 담당자에게 알림 메일. (웹훅 필드: <code>order_id</code>·<code>product</code>·<code>amount</code>)</p>
+<blockquote>
+<p>📥 <strong>이것만 받기</strong>: <a href="templates/%EA%B8%B0%EB%B3%B8/L1-06-%EC%8B%A0%EA%B7%9C%EC%A3%BC%EB%AC%B8-%EC%95%8C%EB%A6%BC.json">워크플로 JSON</a>
+주문 수신(웹훅) 즉시 담당자에게 알림 메일. (웹훅 필드: <code>order_id</code>·<code>product</code>·<code>amount</code>)</p>
+</blockquote>
 <h3><code>L3</code> 경쟁사 가격 모니터링</h3>
-<p>경쟁사 상품 페이지를 매일 확인해 우리보다 싸지면 MD에게 알림. ⚠️ 대상 사이트 <strong>robots·약관 확인 필수</strong>(무단 크롤링 주의) — <strong>가격 비교는 실무 「가격경쟁력 진단」(네이버 공식 API)이 더 안전·정확</strong>하니 그쪽을 권장.</p>
+<blockquote>
+<p>📥 <strong>이것만 받기</strong>: <a href="templates/%EA%B8%B0%EB%B3%B8/L3-05-%EA%B2%BD%EC%9F%81%EC%82%AC-%EA%B0%80%EA%B2%A9%EB%AA%A8%EB%8B%88%ED%84%B0%EB%A7%81.json">워크플로 JSON</a>
+경쟁사 상품 페이지를 매일 확인해 우리보다 싸지면 MD에게 알림. ⚠️ 대상 사이트 <strong>robots·약관 확인 필수</strong>(무단 크롤링 주의). 약관상 자동 조회가 허용되지 않으면 실무 「가격경쟁력 진단」처럼 담당자가 확인한 비교가격을 입력하세요.</p>
+</blockquote>
 <h3><code>L4</code> 홈쇼핑 뉴스 아침 브리핑 (★AI)</h3>
-<p>홈쇼핑·유통 뉴스 RSS를 <strong>Claude가 3줄 브리핑</strong>해 아침에 발송. (실무 「업계 트렌드 브리핑」의 간단 버전)</p>
+<blockquote>
+<p>📥 <strong>이것만 받기</strong>: <a href="templates/%EA%B8%B0%EB%B3%B8/L4-10-%ED%99%88%EC%87%BC%ED%95%91%EB%89%B4%EC%8A%A4-%EB%B8%8C%EB%A6%AC%ED%95%91.json">워크플로 JSON</a>
+홈쇼핑·유통 뉴스 RSS를 <strong>Claude가 3줄 브리핑</strong>해 아침에 발송. (실무 「업계 트렌드 브리핑」의 간단 버전)</p>
+</blockquote>
 <h3><code>L5</code> 업계 트렌드·신상품 브리핑 (★AI)</h3>
-<p>홈쇼핑·유통 뉴스를 <strong>Claude가 경쟁사 신상품·트렌드·소싱 힌트</strong>로 요약해 MD에게.</p>
+<blockquote>
+<p>📥 <strong>이것만 받기</strong>: <a href="templates/%EC%8B%A4%EB%AC%B4-%ED%8C%8C%EC%9D%BC%EB%B2%84%EC%A0%84/%EA%B2%BD%EC%9F%81%EC%82%AC%EC%A1%B0%EC%82%AC/L5-03-%EC%97%85%EA%B3%84%ED%8A%B8%EB%A0%8C%EB%93%9C-%EC%8B%A0%EC%83%81%ED%92%88%EB%B8%8C%EB%A6%AC%ED%95%91.json">워크플로 JSON(파일버전)</a>
+홈쇼핑·유통 뉴스를 <strong>Claude가 경쟁사 신상품·트렌드·소싱 힌트</strong>로 요약해 MD에게.</p>
+</blockquote>
 <hr>
 <h2>어떻게 시작하나 (3단계)</h2>
 <ol>
@@ -233,7 +293,7 @@
 <li><strong><code>YOUR_...</code> 교체</strong>(데이터 경로·수신자) → 노드별 <strong>Execute step</strong>로 검증 → 본인 업무에 맞게 확장</li>
 </ol>
 <blockquote>
-<p>⭐ = 특히 추천 · ★AI = 회사 Anthropic 키 필요(그 외는 Google 크리덴셜만) · 전부 실제 n8n import 검증됨.</p>
+<p>⭐ = 특히 추천 · ★AI = 본인의 개인 제한 Anthropic API 키 필요(파일 버전은 Google OAuth 불필요, Gmail 출력은 Gmail 자격증명 필요) · JSON 구조·연결 무결성 검증 완료.</p>
 </blockquote>
 
 </main>

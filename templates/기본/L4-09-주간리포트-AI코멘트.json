@@ -1,0 +1,166 @@
+{
+ "name": "📈 주간 리포트 + AI 코멘트",
+ "nodes": [
+  {
+   "parameters": {
+    "rule": {
+     "interval": [
+      {
+       "field": "weeks",
+       "triggerAtDay": [
+        1
+       ],
+       "triggerAtHour": 8,
+       "triggerAtMinute": 0
+      }
+     ]
+    }
+   },
+   "id": "t9a",
+   "name": "매주 월요일 08:00",
+   "type": "n8n-nodes-base.scheduleTrigger",
+   "typeVersion": 1.2,
+   "position": [
+    240,
+    300
+   ]
+  },
+  {
+   "parameters": {
+    "documentId": {
+     "__rl": true,
+     "value": "YOUR_GOOGLE_SHEET_ID",
+     "mode": "id"
+    },
+    "sheetName": {
+     "__rl": true,
+     "value": "gid=0",
+     "mode": "list",
+     "cachedResultName": "주간매출"
+    },
+    "options": {}
+   },
+   "id": "t9b",
+   "name": "주간매출 읽기",
+   "type": "n8n-nodes-base.googleSheets",
+   "typeVersion": 4.5,
+   "position": [
+    440,
+    300
+   ]
+  },
+  {
+   "parameters": {
+    "jsCode": "const items=$input.all();\nconst byCat={};\nfor(const it of items){const c=it.json['상품군']||'기타';const rev=Number(String(it.json['매출']||0).replace(/[,\\s]/g,''))||0;byCat[c]=(byCat[c]||0)+rev;}\nconst lines=Object.entries(byCat).map(([k,v])=>`${k}: ${v.toLocaleString()}원`).join(', ');\nreturn [{json:{집계:lines}}];"
+   },
+   "id": "t9c",
+   "name": "상품군 집계",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    640,
+    300
+   ]
+  },
+  {
+   "parameters": {
+    "method": "POST",
+    "url": "https://api.anthropic.com/v1/messages",
+    "authentication": "genericCredentialType",
+    "genericAuthType": "httpHeaderAuth",
+    "sendHeaders": true,
+    "headerParameters": {
+     "parameters": [
+      {
+       "name": "anthropic-version",
+       "value": "2023-06-01"
+      },
+      {
+       "name": "content-type",
+       "value": "application/json"
+      }
+     ]
+    },
+    "sendBody": true,
+    "specifyBody": "json",
+    "jsonBody": "={{ JSON.stringify({ model: 'claude-sonnet-5', max_tokens: 500, thinking: { type: 'disabled' }, messages: [{ role: 'user', content: '다음 주간 상품군별 매출 집계를 보고, 홈쇼핑 MD가 참고할 인사이트 3줄을 만들어줘.\\n' + ($json['집계']||'') }] }) }}",
+    "options": {}
+   },
+   "id": "t9d",
+   "name": "Claude 인사이트 코멘트",
+   "type": "n8n-nodes-base.httpRequest",
+   "typeVersion": 4.2,
+   "position": [
+    840,
+    300
+   ]
+  },
+  {
+   "parameters": {
+    "sendTo": "YOUR_TEAM@example.com",
+    "subject": "=[주간리포트] 매출 요약 + AI 코멘트",
+    "emailType": "text",
+    "message": "=이번 주 상품군별 매출\n{{ $('상품군 집계').item.json['집계'] }}\n\n[AI 코멘트]\n{{ $('Claude 인사이트 코멘트').item.json.content[0].text }}",
+    "options": {}
+   },
+   "id": "t9e",
+   "name": "주간 리포트 발송",
+   "type": "n8n-nodes-base.gmail",
+   "typeVersion": 2.1,
+   "position": [
+    1040,
+    300
+   ]
+  }
+ ],
+ "connections": {
+  "주간매출 읽기": {
+   "main": [
+    [
+     {
+      "node": "상품군 집계",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "상품군 집계": {
+   "main": [
+    [
+     {
+      "node": "Claude 인사이트 코멘트",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Claude 인사이트 코멘트": {
+   "main": [
+    [
+     {
+      "node": "주간 리포트 발송",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "매주 월요일 08:00": {
+   "main": [
+    [
+     {
+      "node": "주간매출 읽기",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "settings": {
+  "executionOrder": "v1",
+  "timezone": "Asia/Seoul"
+ }
+}

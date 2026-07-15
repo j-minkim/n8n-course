@@ -1,0 +1,180 @@
+{
+ "name": "🆚 경쟁 홈쇼핑 편성 브리핑 · 파일버전",
+ "nodes": [
+  {
+   "parameters": {
+    "rule": {
+     "interval": [
+      {
+       "field": "days",
+       "triggerAtHour": 8,
+       "triggerAtMinute": 0
+      }
+     ]
+    }
+   },
+   "id": "c2a",
+   "name": "매일 08:00",
+   "type": "n8n-nodes-base.scheduleTrigger",
+   "typeVersion": 1.2,
+   "position": [
+    240,
+    300
+   ]
+  },
+  {
+   "id": "read_경쟁사편성",
+   "name": "경쟁사편성 파일 읽기",
+   "type": "n8n-nodes-base.readWriteFile",
+   "typeVersion": 1,
+   "position": [
+    440,
+    300
+   ],
+   "parameters": {
+    "fileSelector": "YOUR_DATA_DIR/경쟁사편성.csv",
+    "options": {}
+   }
+  },
+  {
+   "id": "ext_경쟁사편성",
+   "name": "경쟁사 편성 읽기",
+   "type": "n8n-nodes-base.extractFromFile",
+   "typeVersion": 1,
+   "position": [
+    640,
+    300
+   ],
+   "parameters": {
+        "operation": "csv",
+        "options": {
+          "enableBOM": true
+        }
+   }
+  },
+  {
+   "parameters": {
+    "jsCode": "const items=$input.all();\nconst by={};\nfor(const it of items){const ch=it.json['채널']||'경쟁사';(by[ch]=by[ch]||[]).push(`${it.json['시간']||''} ${it.json['상품']||''} (${it.json['카테고리']||''})`);}\nconst brief=Object.entries(by).map(([k,v])=>`[${k}]\\n`+v.join('\\n')).join('\\n\\n');\nreturn [{json:{brief}}];"
+   },
+   "id": "c2c",
+   "name": "채널별 편성 묶기",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    840,
+    300
+   ]
+  },
+  {
+   "parameters": {
+    "method": "POST",
+    "url": "https://api.anthropic.com/v1/messages",
+    "authentication": "genericCredentialType",
+    "genericAuthType": "httpHeaderAuth",
+    "sendHeaders": true,
+    "headerParameters": {
+     "parameters": [
+      {
+       "name": "anthropic-version",
+       "value": "2023-06-01"
+      },
+      {
+       "name": "content-type",
+       "value": "application/json"
+      }
+     ]
+    },
+    "sendBody": true,
+    "specifyBody": "json",
+    "jsonBody": "={{ JSON.stringify({ model: 'claude-sonnet-5', max_tokens: 600, thinking: { type: 'disabled' }, messages: [{ role: 'user', content: '경쟁 홈쇼핑들의 오늘 편성 목록이다(채널·시간·상품·카테고리). 카테고리 분포와 시간대 특징을 3줄로 요약하고, 우리가 차별화할 슬롯 아이디어 2가지를 제안해줘.\\n' + $json['brief'] }] }) }}",
+    "options": {}
+   },
+   "id": "c2d",
+   "name": "Claude 편성 브리핑",
+   "type": "n8n-nodes-base.httpRequest",
+   "typeVersion": 4.2,
+   "position": [
+    1040,
+    300
+   ]
+  },
+  {
+   "parameters": {
+    "sendTo": "YOUR_MD@example.com",
+    "subject": "=[경쟁편성] 오늘 경쟁 홈쇼핑 편성 브리핑",
+    "emailType": "text",
+    "message": "={{ $json.content[0].text }}",
+    "options": {}
+   },
+   "id": "c2e",
+   "name": "MD 편성 브리핑",
+   "type": "n8n-nodes-base.gmail",
+   "typeVersion": 2.1,
+   "position": [
+    1240,
+    300
+   ]
+  }
+ ],
+ "connections": {
+  "매일 08:00": {
+   "main": [
+    [
+     {
+      "node": "경쟁사편성 파일 읽기",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "경쟁사 편성 읽기": {
+   "main": [
+    [
+     {
+      "node": "채널별 편성 묶기",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "채널별 편성 묶기": {
+   "main": [
+    [
+     {
+      "node": "Claude 편성 브리핑",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Claude 편성 브리핑": {
+   "main": [
+    [
+     {
+      "node": "MD 편성 브리핑",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "경쟁사편성 파일 읽기": {
+   "main": [
+    [
+     {
+      "node": "경쟁사 편성 읽기",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "settings": {
+  "executionOrder": "v1",
+  "timezone": "Asia/Seoul"
+ }
+}

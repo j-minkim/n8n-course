@@ -1,0 +1,137 @@
+{
+  "name": "📦 재고 부족 알림",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "triggerAtHour": 10,
+              "triggerAtMinute": 0
+            }
+          ]
+        }
+      },
+      "id": "t4a",
+      "name": "매일 10:00",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_GOOGLE_SHEET_ID",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "재고"
+        },
+        "options": {}
+      },
+      "id": "t4b",
+      "name": "재고 시트 읽기",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        460,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "typeValidation": "loose"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ Number($json['재고수량']) }}",
+              "rightValue": 100,
+              "operator": {
+                "type": "number",
+                "operation": "lt"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "t4c",
+      "name": "재고 임계 이하만",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        680,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "sendTo": "YOUR_BUYER@example.com",
+        "subject": "=[재고부족] 발주 확인 요망",
+        "emailType": "text",
+        "message": "=재고가 임계 이하인 상품입니다.\n\n- 상품: {{ $json['상품명'] }}\n- 재고수량: {{ $json['재고수량'] }}\n\n발주 확인 부탁드립니다.",
+        "options": {}
+      },
+      "id": "t4d",
+      "name": "구매담당 알림",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        900,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "매일 10:00": {
+      "main": [
+        [
+          {
+            "node": "재고 시트 읽기",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "재고 시트 읽기": {
+      "main": [
+        [
+          {
+            "node": "재고 임계 이하만",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "재고 임계 이하만": {
+      "main": [
+        [
+          {
+            "node": "구매담당 알림",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Seoul"
+  }
+}

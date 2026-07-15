@@ -1,0 +1,221 @@
+{
+ "name": "📞 콜센터 폭주 조기경보 · 파일버전",
+ "nodes": [
+  {
+   "parameters": {
+    "rule": {
+     "interval": [
+      {
+       "field": "minutes",
+       "minutesInterval": 3
+      }
+     ]
+    }
+   },
+   "id": "s3a",
+   "name": "피크시간 3분마다",
+   "type": "n8n-nodes-base.scheduleTrigger",
+   "typeVersion": 1.2,
+   "position": [
+    240,
+    300
+   ]
+  },
+  {
+   "id": "read_콜현황",
+   "name": "콜현황 파일 읽기",
+   "type": "n8n-nodes-base.readWriteFile",
+   "typeVersion": 1,
+   "position": [
+    440,
+    300
+   ],
+   "parameters": {
+    "fileSelector": "YOUR_DATA_DIR/콜현황.csv",
+    "options": {}
+   }
+  },
+  {
+   "id": "ext_콜현황",
+   "name": "콜 현황 읽기",
+   "type": "n8n-nodes-base.extractFromFile",
+   "typeVersion": 1,
+   "position": [
+    640,
+    300
+   ],
+   "parameters": {
+        "operation": "csv",
+        "options": {
+          "enableBOM": true
+        }
+   }
+  },
+  {
+   "parameters": {
+    "jsCode": "const r=$json;\nconst num=v=>Number(String(v||0).replace(/[,%\\s]/g,''))||0;\nconst 대기=num(r['현재대기']);\nconst 포기율=num(r['콜포기율']);\nconst 폭주=(대기>=30)||(포기율>=15);\nreturn [{json:{진행방송:r['진행중방송']||'-',현재대기:대기,콜포기율:포기율,상담원가동:r['상담원가동']||'-',폭주:String(폭주)}}];"
+   },
+   "id": "s3c",
+   "name": "폭주 임계 판정",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    840,
+    300
+   ]
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "typeValidation": "loose"
+     },
+     "combinator": "and",
+     "conditions": [
+      {
+       "id": "c1",
+       "leftValue": "={{ $json['폭주'] }}",
+       "rightValue": "true",
+       "operator": {
+        "type": "string",
+        "operation": "equals"
+       }
+      }
+     ]
+    },
+    "options": {}
+   },
+   "id": "s3d",
+   "name": "폭주일 때만",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2.2,
+   "position": [
+    1040,
+    300
+   ]
+  },
+  {
+   "parameters": {
+    "method": "POST",
+    "url": "https://api.anthropic.com/v1/messages",
+    "authentication": "genericCredentialType",
+    "genericAuthType": "httpHeaderAuth",
+    "sendHeaders": true,
+    "headerParameters": {
+     "parameters": [
+      {
+       "name": "anthropic-version",
+       "value": "2023-06-01"
+      },
+      {
+       "name": "content-type",
+       "value": "application/json"
+      }
+     ]
+    },
+    "sendBody": true,
+    "specifyBody": "json",
+    "jsonBody": "={{ JSON.stringify({ model: 'claude-sonnet-5', max_tokens: 350, thinking: { type: 'disabled' }, messages: [{ role: 'user', content: '홈쇼핑 콜센터가 폭주 임계를 넘었다. 운영자가 즉시 취할 조치 2~3가지를 한국어 한 줄씩 제안해줘(예: 상담원 증원 호출, ARS/챗봇 유도, 방송 자막으로 모바일주문 안내).\\n진행 방송: ' + $json['진행방송'] + ' / 현재 대기 ' + $json['현재대기'] + '명 / 콜포기율 ' + $json['콜포기율'] + '%' }] }) }}",
+    "options": {}
+   },
+   "id": "s3e",
+   "name": "Claude 조치 제안",
+   "type": "n8n-nodes-base.httpRequest",
+   "typeVersion": 4.2,
+   "position": [
+    1240,
+    220
+   ]
+  },
+  {
+   "parameters": {
+    "sendTo": "YOUR_OPS@example.com",
+    "subject": "=[콜폭주] 대기 {{ $('폭주 임계 판정').item.json['현재대기'] }}명 · 포기율 {{ $('폭주 임계 판정').item.json['콜포기율'] }}%",
+    "emailType": "text",
+    "message": "=⚠️ 콜센터 폭주\n- 진행 방송: {{ $('폭주 임계 판정').item.json['진행방송'] }}\n- 현재 대기: {{ $('폭주 임계 판정').item.json['현재대기'] }}명 / 콜포기율 {{ $('폭주 임계 판정').item.json['콜포기율'] }}%\n- 상담원 가동: {{ $('폭주 임계 판정').item.json['상담원가동'] }}\n\n[조치]\n{{ $json.content[0].text }}",
+    "options": {}
+   },
+   "id": "s3f",
+   "name": "운영팀 긴급 경보",
+   "type": "n8n-nodes-base.gmail",
+   "typeVersion": 2.1,
+   "position": [
+    1440,
+    220
+   ]
+  }
+ ],
+ "connections": {
+  "피크시간 3분마다": {
+   "main": [
+    [
+     {
+      "node": "콜현황 파일 읽기",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "콜 현황 읽기": {
+   "main": [
+    [
+     {
+      "node": "폭주 임계 판정",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "폭주 임계 판정": {
+   "main": [
+    [
+     {
+      "node": "폭주일 때만",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "폭주일 때만": {
+   "main": [
+    [
+     {
+      "node": "Claude 조치 제안",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Claude 조치 제안": {
+   "main": [
+    [
+     {
+      "node": "운영팀 긴급 경보",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "콜현황 파일 읽기": {
+   "main": [
+    [
+     {
+      "node": "콜 현황 읽기",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "settings": {
+  "executionOrder": "v1",
+  "timezone": "Asia/Seoul"
+ }
+}

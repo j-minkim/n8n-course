@@ -1,0 +1,153 @@
+{
+  "name": "📰 홈쇼핑 뉴스 아침 브리핑",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "triggerAtHour": 8,
+              "triggerAtMinute": 0
+            }
+          ]
+        }
+      },
+      "id": "t10a",
+      "name": "매일 08:00",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://news.google.com/rss/search?q=%ED%99%88%EC%87%BC%ED%95%91%20%EC%9C%A0%ED%86%B5%20%EC%8B%A0%EC%83%81%ED%92%88%20%EA%B8%B0%ED%9A%8D%EC%A0%84&hl=ko&gl=KR&ceid=KR:ko",
+        "options": {}
+      },
+      "id": "t10b",
+      "name": "뉴스 RSS 읽기",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.1,
+      "position": [
+        440,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const items=$input.all().slice(0,5);\nconst list=items.map((it,i)=>`${i+1}. ${it.json.title}`).join('\\n');\nreturn [{json:{뉴스:list}}];"
+      },
+      "id": "t10c",
+      "name": "상위 5개 정리",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        640,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "anthropic-version",
+              "value": "2023-06-01"
+            },
+            {
+              "name": "content-type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ model: 'claude-sonnet-5', max_tokens: 500, thinking: { type: 'disabled' }, messages: [{ role: 'user', content: '다음 유통·홈쇼핑 뉴스 제목 5개를 한국어로 3줄 브리핑으로 요약해줘.\\n' + ($json['뉴스']||'') }] }) }}",
+        "options": {}
+      },
+      "id": "t10d",
+      "name": "Claude 뉴스 브리핑",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        840,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "sendTo": "YOUR_TEAM@example.com",
+        "subject": "=[아침 브리핑] 유통·홈쇼핑 뉴스",
+        "emailType": "text",
+        "message": "={{ $json.content[0].text }}",
+        "options": {}
+      },
+      "id": "t10e",
+      "name": "브리핑 메일",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1040,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "매일 08:00": {
+      "main": [
+        [
+          {
+            "node": "뉴스 RSS 읽기",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "뉴스 RSS 읽기": {
+      "main": [
+        [
+          {
+            "node": "상위 5개 정리",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "상위 5개 정리": {
+      "main": [
+        [
+          {
+            "node": "Claude 뉴스 브리핑",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Claude 뉴스 브리핑": {
+      "main": [
+        [
+          {
+            "node": "브리핑 메일",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Seoul"
+  }
+}

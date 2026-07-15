@@ -1,0 +1,194 @@
+{
+ "name": "✍️ 방송 자막·상세 카피 생성기 · 파일버전",
+ "nodes": [
+  {
+   "parameters": {},
+   "id": "s4a",
+   "name": "▶ 실행 (수동)",
+   "type": "n8n-nodes-base.manualTrigger",
+   "typeVersion": 1,
+   "position": [
+    240,
+    300
+   ]
+  },
+  {
+   "id": "read_카피요청",
+   "name": "카피요청 파일 읽기",
+   "type": "n8n-nodes-base.readWriteFile",
+   "typeVersion": 1,
+   "position": [
+    440,
+    300
+   ],
+   "parameters": {
+    "fileSelector": "YOUR_DATA_DIR/카피요청.csv",
+    "options": {}
+   }
+  },
+  {
+   "id": "ext_카피요청",
+   "name": "카피 요청 읽기",
+   "type": "n8n-nodes-base.extractFromFile",
+   "typeVersion": 1,
+   "position": [
+    640,
+    300
+   ],
+   "parameters": {
+        "operation": "csv",
+        "options": {
+          "enableBOM": true
+        }
+   }
+  },
+  {
+   "parameters": {
+    "method": "POST",
+    "url": "https://api.anthropic.com/v1/messages",
+    "authentication": "genericCredentialType",
+    "genericAuthType": "httpHeaderAuth",
+    "sendHeaders": true,
+    "headerParameters": {
+     "parameters": [
+      {
+       "name": "anthropic-version",
+       "value": "2023-06-01"
+      },
+      {
+       "name": "content-type",
+       "value": "application/json"
+      }
+     ]
+    },
+    "sendBody": true,
+    "specifyBody": "json",
+    "jsonBody": "={{ JSON.stringify({ model: 'claude-sonnet-5', max_tokens: 900, thinking: { type: 'disabled' }, messages: [{ role: 'user', content: '홈쇼핑 방송/상세페이지 카피라이터다. 아래 상품 정보로 (1) 방송 자막 문구 3안(각 20자 내외, 자극적이지 않게) (2) 상세페이지 소개 문구 3문장 (3) 실시간 채팅 응대 멘트 2개 를 한국어로 만들어줘. 과장·허위·의료효능 표현 금지.\\n상품: ' + $json['상품명'] + ' / 핵심특징: ' + ($json['핵심특징']||'') + ' / 가격: ' + ($json['가격']||'') }] }) }}",
+    "options": {}
+   },
+   "id": "s4c",
+   "name": "Claude 카피 생성",
+   "type": "n8n-nodes-base.httpRequest",
+   "typeVersion": 4.2,
+   "position": [
+    840,
+    300
+   ]
+  },
+  {
+   "parameters": {
+    "jsCode": "return [{json:{상품명:$('카피 요청 읽기').item.json['상품명'], 생성카피:$json.content[0].text}}];"
+   },
+   "id": "s4d",
+   "name": "결과 정리",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    1040,
+    300
+   ]
+  },
+  {
+   "id": "conv_카피결과",
+   "name": "카피결과 CSV 변환",
+   "type": "n8n-nodes-base.convertToFile",
+   "typeVersion": 1.1,
+   "position": [
+    1240,
+    300
+   ],
+   "parameters": {
+    "operation": "csv",
+    "options": {}
+   }
+  },
+  {
+   "id": "write_카피결과",
+   "name": "카피 결과 저장",
+   "type": "n8n-nodes-base.readWriteFile",
+   "typeVersion": 1,
+   "position": [
+    1440,
+    300
+   ],
+   "parameters": {
+    "operation": "write",
+    "fileName": "=YOUR_DATA_DIR/카피결과_{{ $now.format('yyyy-LL-dd_HHmm') }}.csv",
+    "dataPropertyName": "data",
+    "options": {}
+   }
+  }
+ ],
+ "connections": {
+  "▶ 실행 (수동)": {
+   "main": [
+    [
+     {
+      "node": "카피요청 파일 읽기",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "카피 요청 읽기": {
+   "main": [
+    [
+     {
+      "node": "Claude 카피 생성",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Claude 카피 생성": {
+   "main": [
+    [
+     {
+      "node": "결과 정리",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "결과 정리": {
+   "main": [
+    [
+     {
+      "node": "카피결과 CSV 변환",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "카피요청 파일 읽기": {
+   "main": [
+    [
+     {
+      "node": "카피 요청 읽기",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "카피결과 CSV 변환": {
+   "main": [
+    [
+     {
+      "node": "카피 결과 저장",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "settings": {
+  "executionOrder": "v1",
+  "timezone": "Asia/Seoul"
+ }
+}
