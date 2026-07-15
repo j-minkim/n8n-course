@@ -145,7 +145,7 @@
 <h4>Step 3 — <code>콜 현황 읽기</code> 추가</h4>
 <ul>
 <li><strong>검색어:</strong> <code>Extract from File</code></li>
-<li><strong>속성 설정:</strong> Operation = <strong><code>Extract From CSV</code></strong> (기본 필드 그대로 · 엑셀 파일이면 <code>Extract From XLSX</code>)</li>
+<li><strong>속성 설정:</strong> Operation = <strong><code>Extract From CSV</code></strong> → Options → <strong><code>Exclude Byte Order Mark (BOM)</code> 켜기</strong>(엑셀이 저장한 CSV 대응 · 엑셀 파일 자체면 <code>Extract From XLSX</code>)</li>
 <li><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</li>
 <li><strong>테스트 포인트:</strong> Test step에서 CSV 각 행이 JSON 아이템으로 나오는지(헤더 = 필드명) 확인 — 여기서부터는 시트 버전과 데이터 모양이 완전히 같습니다.</li>
 </ul>
@@ -193,7 +193,7 @@ return [{json:{진행방송:r[&#39;진행중방송&#39;]||&#39;-&#39;,현재대�
 </ul>
 </li>
 </ul>
-<pre><code class="language-text">{{ JSON.stringify({ model: &#39;claude-sonnet-5&#39;, max_tokens: 350, messages: [{ role: &#39;user&#39;, content: &#39;홈쇼핑 콜센터가 폭주 임계를 넘었다. 운영자가 즉시 취할 조치 2~3가지를 한국어 한 줄씩 제안해줘(예: 상담원 증원 호출, ARS/챗봇 유도, 방송 자막으로 모바일주문 안내).\n진행 방송: &#39; + $json[&#39;진행방송&#39;] + &#39; / 현재 대기 &#39; + $json[&#39;현재대기&#39;] + &#39;명 / 콜포기율 &#39; + $json[&#39;콜포기율&#39;] + &#39;%&#39; }] }) }}
+<pre><code class="language-text">{{ JSON.stringify({ model: &#39;claude-sonnet-5&#39;, max_tokens: 350, thinking: { type: &#39;disabled&#39; }, messages: [{ role: &#39;user&#39;, content: &#39;홈쇼핑 콜센터가 폭주 임계를 넘었다. 운영자가 즉시 취할 조치 2~3가지를 한국어 한 줄씩 제안해줘(예: 상담원 증원 호출, ARS/챗봇 유도, 방송 자막으로 모바일주문 안내).\n진행 방송: &#39; + $json[&#39;진행방송&#39;] + &#39; / 현재 대기 &#39; + $json[&#39;현재대기&#39;] + &#39;명 / 콜포기율 &#39; + $json[&#39;콜포기율&#39;] + &#39;%&#39; }] }) }}
 </code></pre>
 <ul>
 <li><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</li>

@@ -82,36 +82,33 @@
 <main class="doc">
 <h1>01. ⭐ 방송상품 가격경쟁력 진단</h1>
 <blockquote>
-<p>방송 예정 상품이 인터넷 최저가보다 비싼지 매일 아침 자동 점검하고, 비싸면 Claude가 방송 대응 소구점을 제안합니다.</p>
+<p>방송 예정 상품이 조사해둔 비교가(경쟁몰 가격)보다 비싼지 매일 아침 점검하고, 비싸면 Claude가 방송 대응 소구점을 제안합니다. (파일 버전=외부 API 불필요)</p>
 </blockquote>
-<p><strong>받는 사람:</strong> MD · <strong>분류:</strong> 경쟁사 조사 · <strong>데이터 파일:</strong> <code>방송예정상품.csv</code> 헤더: <code>상품명 · 우리방송가</code> — <code>~/.n8n-files</code>에 넣기</p>
+<p><strong>받는 사람:</strong> MD · <strong>분류:</strong> 경쟁사 조사 · <strong>데이터 파일:</strong> <code>방송예정상품.csv</code> 헤더: <code>상품명 · 우리방송가 · 비교가격 · 비교몰</code> — <code>~/.n8n-files</code>에 넣기</p>
 <ul>
-<li><strong>★네이버쇼핑 API</strong>: developers.naver.com → 애플리케이션 등록 → 검색 API(쇼핑) 사용 설정 → Client ID/Secret 발급 (무료 쿼터 있음)</li>
+<li>★파일 버전은 <strong>외부 API가 필요 없습니다</strong> — CSV의 <code>비교가격</code>(본인이 조사해 입력)과 비교. 실시간 최저가 자동조회(네이버쇼핑 API)는 구글시트 버전(보조)에 있어요(단 네이버 검색 API 2026-07-31 종료 예정).</li>
 </ul>
 <blockquote>
 <p>처음 만드는 필드 종류(노드 추가·연결·표현식 토글·크리덴셜)는 <a href="guide-build-common.html">공통 조작법</a>을 먼저 보세요.</p>
 </blockquote>
 <h2>🤖 경로 A — Claude Code에게 시키기 (메타프롬프트)</h2>
 <p>이 강의의 방식대로, 아래 프롬프트를 <strong>Claude Code에 그대로 붙여넣으면</strong> 이 워크플로 JSON을 만들어줍니다(n8n-MCP 연결 시 더 정확). 받은 JSON을 <code>⋮ → Import from File</code>로 불러온 뒤 <strong>노드별 Test step으로 검증</strong>하세요 — AI 초안은 가설, 진실은 에디터 실행 결과입니다.</p>
-<pre><code class="language-text">n8n 워크플로 JSON을 만들어줘: &quot;방송상품 가격경쟁력 진단&quot; 자동화야. (데이터는 CSV 파일 기준)
+<pre><code class="language-text">n8n 워크플로 JSON을 만들어줘: &quot;방송상품 가격경쟁력 진단&quot; 자동화야. (데이터는 CSV 파일 기준 · 외부 API 불필요)
 
-[목표] 방송 예정 상품이 인터넷 최저가보다 비싼지 매일 아침 점검하고, 비싸면 Claude가 방송 대응 소구점을 제안해 MD에게 메일.
+[목표] 방송 예정 상품이 조사해둔 비교가(경쟁몰 가격)보다 비싼지 매일 아침 점검하고, 비싸면 Claude가 방송 대응 소구점을 제안해 MD에게 메일.
 
-[노드 체인 — 8개, 순서대로]
+[노드 체인 — 7개, 순서대로]
 1. Schedule Trigger — 매일 07:30
-2. Read/Write Files from Disk — 읽기: YOUR_DATA_DIR/방송예정상품.csv (헤더: 상품명·우리방송가)
-3. Extract from File — CSV 파싱. ★노드 이름을 &#39;방송예정 상품 읽기&#39;로(뒤 Code가 $()로 참조)
-4. HTTP Request(GET) — 네이버쇼핑 검색 API
-   https://openapi.naver.com/v1/search/shop.json?query={{ encodeURIComponent($json[&#39;상품명&#39;]) }}&amp;display=20&amp;sort=sim
-   헤더: X-Naver-Client-Id / X-Naver-Client-Secret (값은 YOUR_NAVER_CLIENT_ID/SECRET)
-5. Code — 최저가 비교: items의 title에서 HTML 태그 제거, lprice 숫자화,
-   ★가격 중앙값의 40% 미만은 부품·액세서리 오탐으로 버리고, 남은 것 중 최저가 선정.
-   $(&#39;방송예정 상품 읽기&#39;)의 우리방송가(콤마 제거)와 비교해 가격차·열위(true/false) 산출.
-6. IF — 열위 = &quot;true&quot; 일 때만
-7. HTTP Request(POST) — Claude에게 &quot;인터넷 최저가보다 비쌀 때 방송에서 쓸 대응 소구점 2가지
-   (방송한정가·추가 사은품·무이자·차별화 포인트)&quot;를 3줄로 요청. 상품명·우리방송가·최저가·최저가몰·가격차 포함.
-8. Gmail — MD에게: 제목 &quot;[가격경쟁력] {상품명} — 최저가 대비 {가격차}원 비쌈&quot;,
-   본문에 우리방송가/최저가(몰)/가격차 + Claude 소구점.
+2. Read/Write Files from Disk — 읽기: YOUR_DATA_DIR/방송예정상품.csv (헤더: 상품명·우리방송가·비교가격·비교몰)
+3. Extract from File — CSV 파싱(Exclude BOM 옵션 켜기). ★노드 이름을 &#39;방송예정 상품 읽기&#39;로
+4. Code — 비교가격 판단(노드 이름 &#39;비교가격 판단&#39;): 우리방송가·비교가격 숫자화(콤마 제거),
+   가격차 = 우리방송가-비교가격, 열위 = (비교가격&gt;0 &amp;&amp; 가격차&gt;0) 을 &quot;true&quot;/&quot;false&quot; 문자열로.
+5. IF — 열위 = &quot;true&quot; 일 때만
+6. HTTP Request(POST) — Claude에게 &quot;비교가보다 비쌀 때 방송에서 쓸 대응 소구점 2가지
+   (방송한정가·추가 사은품·무이자·차별화 포인트)&quot;를 3줄로 요청. 상품명·우리방송가·비교가격·비교몰·가격차 포함.
+7. Gmail — MD에게: 제목 &quot;[가격경쟁력] {상품명} — 입력 비교가 대비 {가격차}원 비쌈&quot;.
+
+★참고: 실시간 최저가 자동조회(네이버쇼핑 API) 버전은 구글시트(보조) 버전에 있어 — 단 네이버 검색 API가 2026-07-31 종료 예정이라, 파일 버전은 의도적으로 &quot;본인이 조사해 입력한 비교가&quot; 방식이야.
 
 [공통 규칙 — 그대로 지켜줘]
 - n8n-MCP가 연결돼 있으면 각 노드의 정확한 파라미터를 조회해서 만들고, 없으면 표준 노드 구조로.
@@ -130,7 +127,7 @@
 </blockquote>
 <h2>🔧 경로 B — 손으로 직접 만들기 (스텝바이스텝)</h2>
 <p>노드가 왜 이 순서로 놓이는지 이해하려면 이 경로로. 아래 Step은 <strong>기본(파일 버전)</strong> 기준입니다 — 구글시트 버전(보조)은 파일 노드 2단 자리에 Google Sheets 노드 1개가 들어갑니다: <a href="guide-file-version.html">차이 보기</a></p>
-<p><strong>노드 순서 (총 8개):</strong> 매일 07:30 → 방송예정상품 파일 읽기 → 방송예정 상품 읽기 → 네이버쇼핑 최저가 조회 → 최저가 비교 → 가격 열위만 → Claude 대응 소구점 → MD 가격진단 메일</p>
+<p><strong>노드 순서 (총 7개):</strong> 매일 07:30 → 방송예정상품 파일 읽기 → 방송예정 상품 읽기 → 비교가격 판단 → 가격 열위만 → Claude 대응 소구점 → MD 가격진단 메일</p>
 <h4>Step 1 — <code>매일 07:30</code> 추가</h4>
 <ul>
 <li><strong>검색어:</strong> <code>Schedule Trigger</code></li>
@@ -152,50 +149,26 @@
 <h4>Step 3 — <code>방송예정 상품 읽기</code> 추가</h4>
 <ul>
 <li><strong>검색어:</strong> <code>Extract from File</code></li>
-<li><strong>속성 설정:</strong> Operation = <strong><code>Extract From CSV</code></strong> (기본 필드 그대로 · 엑셀 파일이면 <code>Extract From XLSX</code>)</li>
+<li><strong>속성 설정:</strong> Operation = <strong><code>Extract From CSV</code></strong> → Options → <strong><code>Exclude Byte Order Mark (BOM)</code> 켜기</strong>(엑셀이 저장한 CSV 대응 · 엑셀 파일 자체면 <code>Extract From XLSX</code>)</li>
 <li><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</li>
 <li><strong>테스트 포인트:</strong> Test step에서 CSV 각 행이 JSON 아이템으로 나오는지(헤더 = 필드명) 확인 — 여기서부터는 시트 버전과 데이터 모양이 완전히 같습니다.</li>
 </ul>
-<h4>Step 4 — <code>네이버쇼핑 최저가 조회</code> 추가</h4>
-<ul>
-<li><strong>검색어:</strong> <code>HTTP Request</code></li>
-<li><strong>속성 설정:</strong><ul>
-<li>Method = <strong><code>GET</code></strong></li>
-<li>URL: 표현식 토글(=) 켜고 → <code>https://openapi.naver.com/v1/search/shop.json?query={{ encodeURIComponent($json[&#39;상품명&#39;]) }}&amp;display=20&amp;sort=sim</code></li>
-<li>Authentication = <strong><code>None</code></strong> (인증은 헤더로 직접 넣음 — 아래)</li>
-<li>Send Headers = <strong>On</strong> → Add Header 2번:<ul>
-<li><code>X-Naver-Client-Id</code> = <code>YOUR_NAVER_CLIENT_ID</code></li>
-<li><code>X-Naver-Client-Secret</code> = <code>YOUR_NAVER_CLIENT_SECRET</code></li>
-</ul>
-</li>
-<li>Send Body = <strong>Off</strong> (GET 요청이라 바디 없음, 값은 URL과 헤더로 전달)</li>
-</ul>
-</li>
-<li><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</li>
-<li><strong>테스트 포인트:</strong> Test step에서 <code>items</code> 배열에 상품 목록(<code>title</code>·<code>lprice</code>·<code>mallName</code>)이 들어있는지 확인. 401/403 에러면 네이버 Client ID/Secret을 다시 확인하세요.</li>
-</ul>
-<h4>Step 5 — <code>최저가 비교</code> 추가</h4>
+<h4>Step 4 — <code>비교가격 판단</code> 추가</h4>
 <ul>
 <li><strong>검색어:</strong> <code>Code</code></li>
 <li><strong>속성 설정:</strong> Mode = <strong><code>Run Once for All Items</code></strong> (기본값, 바꾸지 않음) → JavaScript 편집창에 아래 코드를 그대로 붙여넣기:</li>
 </ul>
-<pre><code class="language-javascript">const clean=s=&gt;String(s||&#39;&#39;).replace(/&lt;[^&gt;]+&gt;/g,&#39;&#39;);
-let items=($json.items||[]).map(it=&gt;({title:clean(it.title),price:Number(it.lprice)||0,mall:it.mallName})).filter(x=&gt;x.price&gt;0);
-// ★액세서리·부품 이상치 제거: 가격 중앙값의 40% 미만은 버림(부품이 진짜 상품 최저가로 잡히는 것 방지)
-const ps=items.map(x=&gt;x.price).sort((a,b)=&gt;a-b);
-const median=ps.length?ps[Math.floor(ps.length/2)]:0;
-items=items.filter(x=&gt;x.price&gt;=median*0.4);
-items.sort((a,b)=&gt;a.price-b.price);
-const low=items[0]||{price:0,mall:&#39;-&#39;,title:&#39;-&#39;};
-const mine=Number(String($(&#39;방송예정 상품 읽기&#39;).item.json[&#39;우리방송가&#39;]||0).replace(/[,\s]/g,&#39;&#39;))||0;
-const gap=mine-low.price;
-return [{json:{상품명:$(&#39;방송예정 상품 읽기&#39;).item.json[&#39;상품명&#39;],우리방송가:mine,최저가:low.price,최저가몰:low.mall,가격차:gap,열위:String(gap&gt;0)}}];
+<pre><code class="language-javascript">const n=v=&gt;Number(String(v??0).replace(/[,\s]/g,&#39;&#39;))||0;
+const mine=n($json[&#39;우리방송가&#39;]);
+const compare=n($json[&#39;비교가격&#39;]);
+const gap=mine-compare;
+return [{json:{상품명:$json[&#39;상품명&#39;],우리방송가:mine,비교가격:compare,비교몰:$json[&#39;비교몰&#39;]||&#39;사용자 입력&#39;,가격차:gap,열위:String(compare&gt;0&amp;&amp;gap&gt;0)}}];
 </code></pre>
 <ul>
 <li><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</li>
 <li><strong>테스트 포인트:</strong> Test step 눌러서 출력 JSON에 기대한 필드(위 코드의 <code>return</code>에 있는 키들)가 정확히 나오는지 확인하세요. 여기서 필드명 오타가 나면 다음 노드부터 전부 빈 값이 됩니다.</li>
 </ul>
-<h4>Step 6 — <code>가격 열위만</code> 추가</h4>
+<h4>Step 5 — <code>가격 열위만</code> 추가</h4>
 <ul>
 <li><strong>검색어:</strong> <code>If</code></li>
 <li><strong>속성 설정:</strong> Add Condition 클릭 →<ul>
@@ -207,7 +180,7 @@ return [{json:{상품명:$(&#39;방송예정 상품 읽기&#39;).item.json[&#39;
 <li><strong>동작 방식:</strong> If는 조건에 따라 출력이 <strong>True/False 두 갈래</strong>로 갈립니다. 이 템플릿에서는 <strong>True 쪽 출력만</strong> 다음 노드에 연결하세요(False는 그냥 끝).</li>
 <li><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</li>
 </ul>
-<h4>Step 7 — <code>Claude 대응 소구점</code> 추가</h4>
+<h4>Step 6 — <code>Claude 대응 소구점</code> 추가</h4>
 <ul>
 <li><strong>검색어:</strong> <code>HTTP Request</code></li>
 <li><strong>속성 설정:</strong><ul>
@@ -223,29 +196,29 @@ return [{json:{상품명:$(&#39;방송예정 상품 읽기&#39;).item.json[&#39;
 </ul>
 </li>
 </ul>
-<pre><code class="language-text">{{ JSON.stringify({ model: &#39;claude-sonnet-5&#39;, max_tokens: 400, messages: [{ role: &#39;user&#39;, content: &#39;홈쇼핑 방송 상품의 가격 경쟁력 진단이다. 아래 정보를 보고, 인터넷 최저가보다 비쌀 때 방송에서 쓸 대응 소구점 2가지(예: 방송한정가·추가 사은품·무이자·차별화 포인트)를 한국어 3줄로 제안해줘.\n상품: &#39; + $json[&#39;상품명&#39;] + &#39; / 우리 방송가: &#39; + $json[&#39;우리방송가&#39;] + &#39;원 / 인터넷 최저가: &#39; + $json[&#39;최저가&#39;] + &#39;원(&#39; + $json[&#39;최저가몰&#39;] + &#39;) / 가격차: &#39; + $json[&#39;가격차&#39;] + &#39;원&#39; }] }) }}
+<pre><code class="language-text">{{ JSON.stringify({ model: &#39;claude-sonnet-5&#39;, max_tokens: 400, thinking: { type: &#39;disabled&#39; }, messages: [{ role: &#39;user&#39;, content: &#39;홈쇼핑 방송 상품의 가격 경쟁력 진단이다. 아래 정보를 보고, 사용자 입력 비교가보다 비쌀 때 방송에서 쓸 대응 소구점 2가지(예: 방송한정가·추가 사은품·무이자·차별화 포인트)를 한국어 3줄로 제안해줘.\n상품: &#39; + $json[&#39;상품명&#39;] + &#39; / 우리 방송가: &#39; + $json[&#39;우리방송가&#39;] + &#39;원 / 사용자 입력 비교가: &#39; + $json[&#39;비교가격&#39;] + &#39;원(&#39; + $json[&#39;비교몰&#39;] + &#39;) / 가격차: &#39; + $json[&#39;가격차&#39;] + &#39;원&#39; }] }) }}
 </code></pre>
 <ul>
 <li><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</li>
 <li><strong>테스트 포인트:</strong> Test step에서 <code>content[0].text</code>에 Claude의 응답 문장이 들어있는지 확인. <code>invalid x-api-key</code> 에러면 크리덴셜 값을 다시 확인하세요.</li>
 </ul>
-<h4>Step 8 — <code>MD 가격진단 메일</code> 추가</h4>
+<h4>Step 7 — <code>MD 가격진단 메일</code> 추가</h4>
 <ul>
 <li><strong>검색어:</strong> <code>Gmail</code></li>
 <li><strong>속성 설정:</strong><ul>
 <li>Credential: 공통 조작법에서 만든 Gmail 계정 선택</li>
 <li>Operation = <strong><code>Send</code></strong> (기본값)</li>
 <li>To: 표현식 토글 <strong>끄고</strong> → <code>YOUR_MD@example.com</code> (본인 이메일로 교체해서 테스트)</li>
-<li>Subject: 표현식 토글(=) 켜고 → <code>[가격경쟁력] {{ $(&#39;최저가 비교&#39;).item.json[&#39;상품명&#39;] }} — 최저가 대비 {{ $(&#39;최저가 비교&#39;).item.json[&#39;가격차&#39;] }}원 비쌈</code></li>
+<li>Subject: 표현식 토글(=) 켜고 → <code>[가격경쟁력] {{ $(&#39;비교가격 판단&#39;).item.json[&#39;상품명&#39;] }} — 입력 비교가 대비 {{ $(&#39;비교가격 판단&#39;).item.json[&#39;가격차&#39;] }}원 비쌈</code></li>
 <li>Email Type = <strong><code>Text</code></strong></li>
 <li>Message: 표현식 토글(=) 켜고 →</li>
 </ul>
 </li>
 </ul>
-<pre><code class="language-text">■ {{ $(&#39;최저가 비교&#39;).item.json[&#39;상품명&#39;] }}
-- 우리 방송가: {{ $(&#39;최저가 비교&#39;).item.json[&#39;우리방송가&#39;] }}원
-- 인터넷 최저가: {{ $(&#39;최저가 비교&#39;).item.json[&#39;최저가&#39;] }}원 ({{ $(&#39;최저가 비교&#39;).item.json[&#39;최저가몰&#39;] }})
-- 가격차: {{ $(&#39;최저가 비교&#39;).item.json[&#39;가격차&#39;] }}원
+<pre><code class="language-text">■ {{ $(&#39;비교가격 판단&#39;).item.json[&#39;상품명&#39;] }}
+- 우리 방송가: {{ $(&#39;비교가격 판단&#39;).item.json[&#39;우리방송가&#39;] }}원
+- 사용자 입력 비교가: {{ $(&#39;비교가격 판단&#39;).item.json[&#39;비교가격&#39;] }}원 ({{ $(&#39;비교가격 판단&#39;).item.json[&#39;비교몰&#39;] }})
+- 가격차: {{ $(&#39;비교가격 판단&#39;).item.json[&#39;가격차&#39;] }}원
 
 [대응 소구점 제안]
 {{ $json.content[0].text }}

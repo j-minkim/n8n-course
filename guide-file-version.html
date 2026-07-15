@@ -81,13 +81,13 @@
 <div class="topbar"><span class="badge">n8n 자동화 강의</span><span class="t">실무 템플릿 — 기본: 파일(CSV) · 보조: 구글시트</span><nav class="quicknav"><a href="index.html">🏠 홈</a><a href="day1.html">Day1</a><a href="day2.html">Day2</a><a href="assets.html">📦 실습파일</a><a href="guide-templates.html">📖 카탈로그</a><a href="guide-build-index.html">🧱 빌드가이드</a></nav></div>
 <main class="doc">
 <h1>실무 템플릿 — 기본은 파일(CSV) 버전이에요</h1>
-<h3>크리덴셜 0개로 바로 시작 · 구글시트 버전은 팀 공유가 필요할 때 보조로</h3>
-<p>실무 10종 템플릿은 <strong>완전히 같은 자동화 로직</strong>을 두 벌로 제공합니다. <strong>기본은 파일(CSV) 버전</strong> — 내 컴퓨터의 CSV를 읽어서 크리덴셜 없이 바로 돌아갑니다. 팀과 데이터를 공유·동시 수정해야 할 때만 <strong>구글시트 버전(보조)</strong> 으로 갈아타면 됩니다.</p>
+<h3>Google OAuth 0개로 시작 · AI 템플릿은 Anthropic 키 필요 · 구글시트는 팀 공유가 필요할 때 보조로</h3>
+<p>실무 10종 템플릿은 <strong>완전히 같은 자동화 로직</strong>을 두 벌로 제공합니다. <strong>기본은 파일(CSV) 버전</strong> — 내 컴퓨터의 CSV를 읽으므로 Google OAuth 없이 시작합니다. 다만 AI(★) 템플릿은 <strong>본인의 개인 제한 Anthropic API 키</strong>, Gmail 출력은 Gmail 자격증명이 각각 필요합니다. 팀과 데이터를 공유·동시 수정해야 할 때만 <strong>구글시트 버전(보조)</strong> 으로 갈아타면 됩니다.</p>
 <p><strong>📥 다운로드</strong>: <a href="%ED%99%88%EC%95%A4%EC%87%BC%ED%95%91-%EC%8B%A4%EB%AC%B4%ED%85%9C%ED%94%8C%EB%A6%BF-%ED%8C%8C%EC%9D%BC%EB%B2%84%EC%A0%84.zip">★기본 — 파일 버전 zip (실무 10종)</a> · 보조 — <a href="%ED%99%88%EC%95%A4%EC%87%BC%ED%95%91-%EC%A0%84%EC%B2%B4%ED%85%9C%ED%94%8C%EB%A6%BF-20%EC%A2%85.zip">구글시트 버전 zip (전체 20종, 기본 L1~L4 포함)</a></p>
 <hr>
 <h2>1. 왜 파일 버전이 기본인가</h2>
 <ul>
-<li><strong>크리덴셜 0개</strong> — Google OAuth(redirect URI 등)에서 막힐 일이 없음. import하고 CSV만 넣으면 바로 실행</li>
+<li><strong>Google OAuth 0개</strong> — 파일 입출력만으로 Google OAuth 설정을 건너뜀. AI·메일 노드의 자격증명은 별도 필요</li>
 <li><strong>사내 시스템 궁합</strong> — 콜시스템·BI가 주는 CSV export 폴더를 그대로 물릴 수 있음</li>
 <li><strong>보안</strong> — 회사 정책상 구글 계정 연동이 어려운 환경에서도 동작</li>
 </ul>
@@ -144,7 +144,11 @@
 <p><strong>준비 3단계:</strong></p>
 <ol>
 <li>터미널에서 폴더 만들기: <code>mkdir -p ~/.n8n-files</code></li>
-<li>CSV 데이터 파일을 그 안에 넣기 (헤더는 시트 버전과 동일 — zip 안 README에 표로 정리)</li>
+<li>zip 압축을 푼 폴더에서 포함된 <strong><code>data/</code> 샘플 CSV 9개</strong>를 복사:<ul>
+<li>macOS/Linux: <code>cp data/*.csv ~/.n8n-files/</code></li>
+<li>Windows PowerShell: <code>New-Item -ItemType Directory -Force &quot;$HOME\.n8n-files&quot;; Copy-Item .\data\*.csv &quot;$HOME\.n8n-files\&quot;</code></li>
+</ul>
+</li>
 <li>import한 워크플로에서 <code>YOUR_DATA_DIR</code>를 본인 절대경로로 교체:<ul>
 <li>macOS: <code>/Users/본인계정/.n8n-files</code></li>
 <li>Windows: <code>C:\Users\본인계정\.n8n-files</code></li>
@@ -153,7 +157,11 @@
 </ol>
 <blockquote>
 <p>다른 폴더를 쓰려면 n8n 시작 시 <code>N8N_RESTRICT_FILE_ACCESS_TO=/원하는/경로</code> 환경변수를 추가하면 됩니다.
-⚠️ 아카이브 파일명의 시각이 이상하면 n8n을 <code>GENERIC_TIMEZONE=Asia/Seoul</code>로 띄웠는지 확인하세요.</p>
+⚠️ 아카이브 파일명의 시각이 이상하면 n8n을 <code>GENERIC_TIMEZONE=Asia/Seoul</code>로 띄웠는지 확인하세요.
+✅ 9개 Extract from File 노드는 <strong>Exclude Byte Order Mark (BOM)</strong> 옵션이 켜져 있어 일반 UTF-8과 Excel식 UTF-8 BOM CSV를 모두 같은 헤더로 읽습니다. 번들 샘플은 조건/IF의 true 경로를 확인할 수 있는 최소값입니다.</p>
+</blockquote>
+<blockquote>
+<p>⚠️ <strong><code>Workflow executed successfully</code>만으로는 합격이 아닙니다.</strong> 실행 화면에서 <strong>Read File → Extract → Code/IF → 예상한 마지막 출력 노드까지 초록색</strong>인지, 그 경로의 <strong>핵심 노드 item count가 각각 1 이상</strong>인지 확인하세요. Read File이 <code>0 items</code>이면 후속 노드가 실행되지 않아도 전체 워크플로는 Success로 표시될 수 있습니다. 이때는 <code>YOUR_DATA_DIR</code> 교체·샘플 복사·CSV 헤더부터 다시 확인합니다.</p>
 </blockquote>
 <h3>🧰 실전 막힘 카드 — &quot;바탕화면에 뒀는데 에러가 나요&quot; (실제 겪은 사례)</h3>
 <p>CSV를 <strong>바탕화면(Desktop)</strong> 에 두고 실행하면 이 에러가 납니다:</p>
@@ -162,7 +170,7 @@
 <p><strong>해결은 강의에서 배운 그대로</strong> — 에러 전문을 복사해서 <strong>Claude Code에 붙여넣으세요.</strong> 그럼 두 가지 해법을 안내해줍니다:</p>
 <ul>
 <li><strong>(a) 파일을 옮기기</strong>: <code>mv ~/Desktop/방송예정상품.csv ~/.n8n-files/</code> 후 워크플로 경로 수정 ← 보통 이거면 끝</li>
-<li><strong>(b) 허용 경로 넓히기</strong>: n8n을 <code>N8N_RESTRICT_FILE_ACCESS_TO=$HOME/Desktop GENERIC_TIMEZONE=Asia/Seoul npx n8n</code>으로 재시작 (바탕화면을 그대로 쓰고 싶을 때)</li>
+<li><strong>(b) 허용 경로 넓히기</strong>: macOS/Linux는 <code>N8N_RESTRICT_FILE_ACCESS_TO=$HOME/Desktop GENERIC_TIMEZONE=Asia/Seoul npx n8n@2.26.8</code>, Windows PowerShell은 <code>$env:N8N_RESTRICT_FILE_ACCESS_TO=&quot;$HOME\Desktop&quot;; $env:GENERIC_TIMEZONE=&#39;Asia/Seoul&#39;; npx n8n@2.26.8</code>으로 재시작 (바탕화면을 그대로 쓰고 싶을 때)</li>
 </ul>
 <blockquote>
 <p>💡 이 에러는 사실 <strong>미리 겪어볼 가치가 있는 에러</strong>예요 — &quot;빨간 에러 → 전문 복사 → Claude Code → 해법 검증&quot;이라는 M6 디버깅 루프를 파일 하나로 연습하게 됩니다.</p>
@@ -182,7 +190,9 @@
 <h2>5. 검증 수준</h2>
 <ul>
 <li>파일 버전 10종 전부 <strong>실제 n8n REST import 10/10 통과</strong></li>
+<li>Extract from File 9종은 <code>enableBOM: true</code>를 적용하고, 일반 UTF-8·UTF-8 BOM 샘플 모두 첫 헤더의 BOM이 제거되는지 검증</li>
 <li>파일 노드 체인(읽기→CSV 파싱→Code→CSV 변환→쓰기)은 <strong>실데이터로 실제 실행 성공</strong> (한글 파일명·한글 헤더 CSV 파싱, 날짜 파일명 생성까지 확인)</li>
+<li>실행 결과는 Success 배너가 아니라 <strong>예상 마지막 노드 초록색 + 핵심 노드 item count 1 이상</strong>을 함께 확인해 판정</li>
 <li>AI(★) 템플릿의 Claude 호출·메일 발송은 시트 버전과 동일 — 자격증명 연결 후 노드별 Test step으로 재검증하세요</li>
 </ul>
 

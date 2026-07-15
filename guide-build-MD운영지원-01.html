@@ -146,7 +146,7 @@
 <h4>Step 3 — <code>발주현황 읽기</code> 추가</h4>
 <ul>
 <li><strong>검색어:</strong> <code>Extract from File</code></li>
-<li><strong>속성 설정:</strong> Operation = <strong><code>Extract From CSV</code></strong> (기본 필드 그대로 · 엑셀 파일이면 <code>Extract From XLSX</code>)</li>
+<li><strong>속성 설정:</strong> Operation = <strong><code>Extract From CSV</code></strong> → Options → <strong><code>Exclude Byte Order Mark (BOM)</code> 켜기</strong>(엑셀이 저장한 CSV 대응 · 엑셀 파일 자체면 <code>Extract From XLSX</code>)</li>
 <li><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</li>
 <li><strong>테스트 포인트:</strong> Test step에서 CSV 각 행이 JSON 아이템으로 나오는지(헤더 = 필드명) 확인 — 여기서부터는 시트 버전과 데이터 모양이 완전히 같습니다.</li>
 </ul>
@@ -178,7 +178,7 @@
 </ul>
 </li>
 </ul>
-<pre><code class="language-text">{{ JSON.stringify({ model: &#39;claude-sonnet-5&#39;, max_tokens: 500, messages: [{ role: &#39;user&#39;, content: &#39;홈쇼핑 MD가 협력사에 보내는 발주 확인 메일 본문을 정중한 한국어로 작성해줘(3~5문장, 인사+발주내역+회신요청). 서명은 넣지 마.\n협력사: &#39; + $(&#39;발주 필요만&#39;).item.json[&#39;협력사명&#39;] + &#39; / 담당자: &#39; + $(&#39;발주 필요만&#39;).item.json[&#39;담당자&#39;] + &#39; / 상품: &#39; + $(&#39;발주 필요만&#39;).item.json[&#39;상품명&#39;] + &#39; / 발주필요수량: &#39; + $(&#39;발주 필요만&#39;).item.json[&#39;발주필요수량&#39;] }] }) }}
+<pre><code class="language-text">{{ JSON.stringify({ model: &#39;claude-sonnet-5&#39;, max_tokens: 500, thinking: { type: &#39;disabled&#39; }, messages: [{ role: &#39;user&#39;, content: &#39;홈쇼핑 MD가 협력사에 보내는 발주 확인 메일 본문을 정중한 한국어로 작성해줘(3~5문장, 인사+발주내역+회신요청). 서명은 넣지 마.\n협력사: &#39; + $(&#39;발주 필요만&#39;).item.json[&#39;협력사명&#39;] + &#39; / 담당자: &#39; + $(&#39;발주 필요만&#39;).item.json[&#39;담당자&#39;] + &#39; / 상품: &#39; + $(&#39;발주 필요만&#39;).item.json[&#39;상품명&#39;] + &#39; / 발주필요수량: &#39; + $(&#39;발주 필요만&#39;).item.json[&#39;발주필요수량&#39;] }] }) }}
 </code></pre>
 <ul>
 <li><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</li>

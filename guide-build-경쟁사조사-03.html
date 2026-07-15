@@ -165,7 +165,7 @@ return [{json:{뉴스:list}}];
 </ul>
 </li>
 </ul>
-<pre><code class="language-text">{{ JSON.stringify({ model: &#39;claude-sonnet-5&#39;, max_tokens: 600, messages: [{ role: &#39;user&#39;, content: &#39;유통·홈쇼핑 업계 최신 뉴스 제목이다. (1) 경쟁사 신상품·기획전 (2) 소비 트렌드 (3) 우리 소싱/편성에 참고할 힌트 를 각 2줄로 한국어 브리핑해줘.\n&#39; + $json[&#39;뉴스&#39;] }] }) }}
+<pre><code class="language-text">{{ JSON.stringify({ model: &#39;claude-sonnet-5&#39;, max_tokens: 600, thinking: { type: &#39;disabled&#39; }, messages: [{ role: &#39;user&#39;, content: &#39;유통·홈쇼핑 업계 최신 뉴스 제목이다. (1) 경쟁사 신상품·기획전 (2) 소비 트렌드 (3) 우리 소싱/편성에 참고할 힌트 를 각 2줄로 한국어 브리핑해줘.\n&#39; + $json[&#39;뉴스&#39;] }] }) }}
 </code></pre>
 <ul>
 <li><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</li>
