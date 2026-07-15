@@ -156,6 +156,18 @@
 <p>다른 폴더를 쓰려면 n8n 시작 시 <code>N8N_RESTRICT_FILE_ACCESS_TO=/원하는/경로</code> 환경변수를 추가하면 됩니다.
 ⚠️ 아카이브 파일명의 시각이 이상하면 n8n을 <code>GENERIC_TIMEZONE=Asia/Seoul</code>로 띄웠는지 확인하세요.</p>
 </blockquote>
+<h3>🧰 실전 막힘 카드 — &quot;바탕화면에 뒀는데 에러가 나요&quot; (실제 겪은 사례)</h3>
+<p>CSV를 <strong>바탕화면(Desktop)</strong> 에 두고 실행하면 이 에러가 납니다:</p>
+<pre><code>Access to the file is not allowed. Allowed paths: /Users/본인계정/.n8n-files
+</code></pre>
+<p><strong>해결은 강의에서 배운 그대로</strong> — 에러 전문을 복사해서 <strong>Claude Code에 붙여넣으세요.</strong> 그럼 두 가지 해법을 안내해줍니다:</p>
+<ul>
+<li><strong>(a) 파일을 옮기기</strong>: <code>mv ~/Desktop/방송예정상품.csv ~/.n8n-files/</code> 후 워크플로 경로 수정 ← 보통 이거면 끝</li>
+<li><strong>(b) 허용 경로 넓히기</strong>: n8n을 <code>N8N_RESTRICT_FILE_ACCESS_TO=$HOME/Desktop GENERIC_TIMEZONE=Asia/Seoul npx n8n</code>으로 재시작 (바탕화면을 그대로 쓰고 싶을 때)</li>
+</ul>
+<blockquote>
+<p>💡 이 에러는 사실 <strong>미리 겪어볼 가치가 있는 에러</strong>예요 — &quot;빨간 에러 → 전문 복사 → Claude Code → 해법 검증&quot;이라는 M6 디버깅 루프를 파일 하나로 연습하게 됩니다.</p>
+</blockquote>
 <hr>
 <h2>4. 메타프롬프트로 변환하기 (Claude Code에게 시키기)</h2>
 <p>이미 만든 워크플로(또는 <a href="guide-build-index.html">빌드 가이드</a>의 메타프롬프트)에 아래 한 단락만 덧붙이면 Claude Code가 파일 버전으로 만들어줍니다:</p>
