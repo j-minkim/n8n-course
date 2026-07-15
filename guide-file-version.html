@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<script>(function(){try{var p=localStorage.getItem("theme-pref")||"system";var d=p==="dark"||(p==="system"&&matchMedia("(prefers-color-scheme: dark)").matches);document.documentElement.setAttribute("data-theme",d?"dark":"light");}catch(e){document.documentElement.setAttribute("data-theme","dark");}})();</script>
+<title>실무 템플릿 — 구글시트 vs 파일 버전</title>
+<style>
+  /* ── theme tokens (dark default + light override) ── */
+  :root{
+    color-scheme:dark;
+    --bg:#0b0f17; --fg:#e6edf3; --card-bg:#121826;
+    --topbar-bg:rgba(11,15,23,.92); --line:#233047; --line2:#1f2a3c; --cell:#2a3850;
+    --accent:#60a5fa; --h2:#dbeafe; --h3:#bfdbfe; --h4:#93c5fd;
+    --code-bg:#111827; --pre-bg:#0e1420; --quote-bg:#101826; --quote-fg:#cbd5e1; --quote-bd:#3b82f6;
+    --th-bg:#152032; --th-fg:#dbeafe; --tr-even:#0f1827; --strong:#fde68a;
+  }
+  :root[data-theme="light"]{
+    color-scheme:light;
+    --bg:#f7f8fa; --fg:#1f2533; --card-bg:#ffffff;
+    --topbar-bg:rgba(247,248,250,.92); --line:#d7dce6; --line2:#e3e7ef; --cell:#cfd6e2;
+    --accent:#2563eb; --h2:#1e3a8a; --h3:#2456b8; --h4:#3b6fd4;
+    --code-bg:#eef1f6; --pre-bg:#f1f4f9; --quote-bg:#eef3fb; --quote-fg:#44506a; --quote-bd:#2563eb;
+    --th-bg:#e9eef6; --th-fg:#1e3a8a; --tr-even:#f3f6fb; --strong:#b45309;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body { background:var(--bg); color:var(--fg); line-height:1.75; word-break:keep-all; overflow-wrap:anywhere;
+    transition:background-color .25s,color .25s;
+    font-family:-apple-system,BlinkMacSystemFont,"Pretendard","Apple SD Gothic Neo","Segoe UI",Roboto,sans-serif; }
+  /* ── theme toggle (system/light/dark) ── */
+  .theme-toggle{position:fixed;top:10px;right:14px;z-index:2000;display:inline-flex;align-items:center;gap:6px;
+    padding:7px 11px;border-radius:999px;border:1px solid var(--line);background:var(--card-bg);color:var(--fg);
+    font:600 12px/1 inherit;cursor:pointer;opacity:.85;transition:opacity .2s,border-color .2s,background-color .25s,color .25s}
+  .theme-toggle:hover{opacity:1;border-color:var(--accent)}
+  .theme-toggle .tt-ico{font-size:14px;line-height:1}
+  @media print{.theme-toggle{display:none!important}}
+  @media(max-width:760px){.theme-toggle .tt-label{display:none}}
+  .topbar { position:sticky; top:0; z-index:10; background:var(--topbar-bg); backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line2); padding:10px 64px 10px 20px; display:flex; gap:10px; align-items:center; flex-wrap:wrap; row-gap:6px; }
+  .topbar .badge { font-size:11px; color:var(--accent); border:1px solid var(--line); border-radius:999px; padding:3px 9px; }
+  .topbar .t { font-size:14px; font-weight:700; margin-right:auto; }
+  .quicknav { display:flex; gap:6px; flex-wrap:wrap; }
+  .quicknav a { font-size:11.5px; font-weight:600; color:var(--fg); text-decoration:none; border:1px solid var(--line);
+    background:var(--card-bg); border-radius:999px; padding:5px 11px; white-space:nowrap; transition:border-color .15s,color .15s; }
+  .quicknav a:hover { border-color:var(--accent); color:var(--accent); }
+  .quicknav a.cur { color:var(--accent); border-color:var(--accent); }
+  @media(max-width:820px){ .topbar{padding:10px 56px 10px 14px;} .topbar .t{width:100%;margin-right:0;order:1;} .quicknav{order:2;width:100%;} }
+  @media print{ .topbar{display:none!important;} }
+  main.doc { max-width:880px; margin:0 auto; padding:32px 22px 96px; }
+  h1,h2,h3,h4 { line-height:1.35; font-weight:800; margin:1.6em 0 .6em; }
+  h1 { font-size:26px; border-bottom:2px solid var(--line); padding-bottom:.3em; }
+  h2 { font-size:21px; color:var(--h2); border-bottom:1px solid var(--line2); padding-bottom:.25em; }
+  h3 { font-size:17px; color:var(--h3); }
+  h4 { font-size:15px; color:var(--h4); }
+  p, li { font-size:15px; }
+  a { color:var(--accent); }
+  hr { border:0; border-top:1px solid var(--line); margin:2em 0; }
+  blockquote { margin:1em 0; padding:.6em 1em; border-left:3px solid var(--quote-bd); background:var(--quote-bg);
+    border-radius:0 8px 8px 0; color:var(--quote-fg); }
+  blockquote p { margin:.3em 0; }
+  code { background:var(--code-bg); border:1px solid var(--line); border-radius:5px; padding:.1em .4em; font-size:.9em;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; }
+  pre { background:var(--pre-bg); border:1px solid var(--line); border-radius:10px; padding:14px 16px; overflow:auto; }
+  pre code { background:none; border:0; padding:0; font-size:13px; line-height:1.6; }
+  table { border-collapse:collapse; width:100%; margin:1.1em 0; font-size:14px; display:block; overflow-x:auto; }
+  th, td { border:1px solid var(--cell); padding:8px 10px; text-align:left; vertical-align:top; }
+  th { background:var(--th-bg); font-weight:700; color:var(--th-fg); }
+  tr:nth-child(even) td { background:var(--tr-even); }
+  ul, ol { padding-left:1.4em; }
+  li { margin:.3em 0; }
+  li input[type=checkbox] { transform:scale(1.15); margin-right:.5em; accent-color:var(--accent); }
+  ul:has(li input[type=checkbox]) { list-style:none; padding-left:.2em; }
+  strong { color:var(--strong); }
+  img { max-width:100%; }
+</style>
+</head>
+<body>
+<button id="themeToggle" class="theme-toggle" type="button" aria-label="테마 전환" title="테마: 시스템"><span class="tt-ico" aria-hidden="true">🖥</span><span class="tt-label">시스템</span></button>
+<div class="topbar"><span class="badge">n8n 자동화 강의</span><span class="t">실무 템플릿 — 구글시트 vs 파일 버전</span><nav class="quicknav"><a href="index.html">🏠 홈</a><a href="day1.html">Day1</a><a href="day2.html">Day2</a><a href="assets.html">📦 실습파일</a><a href="guide-templates.html">📖 카탈로그</a><a href="guide-build-index.html">🧱 빌드가이드</a></nav></div>
+<main class="doc">
+<h1>실무 템플릿, 두 가지 버전이 있어요</h1>
+<h3>구글시트 버전 vs 파일(CSV) 버전 — 같은 플로우, 데이터 저장소만 다릅니다</h3>
+<p>실무 10종 템플릿은 <strong>완전히 같은 자동화 로직</strong>을 두 벌로 제공합니다. 차이는 딱 하나 — 데이터를 <strong>구글 스프레드시트</strong>에서 읽느냐, <strong>내 컴퓨터의 CSV 파일</strong>에서 읽느냐.</p>
+<p><strong>📥 다운로드</strong>: <a href="%ED%99%88%EC%95%A4%EC%87%BC%ED%95%91-%EC%A0%84%EC%B2%B4%ED%85%9C%ED%94%8C%EB%A6%BF-20%EC%A2%85.zip">구글시트 버전 zip (경쟁사조사·방송운영·MD운영지원 통합은 전체 20종)</a> · <a href="%ED%99%88%EC%95%A4%EC%87%BC%ED%95%91-%EC%8B%A4%EB%AC%B4%ED%85%9C%ED%94%8C%EB%A6%BF-%ED%8C%8C%EC%9D%BC%EB%B2%84%EC%A0%84.zip">★파일 버전 zip (실무 10종)</a></p>
+<hr>
+<h2>1. 어느 버전을 쓰면 되나</h2>
+<table>
+<thead>
+<tr>
+<th>상황</th>
+<th>추천</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>팀원과 데이터를 공유·동시 수정해야 한다</td>
+<td><strong>구글시트 버전</strong></td>
+</tr>
+<tr>
+<td>회사 보안상 구글 계정 연동이 어렵다</td>
+<td><strong>파일 버전</strong></td>
+</tr>
+<tr>
+<td>Google OAuth 설정이 자꾸 막힌다 (redirect URI 등)</td>
+<td><strong>파일 버전</strong> — 크리덴셜 0개로 시작</td>
+</tr>
+<tr>
+<td>사내 시스템이 CSV export를 준다 (콜시스템·BI 등)</td>
+<td><strong>파일 버전</strong> — export 폴더를 그대로 사용</td>
+</tr>
+<tr>
+<td>어디서든(폰·다른 PC) 데이터를 고치고 싶다</td>
+<td><strong>구글시트 버전</strong></td>
+</tr>
+<tr>
+<td>일단 오늘 처음 돌려본다</td>
+<td><strong>파일 버전</strong>이 준비물이 적어 가장 빠릅니다</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>💡 로직(Code·IF·Claude 프롬프트)은 두 버전이 <strong>동일</strong>합니다. 파일 버전으로 배우고 나중에 시트 버전으로 갈아타도 바뀌는 건 읽기/쓰기 노드뿐이에요.</p>
+</blockquote>
+<hr>
+<h2>2. 노드가 어떻게 바뀌나 (매핑)</h2>
+<p><strong>읽기</strong> — 시트에서 행 읽기 → 파일에서 행 읽기:</p>
+<pre><code>[구글시트 버전]  Google Sheets (Get Row(s), &#39;방송예정상품&#39; 탭)
+                        ↓ 같은 자리에서
+[파일 버전]      Read/Write Files from Disk (읽기: YOUR_DATA_DIR/방송예정상품.csv)
+                  → Extract from File (CSV → 행 데이터)
+</code></pre>
+<p><strong>쓰기(아카이브)</strong> — 시트에 행 추가 → 날짜별 CSV 파일 생성:</p>
+<pre><code>[구글시트 버전]  Google Sheets (Append Row, &#39;트렌드로그&#39; 탭)
+                        ↓ 같은 자리에서
+[파일 버전]      Convert to File (행 데이터 → CSV)
+                  → Read/Write Files from Disk (쓰기: 트렌드로그_2026-07-15_0930.csv)
+</code></pre>
+<ul>
+<li>파일 버전의 아카이브는 <strong>실행할 때마다 날짜·시각이 붙은 새 CSV</strong>가 생깁니다(시트처럼 한 표에 누적되는 게 아니라 로그 폴더에 파일이 쌓이는 방식).</li>
+<li>Code 노드가 참조하는 노드 이름(<code>$(&#39;방송예정 상품 읽기&#39;)</code> 등)은 두 버전에서 <strong>동일하게 유지</strong>돼 있어서, 나머지 노드는 손댈 게 없습니다.</li>
+</ul>
+<hr>
+<h2>3. ★파일 버전 사용 전 꼭 알아야 할 한 가지 — <code>~/.n8n-files/</code></h2>
+<p>self-host n8n은 보안상 <strong>홈 폴더의 <code>.n8n-files</code> 폴더 안에 있는 파일만</strong> 읽고 쓸 수 있습니다. (아무 경로나 접근하면 <code>Access to the file is not allowed</code> 에러 — 실제 실행으로 확인했습니다.)</p>
+<p><strong>준비 3단계:</strong></p>
+<ol>
+<li>터미널에서 폴더 만들기: <code>mkdir -p ~/.n8n-files</code></li>
+<li>CSV 데이터 파일을 그 안에 넣기 (헤더는 시트 버전과 동일 — zip 안 README에 표로 정리)</li>
+<li>import한 워크플로에서 <code>YOUR_DATA_DIR</code>를 본인 절대경로로 교체:<ul>
+<li>macOS: <code>/Users/본인계정/.n8n-files</code></li>
+<li>Windows: <code>C:\Users\본인계정\.n8n-files</code></li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<p>다른 폴더를 쓰려면 n8n 시작 시 <code>N8N_RESTRICT_FILE_ACCESS_TO=/원하는/경로</code> 환경변수를 추가하면 됩니다.
+⚠️ 아카이브 파일명의 시각이 이상하면 n8n을 <code>GENERIC_TIMEZONE=Asia/Seoul</code>로 띄웠는지 확인하세요.</p>
+</blockquote>
+<hr>
+<h2>4. 메타프롬프트로 변환하기 (Claude Code에게 시키기)</h2>
+<p>이미 만든 워크플로(또는 <a href="guide-build-index.html">빌드 가이드</a>의 메타프롬프트)에 아래 한 단락만 덧붙이면 Claude Code가 파일 버전으로 만들어줍니다:</p>
+<pre><code class="language-text">구글시트 노드 대신 파일 노드를 써줘:
+- 읽기는 Read/Write Files from Disk(read, YOUR_DATA_DIR/파일명.csv) → Extract from File(csv) 2단으로,
+- 쓰기(아카이브)는 Convert to File(csv) → Read/Write Files from Disk(write) 2단으로,
+  쓰기 파일명은 &quot;이름_{{ $now.format(&#39;yyyy-LL-dd_HHmm&#39;) }}.csv&quot; 표현식으로.
+- Code 노드가 $(&#39;노드명&#39;)으로 참조하는 이름은 Extract from File 노드가 그대로 물려받게 해줘.
+- 참고: self-host n8n은 ~/.n8n-files 안의 파일만 접근 가능.
+</code></pre>
+<hr>
+<h2>5. 검증 수준</h2>
+<ul>
+<li>파일 버전 10종 전부 <strong>실제 n8n REST import 10/10 통과</strong></li>
+<li>파일 노드 체인(읽기→CSV 파싱→Code→CSV 변환→쓰기)은 <strong>실데이터로 실제 실행 성공</strong> (한글 파일명·한글 헤더 CSV 파싱, 날짜 파일명 생성까지 확인)</li>
+<li>AI(★) 템플릿의 Claude 호출·메일 발송은 시트 버전과 동일 — 자격증명 연결 후 노드별 Test step으로 재검증하세요</li>
+</ul>
+
+</main>
+<script>
+(function(){
+  var root=document.documentElement, btn=document.getElementById("themeToggle");
+  var mq=window.matchMedia("(prefers-color-scheme: dark)");
+  var ICON={system:"🖥",light:"☀️",dark:"🌙"}, LABEL={system:"시스템",light:"라이트",dark:"다크"};
+  var cur="system"; try{cur=localStorage.getItem("theme-pref")||"system";}catch(e){}
+  function apply(){
+    var d=cur==="dark"||(cur==="system"&&mq.matches);
+    root.setAttribute("data-theme",d?"dark":"light");
+    if(btn){var i=btn.querySelector(".tt-ico"),l=btn.querySelector(".tt-label");
+      if(i)i.textContent=ICON[cur]; if(l)l.textContent=LABEL[cur]; btn.title="테마: "+LABEL[cur];}
+  }
+  apply();
+  if(btn)btn.addEventListener("click",function(){
+    var o=["system","light","dark"]; cur=o[(o.indexOf(cur)+1)%o.length];
+    try{localStorage.setItem("theme-pref",cur);}catch(e){}
+    apply();
+  });
+  if(mq.addEventListener)mq.addEventListener("change",function(){if(cur==="system")apply();});
+})();
+</script>
+</body>
+</html>
