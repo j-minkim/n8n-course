@@ -138,6 +138,38 @@
 <ul>
 <li><strong>★네이버쇼핑 API</strong>: developers.naver.com → 애플리케이션 등록 → 검색 API(쇼핑) 사용 설정 → Client ID/Secret 발급 (무료 쿼터 있음)</li>
 </ul>
+<h4>🤖 경로 A — Claude Code에게 시키기 (메타프롬프트)</h4>
+<p>아래 프롬프트를 Claude Code에 그대로 붙여넣으면 이 워크플로 JSON을 만들어줍니다(n8n-MCP 연결 시 더 정확). import 후 노드별 Test step 검증 필수.</p>
+<pre><code class="language-text">n8n 워크플로 JSON을 만들어줘: &quot;방송상품 가격경쟁력 진단&quot; 자동화야.
+
+[목표] 방송 예정 상품이 인터넷 최저가보다 비싼지 매일 아침 점검하고, 비싸면 Claude가 방송 대응 소구점을 제안해 MD에게 메일.
+
+[노드 체인 — 7개, 순서대로]
+1. Schedule Trigger — 매일 07:30
+2. Google Sheets — &#39;방송예정상품&#39; 탭 읽기 (열: 상품명·우리방송가)
+3. HTTP Request(GET) — 네이버쇼핑 검색 API
+   https://openapi.naver.com/v1/search/shop.json?query={{ encodeURIComponent($json[&#39;상품명&#39;]) }}&amp;display=20&amp;sort=sim
+   헤더: X-Naver-Client-Id / X-Naver-Client-Secret (값은 YOUR_NAVER_CLIENT_ID/SECRET)
+4. Code — 최저가 비교: items의 title에서 HTML 태그 제거, lprice 숫자화,
+   ★가격 중앙값의 40% 미만은 부품·액세서리 오탐으로 버리고, 남은 것 중 최저가 선정.
+   $(&#39;방송예정 상품 읽기&#39;)의 우리방송가(콤마 제거)와 비교해 가격차·열위(true/false) 산출.
+5. IF — 열위 = &quot;true&quot; 일 때만
+6. HTTP Request(POST) — Claude에게 &quot;인터넷 최저가보다 비쌀 때 방송에서 쓸 대응 소구점 2가지
+   (방송한정가·추가 사은품·무이자·차별화 포인트)&quot;를 3줄로 요청. 상품명·우리방송가·최저가·최저가몰·가격차를 프롬프트에 포함.
+7. Gmail — MD에게: 제목 &quot;[가격경쟁력] {상품명} — 최저가 대비 {가격차}원 비쌈&quot;,
+   본문에 우리방송가/최저가(몰)/가격차 + Claude 소구점.
+
+[공통 규칙 — 그대로 지켜줘]
+- n8n-MCP가 연결돼 있으면 각 노드의 정확한 파라미터를 조회해서 만들고, 없으면 표준 노드 구조로.
+- Claude 호출은 HTTP Request 노드로: POST https://api.anthropic.com/v1/messages,
+  인증은 Header Auth 크리덴셜(이름 x-api-key), 추가 헤더 anthropic-version: 2023-06-01,
+  모델 claude-sonnet-5, 응답 본문은 content[0].text 로 파싱.
+- 시트 ID는 YOUR_GOOGLE_SHEET_ID, 수신자 이메일은 YOUR_...@example.com 플레이스홀더로.
+- connections의 타입은 전부 &quot;main&quot;. IF 노드는 true 출력만 다음 노드로.
+- 완성되면 워크플로 JSON을 파일로 저장해줘 — 내가 n8n에서 ⋮ → Import from File 로 불러올게.
+- import 후엔 노드별 Test step으로 하나씩 검증할 거야(통째로 맞다고 가정하지 말 것).
+</code></pre>
+<h4>🔧 경로 B — 손으로 직접 만들기</h4>
 <p><strong>노드 순서 (총 7개):</strong> 매일 07:30 → 방송예정 상품 읽기 → 네이버쇼핑 최저가 조회 → 최저가 비교 → 가격 열위만 → Claude 대응 소구점 → MD 가격진단 메일</p>
 <h4>Step 1 — <code>매일 07:30</code> 추가</h4>
 <ul>
@@ -316,6 +348,31 @@ return [{json:{상품명:$(&#39;방송예정 상품 읽기&#39;).item.json[&#39;
 <p>경쟁사 오늘 편성(시트 입력)을 Claude가 카테고리·시간대로 요약하고 우리 차별화 슬롯을 제안합니다. (무단 크롤링 대신 시트 기반)</p>
 </blockquote>
 <p><strong>받는 사람:</strong> MD · <strong>시트:</strong> <strong>경쟁사편성</strong> 탭 헤더: <code>채널 · 시간 · 상품 · 카테고리</code></p>
+<h4>🤖 경로 A — Claude Code에게 시키기 (메타프롬프트)</h4>
+<p>아래 프롬프트를 Claude Code에 그대로 붙여넣으면 이 워크플로 JSON을 만들어줍니다(n8n-MCP 연결 시 더 정확). import 후 노드별 Test step 검증 필수.</p>
+<pre><code class="language-text">n8n 워크플로 JSON을 만들어줘: &quot;경쟁 홈쇼핑 편성 모니터링&quot; 자동화야.
+
+[목표] 시트에 입력해둔 경쟁사 오늘 편성을 Claude가 카테고리·시간대로 요약하고 우리 차별화 슬롯을 제안해 MD에게 메일. (크롤링 금지 — 시트 기반)
+
+[노드 체인 — 5개, 순서대로]
+1. Schedule Trigger — 매일 08:00
+2. Google Sheets — &#39;경쟁사편성&#39; 탭 읽기 (열: 채널·시간·상품·카테고리)
+3. Code — $input.all()로 전 행을 받아 채널별로 &quot;시간 상품 (카테고리)&quot; 목록을 묶어
+   [채널명] 블록 텍스트(brief) 하나로 합치기.
+4. HTTP Request(POST) — Claude에게 &quot;카테고리 분포와 시간대 특징 3줄 요약 + 우리가 차별화할 슬롯 아이디어 2가지&quot;를 요청, brief를 프롬프트에 포함.
+5. Gmail — MD에게: 제목 &quot;[경쟁편성] 오늘 경쟁 홈쇼핑 편성 브리핑&quot;, 본문 = Claude 응답.
+
+[공통 규칙 — 그대로 지켜줘]
+- n8n-MCP가 연결돼 있으면 각 노드의 정확한 파라미터를 조회해서 만들고, 없으면 표준 노드 구조로.
+- Claude 호출은 HTTP Request 노드로: POST https://api.anthropic.com/v1/messages,
+  인증은 Header Auth 크리덴셜(이름 x-api-key), 추가 헤더 anthropic-version: 2023-06-01,
+  모델 claude-sonnet-5, 응답 본문은 content[0].text 로 파싱.
+- 시트 ID는 YOUR_GOOGLE_SHEET_ID, 수신자 이메일은 YOUR_...@example.com 플레이스홀더로.
+- connections의 타입은 전부 &quot;main&quot;. IF 노드는 true 출력만 다음 노드로.
+- 완성되면 워크플로 JSON을 파일로 저장해줘 — 내가 n8n에서 ⋮ → Import from File 로 불러올게.
+- import 후엔 노드별 Test step으로 하나씩 검증할 거야(통째로 맞다고 가정하지 말 것).
+</code></pre>
+<h4>🔧 경로 B — 손으로 직접 만들기</h4>
 <p><strong>노드 순서 (총 5개):</strong> 매일 08:00 → 경쟁사 편성 읽기 → 채널별 편성 묶기 → Claude 편성 브리핑 → MD 편성 브리핑</p>
 <h4>Step 1 — <code>매일 08:00</code> 추가</h4>
 <ul>
@@ -434,6 +491,33 @@ return [{json:{brief}}];
 <p>홈쇼핑·유통 뉴스를 Claude가 경쟁사 신상품·트렌드·소싱 힌트로 요약해 MD에게 보내고 아카이브에 기록합니다.</p>
 </blockquote>
 <p><strong>받는 사람:</strong> MD · <strong>시트:</strong> <strong>트렌드로그</strong> 탭: 헤더 없이 시작해도 됨(자동 매핑 저장)</p>
+<h4>🤖 경로 A — Claude Code에게 시키기 (메타프롬프트)</h4>
+<p>아래 프롬프트를 Claude Code에 그대로 붙여넣으면 이 워크플로 JSON을 만들어줍니다(n8n-MCP 연결 시 더 정확). import 후 노드별 Test step 검증 필수.</p>
+<pre><code class="language-text">n8n 워크플로 JSON을 만들어줘: &quot;업계 트렌드·신상품 브리핑&quot; 자동화야.
+
+[목표] 홈쇼핑·유통 뉴스를 Claude가 경쟁사 신상품·트렌드·소싱 힌트로 요약해 MD에게 메일 + 시트 아카이브.
+
+[노드 체인 — 6개]
+1. Schedule Trigger — 매일 08:30
+2. RSS Read — 구글뉴스 검색 RSS (검색어 &quot;홈쇼핑 유통 신상품 기획전&quot;을 URL 인코딩):
+   https://news.google.com/rss/search?q=%ED%99%88%EC%87%BC%ED%95%91%20%EC%9C%A0%ED%86%B5%20%EC%8B%A0%EC%83%81%ED%92%88%20%EA%B8%B0%ED%9A%8D%EC%A0%84&amp;hl=ko&amp;gl=KR&amp;ceid=KR:ko
+3. Code — $input.all().slice(0,8)로 상위 8개 제목을 &quot;1. 제목&quot; 목록 텍스트로.
+4. HTTP Request(POST) — Claude에게 &quot;(1) 경쟁사 신상품·기획전 (2) 소비 트렌드 (3) 우리 소싱/편성 참고 힌트를 각 2줄&quot;로 요청.
+5. Gmail — MD에게 브리핑 발송.
+6. Google Sheets(Append) — &#39;트렌드로그&#39; 탭에 결과 저장 (autoMapInputData).
+★연결 주의: 4번(Claude)의 출력이 5번(Gmail)과 6번(Sheets append) **둘 다**로 나가는 fan-out.
+
+[공통 규칙 — 그대로 지켜줘]
+- n8n-MCP가 연결돼 있으면 각 노드의 정확한 파라미터를 조회해서 만들고, 없으면 표준 노드 구조로.
+- Claude 호출은 HTTP Request 노드로: POST https://api.anthropic.com/v1/messages,
+  인증은 Header Auth 크리덴셜(이름 x-api-key), 추가 헤더 anthropic-version: 2023-06-01,
+  모델 claude-sonnet-5, 응답 본문은 content[0].text 로 파싱.
+- 시트 ID는 YOUR_GOOGLE_SHEET_ID, 수신자 이메일은 YOUR_...@example.com 플레이스홀더로.
+- connections의 타입은 전부 &quot;main&quot;. IF 노드는 true 출력만 다음 노드로.
+- 완성되면 워크플로 JSON을 파일로 저장해줘 — 내가 n8n에서 ⋮ → Import from File 로 불러올게.
+- import 후엔 노드별 Test step으로 하나씩 검증할 거야(통째로 맞다고 가정하지 말 것).
+</code></pre>
+<h4>🔧 경로 B — 손으로 직접 만들기</h4>
 <p><strong>노드 순서 (총 6개):</strong> 매일 08:30 → 홈쇼핑 뉴스 RSS → 상위 뉴스 정리 → Claude 트렌드 브리핑 → MD 트렌드 브리핑 → 브리핑 아카이브</p>
 <h4>Step 1 — <code>매일 08:30</code> 추가</h4>
 <ul>
@@ -564,6 +648,35 @@ return [{json:{뉴스:list}}];
 <p>방송 중 5분마다 목표 페이스 대비 실적을 계산해 저조하면 Claude가 실시간 대응 멘트와 함께 긴급 알림을 보냅니다.</p>
 </blockquote>
 <p><strong>받는 사람:</strong> MD·PD · <strong>시트:</strong> <strong>방송현황</strong> 탭 헤더: <code>상품명 · 목표매출 · 총방송분 · 경과분 · 누적매출</code></p>
+<h4>🤖 경로 A — Claude Code에게 시키기 (메타프롬프트)</h4>
+<p>아래 프롬프트를 Claude Code에 그대로 붙여넣으면 이 워크플로 JSON을 만들어줍니다(n8n-MCP 연결 시 더 정확). import 후 노드별 Test step 검증 필수.</p>
+<pre><code class="language-text">n8n 워크플로 JSON을 만들어줘: &quot;생방송 실적 페이스메이커&quot; 자동화야.
+
+[목표] 방송 중 5분마다 목표 페이스 대비 실적을 계산해, 저조하면 Claude 실시간 대응멘트와 함께 MD·PD에게 긴급 메일.
+
+[노드 체인 — 6개]
+1. Schedule Trigger — 5분마다 (Minutes interval 5)
+2. Google Sheets — &#39;방송현황&#39; 탭 읽기 (열: 상품명·목표매출·총방송분·경과분·누적매출)
+3. Code — 목표 페이스 계산: 숫자화(콤마 제거), 예상매출 = 목표×(경과분/총방송분),
+   달성률 = round(누적/예상×100), 저조 = 달성률&lt;80 (문자열 &quot;true&quot;/&quot;false&quot;).
+4. IF — 저조 = &quot;true&quot; 일 때만
+5. HTTP Request(POST) — Claude에게 &quot;진행자가 바로 읽을 실시간 대응 멘트 2가지
+   (매진임박·수량한정 자막, 방송한정 사은품, 무이자 강조)&quot;를 요청. 상품명·달성률·경과분 포함.
+6. Gmail — MD·PD에게: 제목 &quot;[생방송] {상품명} 목표 대비 {달성률}% 저조&quot;.
+
+★운영 주의: 5분마다 도는 워크플로라 **방송 시간대에만 Active** 켜야 함(24시간 알림 방지).
+
+[공통 규칙 — 그대로 지켜줘]
+- n8n-MCP가 연결돼 있으면 각 노드의 정확한 파라미터를 조회해서 만들고, 없으면 표준 노드 구조로.
+- Claude 호출은 HTTP Request 노드로: POST https://api.anthropic.com/v1/messages,
+  인증은 Header Auth 크리덴셜(이름 x-api-key), 추가 헤더 anthropic-version: 2023-06-01,
+  모델 claude-sonnet-5, 응답 본문은 content[0].text 로 파싱.
+- 시트 ID는 YOUR_GOOGLE_SHEET_ID, 수신자 이메일은 YOUR_...@example.com 플레이스홀더로.
+- connections의 타입은 전부 &quot;main&quot;. IF 노드는 true 출력만 다음 노드로.
+- 완성되면 워크플로 JSON을 파일로 저장해줘 — 내가 n8n에서 ⋮ → Import from File 로 불러올게.
+- import 후엔 노드별 Test step으로 하나씩 검증할 거야(통째로 맞다고 가정하지 말 것).
+</code></pre>
+<h4>🔧 경로 B — 손으로 직접 만들기</h4>
 <p><strong>노드 순서 (총 6개):</strong> 방송 중 5분마다 → 현재 방송실적 읽기 → 목표 페이스 계산 → 저조할 때만 → Claude 실시간 대응멘트 → MD·PD 긴급 알림</p>
 <h4>Step 1 — <code>방송 중 5분마다</code> 추가</h4>
 <ul>
@@ -709,6 +822,34 @@ return [{json:{상품명:r[&#39;상품명&#39;],목표,누적,경과분:경과,�
 <p>방송 종료 후 매출·주문·콜·반품 지표를 모아 Claude가 &#39;잘된 점/아쉬운 점/개선안&#39; 리포트 초안을 써서 MD에게 보내고 아카이브합니다.</p>
 </blockquote>
 <p><strong>받는 사람:</strong> MD · <strong>시트:</strong> <strong>방송결과</strong> 탭 헤더: <code>방송명 · 목표매출 · 매출 · 주문건수 · 콜인입 · 콜포기율 · 반품건수</code></p>
+<h4>🤖 경로 A — Claude Code에게 시키기 (메타프롬프트)</h4>
+<p>아래 프롬프트를 Claude Code에 그대로 붙여넣으면 이 워크플로 JSON을 만들어줍니다(n8n-MCP 연결 시 더 정확). import 후 노드별 Test step 검증 필수.</p>
+<pre><code class="language-text">n8n 워크플로 JSON을 만들어줘: &quot;방송 결과 리포트 자동 초안&quot; 자동화야.
+
+[목표] 방송 종료 후 지표를 모아 Claude가 [요약][잘된 점][아쉬운 점][다음 방송 개선안] 리포트 초안을 써서 MD 메일 + 시트 아카이브.
+
+[노드 체인 — 6개]
+1. Schedule Trigger — 매일 23:30
+2. Google Sheets — &#39;방송결과&#39; 탭 읽기 (열: 방송명·목표매출·매출·주문건수·콜인입·콜포기율·반품건수)
+3. Code — 지표 정리: 숫자화 후 달성률=round(매출/목표×100), 반품률=round(반품/주문×100),
+   &quot;방송/목표매출/매출(달성률)/주문/콜인입/콜포기율/반품(반품률)&quot; 멀티라인 metrics 텍스트 생성.
+4. HTTP Request(POST) — Claude에게 &quot;MD가 팀에 공유할 방송 결과 리포트 초안을
+   [요약][잘된 점][아쉬운 점][다음 방송 개선안] 4개 소제목으로, 사실 기반으로 간결하게&quot; 요청. metrics 포함.
+5. Gmail — MD에게: 제목 &quot;[방송리포트] {방송명} (달성률 {달성률}%)&quot;, 본문 = metrics + 구분선 + Claude 리포트.
+6. Google Sheets(Append) — &#39;방송리포트로그&#39; 탭에 저장.
+★연결 주의: 4번 출력이 5번·6번 **둘 다**로 나가는 fan-out.
+
+[공통 규칙 — 그대로 지켜줘]
+- n8n-MCP가 연결돼 있으면 각 노드의 정확한 파라미터를 조회해서 만들고, 없으면 표준 노드 구조로.
+- Claude 호출은 HTTP Request 노드로: POST https://api.anthropic.com/v1/messages,
+  인증은 Header Auth 크리덴셜(이름 x-api-key), 추가 헤더 anthropic-version: 2023-06-01,
+  모델 claude-sonnet-5, 응답 본문은 content[0].text 로 파싱.
+- 시트 ID는 YOUR_GOOGLE_SHEET_ID, 수신자 이메일은 YOUR_...@example.com 플레이스홀더로.
+- connections의 타입은 전부 &quot;main&quot;. IF 노드는 true 출력만 다음 노드로.
+- 완성되면 워크플로 JSON을 파일로 저장해줘 — 내가 n8n에서 ⋮ → Import from File 로 불러올게.
+- import 후엔 노드별 Test step으로 하나씩 검증할 거야(통째로 맞다고 가정하지 말 것).
+</code></pre>
+<h4>🔧 경로 B — 손으로 직접 만들기</h4>
 <p><strong>노드 순서 (총 6개):</strong> 방송 종료 후 23:30 → 방송결과 지표 읽기 → 지표 정리 → Claude 리포트 작성 → MD 리포트 초안 → 리포트 아카이브</p>
 <h4>Step 1 — <code>방송 종료 후 23:30</code> 추가</h4>
 <ul>
@@ -858,6 +999,34 @@ return [{json:{방송명:r[&#39;방송명&#39;],달성률,metrics}}];
 <p>반품 데이터를 Claude가 사유 분류하고 특정 상품의 반복 이슈를 감지해 MD·품질팀에 알림 + 개선이슈 로그에 기록합니다.</p>
 </blockquote>
 <p><strong>받는 사람:</strong> MD·품질팀 · <strong>시트:</strong> <strong>반품데이터</strong> 탭 헤더: <code>상품명 · 반품사유</code></p>
+<h4>🤖 경로 A — Claude Code에게 시키기 (메타프롬프트)</h4>
+<p>아래 프롬프트를 Claude Code에 그대로 붙여넣으면 이 워크플로 JSON을 만들어줍니다(n8n-MCP 연결 시 더 정확). import 후 노드별 Test step 검증 필수.</p>
+<pre><code class="language-text">n8n 워크플로 JSON을 만들어줘: &quot;반품 사유 AI 분류 → 상품개선 루프&quot; 자동화야.
+
+[목표] 반품 데이터를 Claude가 사유 분류하고 반복 이슈를 감지해 MD·품질팀 메일 + 개선이슈 로그.
+
+[노드 체인 — 6개]
+1. Schedule Trigger — 매일 09:00
+2. Google Sheets — &#39;반품데이터&#39; 탭 읽기 (열: 상품명·반품사유)
+3. Code — $input.all()로 전 행을 받아 상품명별로 반품사유를 묶어
+   &quot;■ 상품명 (N건)\n- 사유...&quot; 형식의 반품목록 텍스트 + 총 건수 산출.
+4. HTTP Request(POST) — Claude에게 &quot;(1) 사유를 사이즈·품질·오배송·단순변심·기타로 분류해 상품별 집계
+   (2) 같은 상품 반복 이슈(3건 이상) 지목 (3) MD·협력사 전달용 상품개선 제안&quot; 요청.
+5. Gmail — 품질팀에게: 제목 &quot;[반품분석] 상품개선 제안 ({건수}건 분석)&quot;.
+6. Google Sheets(Append) — &#39;반품개선로그&#39; 탭에 저장.
+★연결 주의: 4번 출력이 5번·6번 **둘 다**로 나가는 fan-out.
+
+[공통 규칙 — 그대로 지켜줘]
+- n8n-MCP가 연결돼 있으면 각 노드의 정확한 파라미터를 조회해서 만들고, 없으면 표준 노드 구조로.
+- Claude 호출은 HTTP Request 노드로: POST https://api.anthropic.com/v1/messages,
+  인증은 Header Auth 크리덴셜(이름 x-api-key), 추가 헤더 anthropic-version: 2023-06-01,
+  모델 claude-sonnet-5, 응답 본문은 content[0].text 로 파싱.
+- 시트 ID는 YOUR_GOOGLE_SHEET_ID, 수신자 이메일은 YOUR_...@example.com 플레이스홀더로.
+- connections의 타입은 전부 &quot;main&quot;. IF 노드는 true 출력만 다음 노드로.
+- 완성되면 워크플로 JSON을 파일로 저장해줘 — 내가 n8n에서 ⋮ → Import from File 로 불러올게.
+- import 후엔 노드별 Test step으로 하나씩 검증할 거야(통째로 맞다고 가정하지 말 것).
+</code></pre>
+<h4>🔧 경로 B — 손으로 직접 만들기</h4>
 <p><strong>노드 순서 (총 6개):</strong> 매일 09:00 → 반품 데이터 읽기 → 상품별 반품 묶기 → Claude 사유분류·개선제안 → MD·품질팀 알림 → 개선이슈 로그</p>
 <h4>Step 1 — <code>매일 09:00</code> 추가</h4>
 <ul>
@@ -1004,6 +1173,35 @@ return [{json:{반품목록:text,건수:items.length}}];
 <p>재고 부족한 협력사마다 Claude가 벤더별 맞춤 발주확인 메일을 써서 담당자에게 개별 발송합니다.</p>
 </blockquote>
 <p><strong>받는 사람:</strong> 협력사 담당자 · <strong>시트:</strong> <strong>발주현황</strong> 탭 헤더: <code>협력사명 · 담당자 · 담당자메일 · 상품명 · 현재재고 · 발주필요수량</code></p>
+<h4>🤖 경로 A — Claude Code에게 시키기 (메타프롬프트)</h4>
+<p>아래 프롬프트를 Claude Code에 그대로 붙여넣으면 이 워크플로 JSON을 만들어줍니다(n8n-MCP 연결 시 더 정확). import 후 노드별 Test step 검증 필수.</p>
+<pre><code class="language-text">n8n 워크플로 JSON을 만들어줘: &quot;협력사 발주 개인화 메일&quot; 자동화야.
+
+[목표] 발주 필요한 협력사마다 Claude가 맞춤 발주확인 메일을 써서 각 담당자에게 개별 발송.
+
+[노드 체인 — 5개]
+1. Schedule Trigger — 매일 10:00
+2. Google Sheets — &#39;발주현황&#39; 탭 읽기 (열: 협력사명·담당자·담당자메일·상품명·현재재고·발주필요수량)
+3. Filter — Number($json[&#39;발주필요수량&#39;]) &gt; 0 인 행만 통과
+4. HTTP Request(POST) — Claude에게 &quot;홈쇼핑 MD가 협력사에 보내는 발주 확인 메일 본문을
+   정중한 한국어로(3~5문장, 인사+발주내역+회신요청, 서명 없이)&quot; 요청.
+   $(&#39;발주 필요만&#39;)에서 협력사명·담당자·상품명·발주필요수량을 프롬프트에 포함.
+5. Gmail — To는 표현식으로 $(&#39;발주 필요만&#39;).item.json[&#39;담당자메일&#39;],
+   제목 &quot;[발주 확인] {상품명} {발주필요수량}개&quot;, 본문 = Claude가 쓴 메일.
+
+★포인트: 행마다 개별 메일이 나가는 구조 — Filter를 통과한 아이템 수만큼 Claude 호출·발송이 반복됨.
+
+[공통 규칙 — 그대로 지켜줘]
+- n8n-MCP가 연결돼 있으면 각 노드의 정확한 파라미터를 조회해서 만들고, 없으면 표준 노드 구조로.
+- Claude 호출은 HTTP Request 노드로: POST https://api.anthropic.com/v1/messages,
+  인증은 Header Auth 크리덴셜(이름 x-api-key), 추가 헤더 anthropic-version: 2023-06-01,
+  모델 claude-sonnet-5, 응답 본문은 content[0].text 로 파싱.
+- 시트 ID는 YOUR_GOOGLE_SHEET_ID, 수신자 이메일은 YOUR_...@example.com 플레이스홀더로.
+- connections의 타입은 전부 &quot;main&quot;. IF 노드는 true 출력만 다음 노드로.
+- 완성되면 워크플로 JSON을 파일로 저장해줘 — 내가 n8n에서 ⋮ → Import from File 로 불러올게.
+- import 후엔 노드별 Test step으로 하나씩 검증할 거야(통째로 맞다고 가정하지 말 것).
+</code></pre>
+<h4>🔧 경로 B — 손으로 직접 만들기</h4>
 <p><strong>노드 순서 (총 5개):</strong> 매일 10:00 → 발주현황 읽기 → 발주 필요만 → Claude 발주메일 작성 → 협력사 발송</p>
 <h4>Step 1 — <code>매일 10:00</code> 추가</h4>
 <ul>
@@ -1122,6 +1320,34 @@ return [{json:{반품목록:text,건수:items.length}}];
 <p>매일 밤 내일 편성표를 재고·가격·혜택·물량·자막과 대조해 미비 항목만 Claude 조치안내와 함께 담당자에게 알립니다.</p>
 </blockquote>
 <p><strong>받는 사람:</strong> 방송 담당자 · <strong>시트:</strong> <strong>내일편성</strong> 탭 헤더: <code>방송명 · 예상판매량 · 현재재고 · 가격설정여부 · 혜택설정여부 · 물량확정여부 · 자막준비여부</code> (여부 칸은 Y/완료 등)</p>
+<h4>🤖 경로 A — Claude Code에게 시키기 (메타프롬프트)</h4>
+<p>아래 프롬프트를 Claude Code에 그대로 붙여넣으면 이 워크플로 JSON을 만들어줍니다(n8n-MCP 연결 시 더 정확). import 후 노드별 Test step 검증 필수.</p>
+<pre><code class="language-text">n8n 워크플로 JSON을 만들어줘: &quot;방송 D-1 사고방지 체크&quot; 자동화야.
+
+[목표] 매일 밤 내일 편성을 재고·가격·혜택·물량·자막과 대조해, 미비 항목만 Claude 조치안내와 함께 담당자에게 메일.
+
+[노드 체인 — 6개]
+1. Schedule Trigger — 매일 20:00
+2. Google Sheets — &#39;내일편성&#39; 탭 읽기 (열: 방송명·예상판매량·현재재고·가격설정여부·혜택설정여부·물량확정여부·자막준비여부)
+3. Code — 미비 판정: 숫자화 후 현재재고&lt;예상판매량이면 &quot;재고 부족&quot;,
+   여부 칸(Y/y/O/예/완료/true/1 허용)이 아니면 각각 &quot;가격 미설정&quot;/&quot;혜택 미설정&quot;/&quot;협력사 물량 미확정&quot;/&quot;자막 미준비&quot;.
+   방송명·미비수·미비목록(&quot; / &quot;로 join, 없으면 &quot;없음&quot;) 반환.
+4. IF — 미비수 &gt; 0 일 때만
+5. HTTP Request(POST) — Claude에게 &quot;담당자가 오늘 밤 처리할 수 있게 우선순위를 매긴 조치 안내를 불릿으로&quot; 요청. 방송명·미비목록 포함.
+6. Gmail — 담당자에게: 제목 &quot;[방송 D-1] {방송명} 준비 미비 {미비수}건&quot;,
+   본문 = 미비 목록 + [조치 안내] Claude 응답. ($(&#39;항목별 미비 판정&#39;)로 앞 노드 값 참조)
+
+[공통 규칙 — 그대로 지켜줘]
+- n8n-MCP가 연결돼 있으면 각 노드의 정확한 파라미터를 조회해서 만들고, 없으면 표준 노드 구조로.
+- Claude 호출은 HTTP Request 노드로: POST https://api.anthropic.com/v1/messages,
+  인증은 Header Auth 크리덴셜(이름 x-api-key), 추가 헤더 anthropic-version: 2023-06-01,
+  모델 claude-sonnet-5, 응답 본문은 content[0].text 로 파싱.
+- 시트 ID는 YOUR_GOOGLE_SHEET_ID, 수신자 이메일은 YOUR_...@example.com 플레이스홀더로.
+- connections의 타입은 전부 &quot;main&quot;. IF 노드는 true 출력만 다음 노드로.
+- 완성되면 워크플로 JSON을 파일로 저장해줘 — 내가 n8n에서 ⋮ → Import from File 로 불러올게.
+- import 후엔 노드별 Test step으로 하나씩 검증할 거야(통째로 맞다고 가정하지 말 것).
+</code></pre>
+<h4>🔧 경로 B — 손으로 직접 만들기</h4>
 <p><strong>노드 순서 (총 6개):</strong> 매일 20:00 (방송 D-1) → 내일 편성 읽기 → 항목별 미비 판정 → 미비 있을 때만 → Claude 조치 안내 → 담당자 사고방지 알림</p>
 <h4>Step 1 — <code>매일 20:00 (방송 D-1)</code> 추가</h4>
 <ul>
@@ -1268,6 +1494,35 @@ return [{json:{방송명:r[&#39;방송명&#39;],미비수:miss.length,미비:mis
 <p>콜 대기·포기율이 임계를 넘으면 Claude 조치 제안과 함께 운영팀에 긴급 경보를 보냅니다.</p>
 </blockquote>
 <p><strong>받는 사람:</strong> 운영팀 · <strong>시트:</strong> <strong>콜현황</strong> 탭 헤더: <code>진행중방송 · 현재대기 · 콜포기율 · 상담원가동</code> (콜시스템 실시간 export)</p>
+<h4>🤖 경로 A — Claude Code에게 시키기 (메타프롬프트)</h4>
+<p>아래 프롬프트를 Claude Code에 그대로 붙여넣으면 이 워크플로 JSON을 만들어줍니다(n8n-MCP 연결 시 더 정확). import 후 노드별 Test step 검증 필수.</p>
+<pre><code class="language-text">n8n 워크플로 JSON을 만들어줘: &quot;콜센터 폭주 조기경보&quot; 자동화야.
+
+[목표] 콜 대기·포기율이 임계를 넘으면 Claude 조치 제안과 함께 운영팀에 긴급 메일.
+
+[노드 체인 — 6개]
+1. Schedule Trigger — 3분마다 (Minutes interval 3)
+2. Google Sheets — &#39;콜현황&#39; 탭 읽기 (열: 진행중방송·현재대기·콜포기율·상담원가동)
+3. Code — 폭주 판정: 숫자화(콤마·% 제거) 후 폭주 = (대기≥30) || (포기율≥15),
+   진행방송·현재대기·콜포기율·상담원가동·폭주(&quot;true&quot;/&quot;false&quot;) 반환.
+4. IF — 폭주 = &quot;true&quot; 일 때만
+5. HTTP Request(POST) — Claude에게 &quot;운영자가 즉시 취할 조치 2~3가지를 한 줄씩
+   (상담원 증원 호출, ARS/챗봇 유도, 방송 자막으로 모바일주문 안내)&quot; 요청. 진행방송·대기·포기율 포함.
+6. Gmail — 운영팀에게: 제목 &quot;[콜폭주] 대기 {현재대기}명 · 포기율 {콜포기율}%&quot;.
+
+★운영 주의: 3분마다 도는 워크플로 — **피크시간대에만 Active**. 임계값(30명/15%)은 사내 기준으로 Code에서 조정.
+
+[공통 규칙 — 그대로 지켜줘]
+- n8n-MCP가 연결돼 있으면 각 노드의 정확한 파라미터를 조회해서 만들고, 없으면 표준 노드 구조로.
+- Claude 호출은 HTTP Request 노드로: POST https://api.anthropic.com/v1/messages,
+  인증은 Header Auth 크리덴셜(이름 x-api-key), 추가 헤더 anthropic-version: 2023-06-01,
+  모델 claude-sonnet-5, 응답 본문은 content[0].text 로 파싱.
+- 시트 ID는 YOUR_GOOGLE_SHEET_ID, 수신자 이메일은 YOUR_...@example.com 플레이스홀더로.
+- connections의 타입은 전부 &quot;main&quot;. IF 노드는 true 출력만 다음 노드로.
+- 완성되면 워크플로 JSON을 파일로 저장해줘 — 내가 n8n에서 ⋮ → Import from File 로 불러올게.
+- import 후엔 노드별 Test step으로 하나씩 검증할 거야(통째로 맞다고 가정하지 말 것).
+</code></pre>
+<h4>🔧 경로 B — 손으로 직접 만들기</h4>
 <p><strong>노드 순서 (총 6개):</strong> 피크시간 3분마다 → 콜 현황 읽기 → 폭주 임계 판정 → 폭주일 때만 → Claude 조치 제안 → 운영팀 긴급 경보</p>
 <h4>Step 1 — <code>피크시간 3분마다</code> 추가</h4>
 <ul>
@@ -1411,6 +1666,34 @@ return [{json:{진행방송:r[&#39;진행중방송&#39;]||&#39;-&#39;,현재대�
 <p>상품 정보를 넣으면 Claude가 방송 자막 3안 + 상세페이지 문구 + 채팅 응대 멘트를 만들어 시트에 저장합니다.</p>
 </blockquote>
 <p><strong>받는 사람:</strong> 본인(수동 실행) · <strong>시트:</strong> <strong>카피요청</strong> 탭 헤더: <code>상품명 · 핵심특징 · 가격</code> → 결과는 <strong>카피결과</strong> 탭에 자동 추가</p>
+<h4>🤖 경로 A — Claude Code에게 시키기 (메타프롬프트)</h4>
+<p>아래 프롬프트를 Claude Code에 그대로 붙여넣으면 이 워크플로 JSON을 만들어줍니다(n8n-MCP 연결 시 더 정확). import 후 노드별 Test step 검증 필수.</p>
+<pre><code class="language-text">n8n 워크플로 JSON을 만들어줘: &quot;방송 자막·상세 카피 생성기&quot; 자동화야.
+
+[목표] 시트의 상품 정보로 Claude가 방송 자막 3안 + 상세페이지 문구 + 채팅 응대 멘트를 만들어 결과 시트에 저장. (수동 실행형)
+
+[노드 체인 — 5개]
+1. Manual Trigger — ▶ 수동 실행
+2. Google Sheets — &#39;카피요청&#39; 탭 읽기 (열: 상품명·핵심특징·가격)
+3. HTTP Request(POST) — Claude에게 &quot;(1) 방송 자막 문구 3안(각 20자 내외, 자극적이지 않게)
+   (2) 상세페이지 소개 문구 3문장 (3) 실시간 채팅 응대 멘트 2개.
+   ★과장·허위·의료효능 표현 금지&quot;를 요청. 상품명·핵심특징·가격 포함. (max_tokens 900)
+4. Code — $(&#39;카피 요청 읽기&#39;)의 상품명 + Claude 응답(content[0].text)을 {상품명, 생성카피}로 정리.
+5. Google Sheets(Append) — &#39;카피결과&#39; 탭에 저장 (autoMapInputData).
+
+★주의: 생성된 카피는 송출 전 반드시 사람이 최종 검수(방송 심의).
+
+[공통 규칙 — 그대로 지켜줘]
+- n8n-MCP가 연결돼 있으면 각 노드의 정확한 파라미터를 조회해서 만들고, 없으면 표준 노드 구조로.
+- Claude 호출은 HTTP Request 노드로: POST https://api.anthropic.com/v1/messages,
+  인증은 Header Auth 크리덴셜(이름 x-api-key), 추가 헤더 anthropic-version: 2023-06-01,
+  모델 claude-sonnet-5, 응답 본문은 content[0].text 로 파싱.
+- 시트 ID는 YOUR_GOOGLE_SHEET_ID, 수신자 이메일은 YOUR_...@example.com 플레이스홀더로.
+- connections의 타입은 전부 &quot;main&quot;. IF 노드는 true 출력만 다음 노드로.
+- 완성되면 워크플로 JSON을 파일로 저장해줘 — 내가 n8n에서 ⋮ → Import from File 로 불러올게.
+- import 후엔 노드별 Test step으로 하나씩 검증할 거야(통째로 맞다고 가정하지 말 것).
+</code></pre>
+<h4>🔧 경로 B — 손으로 직접 만들기</h4>
 <p><strong>노드 순서 (총 5개):</strong> ▶ 실행 (수동) → 카피 요청 읽기 → Claude 카피 생성 → 결과 정리 → 카피 결과 저장</p>
 <h4>Step 1 — <code>▶ 실행 (수동)</code> 추가</h4>
 <ul>

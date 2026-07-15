@@ -91,6 +91,39 @@
 <blockquote>
 <p>처음 만드는 필드 종류(노드 추가·연결·표현식 토글·크리덴셜)는 <a href="guide-build-common.html">공통 조작법</a>을 먼저 보세요.</p>
 </blockquote>
+<h2>🤖 경로 A — Claude Code에게 시키기 (메타프롬프트)</h2>
+<p>이 강의의 방식대로, 아래 프롬프트를 <strong>Claude Code에 그대로 붙여넣으면</strong> 이 워크플로 JSON을 만들어줍니다(n8n-MCP 연결 시 더 정확). 받은 JSON을 <code>⋮ → Import from File</code>로 불러온 뒤 <strong>노드별 Test step으로 검증</strong>하세요 — AI 초안은 가설, 진실은 에디터 실행 결과입니다.</p>
+<pre><code class="language-text">n8n 워크플로 JSON을 만들어줘: &quot;방송상품 가격경쟁력 진단&quot; 자동화야.
+
+[목표] 방송 예정 상품이 인터넷 최저가보다 비싼지 매일 아침 점검하고, 비싸면 Claude가 방송 대응 소구점을 제안해 MD에게 메일.
+
+[노드 체인 — 7개, 순서대로]
+1. Schedule Trigger — 매일 07:30
+2. Google Sheets — &#39;방송예정상품&#39; 탭 읽기 (열: 상품명·우리방송가)
+3. HTTP Request(GET) — 네이버쇼핑 검색 API
+   https://openapi.naver.com/v1/search/shop.json?query={{ encodeURIComponent($json[&#39;상품명&#39;]) }}&amp;display=20&amp;sort=sim
+   헤더: X-Naver-Client-Id / X-Naver-Client-Secret (값은 YOUR_NAVER_CLIENT_ID/SECRET)
+4. Code — 최저가 비교: items의 title에서 HTML 태그 제거, lprice 숫자화,
+   ★가격 중앙값의 40% 미만은 부품·액세서리 오탐으로 버리고, 남은 것 중 최저가 선정.
+   $(&#39;방송예정 상품 읽기&#39;)의 우리방송가(콤마 제거)와 비교해 가격차·열위(true/false) 산출.
+5. IF — 열위 = &quot;true&quot; 일 때만
+6. HTTP Request(POST) — Claude에게 &quot;인터넷 최저가보다 비쌀 때 방송에서 쓸 대응 소구점 2가지
+   (방송한정가·추가 사은품·무이자·차별화 포인트)&quot;를 3줄로 요청. 상품명·우리방송가·최저가·최저가몰·가격차를 프롬프트에 포함.
+7. Gmail — MD에게: 제목 &quot;[가격경쟁력] {상품명} — 최저가 대비 {가격차}원 비쌈&quot;,
+   본문에 우리방송가/최저가(몰)/가격차 + Claude 소구점.
+
+[공통 규칙 — 그대로 지켜줘]
+- n8n-MCP가 연결돼 있으면 각 노드의 정확한 파라미터를 조회해서 만들고, 없으면 표준 노드 구조로.
+- Claude 호출은 HTTP Request 노드로: POST https://api.anthropic.com/v1/messages,
+  인증은 Header Auth 크리덴셜(이름 x-api-key), 추가 헤더 anthropic-version: 2023-06-01,
+  모델 claude-sonnet-5, 응답 본문은 content[0].text 로 파싱.
+- 시트 ID는 YOUR_GOOGLE_SHEET_ID, 수신자 이메일은 YOUR_...@example.com 플레이스홀더로.
+- connections의 타입은 전부 &quot;main&quot;. IF 노드는 true 출력만 다음 노드로.
+- 완성되면 워크플로 JSON을 파일로 저장해줘 — 내가 n8n에서 ⋮ → Import from File 로 불러올게.
+- import 후엔 노드별 Test step으로 하나씩 검증할 거야(통째로 맞다고 가정하지 말 것).
+</code></pre>
+<h2>🔧 경로 B — 손으로 직접 만들기 (스텝바이스텝)</h2>
+<p>노드가 왜 이 순서로 놓이는지 이해하려면 이 경로로. 아래 Step을 그대로 따라가면 됩니다.</p>
 <p><strong>노드 순서 (총 7개):</strong> 매일 07:30 → 방송예정 상품 읽기 → 네이버쇼핑 최저가 조회 → 최저가 비교 → 가격 열위만 → Claude 대응 소구점 → MD 가격진단 메일</p>
 <h4>Step 1 — <code>매일 07:30</code> 추가</h4>
 <ul>

@@ -88,6 +88,35 @@
 <blockquote>
 <p>처음 만드는 필드 종류(노드 추가·연결·표현식 토글·크리덴셜)는 <a href="guide-build-common.html">공통 조작법</a>을 먼저 보세요.</p>
 </blockquote>
+<h2>🤖 경로 A — Claude Code에게 시키기 (메타프롬프트)</h2>
+<p>이 강의의 방식대로, 아래 프롬프트를 <strong>Claude Code에 그대로 붙여넣으면</strong> 이 워크플로 JSON을 만들어줍니다(n8n-MCP 연결 시 더 정확). 받은 JSON을 <code>⋮ → Import from File</code>로 불러온 뒤 <strong>노드별 Test step으로 검증</strong>하세요 — AI 초안은 가설, 진실은 에디터 실행 결과입니다.</p>
+<pre><code class="language-text">n8n 워크플로 JSON을 만들어줘: &quot;반품 사유 AI 분류 → 상품개선 루프&quot; 자동화야.
+
+[목표] 반품 데이터를 Claude가 사유 분류하고 반복 이슈를 감지해 MD·품질팀 메일 + 개선이슈 로그.
+
+[노드 체인 — 6개]
+1. Schedule Trigger — 매일 09:00
+2. Google Sheets — &#39;반품데이터&#39; 탭 읽기 (열: 상품명·반품사유)
+3. Code — $input.all()로 전 행을 받아 상품명별로 반품사유를 묶어
+   &quot;■ 상품명 (N건)\n- 사유...&quot; 형식의 반품목록 텍스트 + 총 건수 산출.
+4. HTTP Request(POST) — Claude에게 &quot;(1) 사유를 사이즈·품질·오배송·단순변심·기타로 분류해 상품별 집계
+   (2) 같은 상품 반복 이슈(3건 이상) 지목 (3) MD·협력사 전달용 상품개선 제안&quot; 요청.
+5. Gmail — 품질팀에게: 제목 &quot;[반품분석] 상품개선 제안 ({건수}건 분석)&quot;.
+6. Google Sheets(Append) — &#39;반품개선로그&#39; 탭에 저장.
+★연결 주의: 4번 출력이 5번·6번 **둘 다**로 나가는 fan-out.
+
+[공통 규칙 — 그대로 지켜줘]
+- n8n-MCP가 연결돼 있으면 각 노드의 정확한 파라미터를 조회해서 만들고, 없으면 표준 노드 구조로.
+- Claude 호출은 HTTP Request 노드로: POST https://api.anthropic.com/v1/messages,
+  인증은 Header Auth 크리덴셜(이름 x-api-key), 추가 헤더 anthropic-version: 2023-06-01,
+  모델 claude-sonnet-5, 응답 본문은 content[0].text 로 파싱.
+- 시트 ID는 YOUR_GOOGLE_SHEET_ID, 수신자 이메일은 YOUR_...@example.com 플레이스홀더로.
+- connections의 타입은 전부 &quot;main&quot;. IF 노드는 true 출력만 다음 노드로.
+- 완성되면 워크플로 JSON을 파일로 저장해줘 — 내가 n8n에서 ⋮ → Import from File 로 불러올게.
+- import 후엔 노드별 Test step으로 하나씩 검증할 거야(통째로 맞다고 가정하지 말 것).
+</code></pre>
+<h2>🔧 경로 B — 손으로 직접 만들기 (스텝바이스텝)</h2>
+<p>노드가 왜 이 순서로 놓이는지 이해하려면 이 경로로. 아래 Step을 그대로 따라가면 됩니다.</p>
 <p><strong>노드 순서 (총 6개):</strong> 매일 09:00 → 반품 데이터 읽기 → 상품별 반품 묶기 → Claude 사유분류·개선제안 → MD·품질팀 알림 → 개선이슈 로그</p>
 <h4>Step 1 — <code>매일 09:00</code> 추가</h4>
 <ul>

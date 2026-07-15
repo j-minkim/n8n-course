@@ -88,6 +88,36 @@
 <blockquote>
 <p>처음 만드는 필드 종류(노드 추가·연결·표현식 토글·크리덴셜)는 <a href="guide-build-common.html">공통 조작법</a>을 먼저 보세요.</p>
 </blockquote>
+<h2>🤖 경로 A — Claude Code에게 시키기 (메타프롬프트)</h2>
+<p>이 강의의 방식대로, 아래 프롬프트를 <strong>Claude Code에 그대로 붙여넣으면</strong> 이 워크플로 JSON을 만들어줍니다(n8n-MCP 연결 시 더 정확). 받은 JSON을 <code>⋮ → Import from File</code>로 불러온 뒤 <strong>노드별 Test step으로 검증</strong>하세요 — AI 초안은 가설, 진실은 에디터 실행 결과입니다.</p>
+<pre><code class="language-text">n8n 워크플로 JSON을 만들어줘: &quot;생방송 실적 페이스메이커&quot; 자동화야.
+
+[목표] 방송 중 5분마다 목표 페이스 대비 실적을 계산해, 저조하면 Claude 실시간 대응멘트와 함께 MD·PD에게 긴급 메일.
+
+[노드 체인 — 6개]
+1. Schedule Trigger — 5분마다 (Minutes interval 5)
+2. Google Sheets — &#39;방송현황&#39; 탭 읽기 (열: 상품명·목표매출·총방송분·경과분·누적매출)
+3. Code — 목표 페이스 계산: 숫자화(콤마 제거), 예상매출 = 목표×(경과분/총방송분),
+   달성률 = round(누적/예상×100), 저조 = 달성률&lt;80 (문자열 &quot;true&quot;/&quot;false&quot;).
+4. IF — 저조 = &quot;true&quot; 일 때만
+5. HTTP Request(POST) — Claude에게 &quot;진행자가 바로 읽을 실시간 대응 멘트 2가지
+   (매진임박·수량한정 자막, 방송한정 사은품, 무이자 강조)&quot;를 요청. 상품명·달성률·경과분 포함.
+6. Gmail — MD·PD에게: 제목 &quot;[생방송] {상품명} 목표 대비 {달성률}% 저조&quot;.
+
+★운영 주의: 5분마다 도는 워크플로라 **방송 시간대에만 Active** 켜야 함(24시간 알림 방지).
+
+[공통 규칙 — 그대로 지켜줘]
+- n8n-MCP가 연결돼 있으면 각 노드의 정확한 파라미터를 조회해서 만들고, 없으면 표준 노드 구조로.
+- Claude 호출은 HTTP Request 노드로: POST https://api.anthropic.com/v1/messages,
+  인증은 Header Auth 크리덴셜(이름 x-api-key), 추가 헤더 anthropic-version: 2023-06-01,
+  모델 claude-sonnet-5, 응답 본문은 content[0].text 로 파싱.
+- 시트 ID는 YOUR_GOOGLE_SHEET_ID, 수신자 이메일은 YOUR_...@example.com 플레이스홀더로.
+- connections의 타입은 전부 &quot;main&quot;. IF 노드는 true 출력만 다음 노드로.
+- 완성되면 워크플로 JSON을 파일로 저장해줘 — 내가 n8n에서 ⋮ → Import from File 로 불러올게.
+- import 후엔 노드별 Test step으로 하나씩 검증할 거야(통째로 맞다고 가정하지 말 것).
+</code></pre>
+<h2>🔧 경로 B — 손으로 직접 만들기 (스텝바이스텝)</h2>
+<p>노드가 왜 이 순서로 놓이는지 이해하려면 이 경로로. 아래 Step을 그대로 따라가면 됩니다.</p>
 <p><strong>노드 순서 (총 6개):</strong> 방송 중 5분마다 → 현재 방송실적 읽기 → 목표 페이스 계산 → 저조할 때만 → Claude 실시간 대응멘트 → MD·PD 긴급 알림</p>
 <h4>Step 1 — <code>방송 중 5분마다</code> 추가</h4>
 <ul>

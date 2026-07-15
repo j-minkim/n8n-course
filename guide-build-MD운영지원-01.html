@@ -88,6 +88,36 @@
 <blockquote>
 <p>처음 만드는 필드 종류(노드 추가·연결·표현식 토글·크리덴셜)는 <a href="guide-build-common.html">공통 조작법</a>을 먼저 보세요.</p>
 </blockquote>
+<h2>🤖 경로 A — Claude Code에게 시키기 (메타프롬프트)</h2>
+<p>이 강의의 방식대로, 아래 프롬프트를 <strong>Claude Code에 그대로 붙여넣으면</strong> 이 워크플로 JSON을 만들어줍니다(n8n-MCP 연결 시 더 정확). 받은 JSON을 <code>⋮ → Import from File</code>로 불러온 뒤 <strong>노드별 Test step으로 검증</strong>하세요 — AI 초안은 가설, 진실은 에디터 실행 결과입니다.</p>
+<pre><code class="language-text">n8n 워크플로 JSON을 만들어줘: &quot;협력사 발주 개인화 메일&quot; 자동화야.
+
+[목표] 발주 필요한 협력사마다 Claude가 맞춤 발주확인 메일을 써서 각 담당자에게 개별 발송.
+
+[노드 체인 — 5개]
+1. Schedule Trigger — 매일 10:00
+2. Google Sheets — &#39;발주현황&#39; 탭 읽기 (열: 협력사명·담당자·담당자메일·상품명·현재재고·발주필요수량)
+3. Filter — Number($json[&#39;발주필요수량&#39;]) &gt; 0 인 행만 통과
+4. HTTP Request(POST) — Claude에게 &quot;홈쇼핑 MD가 협력사에 보내는 발주 확인 메일 본문을
+   정중한 한국어로(3~5문장, 인사+발주내역+회신요청, 서명 없이)&quot; 요청.
+   $(&#39;발주 필요만&#39;)에서 협력사명·담당자·상품명·발주필요수량을 프롬프트에 포함.
+5. Gmail — To는 표현식으로 $(&#39;발주 필요만&#39;).item.json[&#39;담당자메일&#39;],
+   제목 &quot;[발주 확인] {상품명} {발주필요수량}개&quot;, 본문 = Claude가 쓴 메일.
+
+★포인트: 행마다 개별 메일이 나가는 구조 — Filter를 통과한 아이템 수만큼 Claude 호출·발송이 반복됨.
+
+[공통 규칙 — 그대로 지켜줘]
+- n8n-MCP가 연결돼 있으면 각 노드의 정확한 파라미터를 조회해서 만들고, 없으면 표준 노드 구조로.
+- Claude 호출은 HTTP Request 노드로: POST https://api.anthropic.com/v1/messages,
+  인증은 Header Auth 크리덴셜(이름 x-api-key), 추가 헤더 anthropic-version: 2023-06-01,
+  모델 claude-sonnet-5, 응답 본문은 content[0].text 로 파싱.
+- 시트 ID는 YOUR_GOOGLE_SHEET_ID, 수신자 이메일은 YOUR_...@example.com 플레이스홀더로.
+- connections의 타입은 전부 &quot;main&quot;. IF 노드는 true 출력만 다음 노드로.
+- 완성되면 워크플로 JSON을 파일로 저장해줘 — 내가 n8n에서 ⋮ → Import from File 로 불러올게.
+- import 후엔 노드별 Test step으로 하나씩 검증할 거야(통째로 맞다고 가정하지 말 것).
+</code></pre>
+<h2>🔧 경로 B — 손으로 직접 만들기 (스텝바이스텝)</h2>
+<p>노드가 왜 이 순서로 놓이는지 이해하려면 이 경로로. 아래 Step을 그대로 따라가면 됩니다.</p>
 <p><strong>노드 순서 (총 5개):</strong> 매일 10:00 → 발주현황 읽기 → 발주 필요만 → Claude 발주메일 작성 → 협력사 발송</p>
 <h4>Step 1 — <code>매일 10:00</code> 추가</h4>
 <ul>
