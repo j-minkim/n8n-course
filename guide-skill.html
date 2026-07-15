@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
 <script>(function(){try{var p=localStorage.getItem("theme-pref")||"system";var d=p==="dark"||(p==="system"&&matchMedia("(prefers-color-scheme: dark)").matches);document.documentElement.setAttribute("data-theme",d?"dark":"light");}catch(e){document.documentElement.setAttribute("data-theme","dark");}})();</script>
-<title>자동화 PRD 경량 스킬 — n8n + Claude Code 강의</title>
+<title>자동화 PRD 스킬 가이드</title>
 <style>
   /* ── theme tokens (dark default + light override) ── */
   :root{
@@ -78,11 +78,11 @@
 </head>
 <body>
 <button id="themeToggle" class="theme-toggle" type="button" aria-label="테마 전환" title="테마: 시스템"><span class="tt-ico" aria-hidden="true">🖥</span><span class="tt-label">시스템</span></button>
-<div class="topbar"><span class="badge">n8n 자동화 강의</span><span class="t">자동화 PRD 경량 스킬 — n8n + Claude Code 강의</span><nav class="quicknav"><a href="index.html">🏠 홈</a><a href="day1.html">Day1</a><a href="day2.html">Day2</a><a href="assets.html">📦 실습파일</a><a href="guide-templates.html">📖 카탈로그</a><a href="guide-build-index.html">🧱 빌드가이드</a></nav></div>
+<div class="topbar"><span class="badge">n8n 자동화 강의</span><span class="t">자동화 PRD 스킬 가이드</span><nav class="quicknav"><a href="index.html">🏠 홈</a><a href="day1.html">Day1</a><a href="day2.html">Day2</a><a href="assets.html">📦 실습파일</a><a href="guide-templates.html">📖 카탈로그</a><a href="guide-build-index.html">🧱 빌드가이드</a></nav></div>
 <main class="doc">
 <h1>자동화 PRD 경량 스킬 — <code>/n8n-automation-prd</code></h1>
 <blockquote>
-<p>워크플로를 만들기 <strong>전에</strong>, &quot;무엇을 자동화할지&quot;를 <strong>5섹션 PRD</strong>로 한 번에 정리해 주는 Claude Code 전용 경량 스킬입니다. M4(Lab3)·M9(Lab6)에서 사용해요.</p>
+<p>워크플로를 만들기 <strong>전에</strong>, &quot;무엇을 자동화할지&quot;를 <strong>5섹션 PRD</strong>로 한 번에 정리해 주는 Claude Code 전용 경량 스킬입니다. Day2 B1(Lab3)·B6~B7(Lab6)에서 사용해요.</p>
 </blockquote>
 <h2>무엇을 해 주나</h2>
 <ul>
@@ -148,7 +148,7 @@
 <h2>자주 묻는 것</h2>
 <ul>
 <li><strong>PRD를 파일로 남기고 싶어요</strong> → &quot;이 PRD를 .md로 저장해줘&quot;라고 하면 됩니다.</li>
-<li><strong>AI 판단 노드(③ 처리)는 무엇으로 도나요?</strong> → 워크플로 안 Anthropic 노드는 **별도 Anthropic API 키(종량과금)**로 돕니다. 개인 Claude 구독으로는 <strong>안 돼요</strong>(2일차에서 회사 키로 실습).</li>
+<li><strong>AI 판단 노드(③ 처리)는 무엇으로 도나요?</strong> → 워크플로 안 Anthropic 노드는 **별도 Anthropic API 키(종량과금)**로 돕니다. 개인 Claude 구독으로는 안 됩니다. 각자 제한 키를 쓰거나 강사 화면 시연으로 확인하며 키·Credential을 공유하지 않습니다.</li>
 <li><strong>노드를 한 번에 다 만들어도 되나요?</strong> → 아니요. 거대 JSON 통째 생성은 cascade 에러 위험 → <strong>노드별로 만들고 즉시 검증</strong>하세요.</li>
 </ul>
 <blockquote>
