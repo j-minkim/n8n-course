@@ -122,8 +122,11 @@
 - 완성되면 워크플로 JSON을 파일로 저장해줘 — 내가 n8n에서 ⋮ → Import from File 로 불러올게.
 - import 후엔 노드별 Test step으로 하나씩 검증할 거야(통째로 맞다고 가정하지 말 것).
 </code></pre>
+<blockquote>
+<p>🗂 이 프롬프트는 구글시트(보조) 버전 기준입니다. <strong>기본(파일 버전)으로 생성하려면</strong> 프롬프트 끝에 <a href="guide-file-version.html">파일 버전 가이드</a> §4의 변환 단락을 덧붙이세요.</p>
+</blockquote>
 <h2>🔧 경로 B — 손으로 직접 만들기 (스텝바이스텝)</h2>
-<p>노드가 왜 이 순서로 놓이는지 이해하려면 이 경로로. 아래 Step을 그대로 따라가면 됩니다.</p>
+<p>노드가 왜 이 순서로 놓이는지 이해하려면 이 경로로. 아래 Step을 그대로 따라가면 됩니다. (Google Sheets 노드 = 보조 버전 기준 — 기본(파일 버전)은 그 자리에 파일 노드 2단이 들어갑니다: <a href="guide-file-version.html">차이 보기</a>)</p>
 <p><strong>노드 순서 (총 7개):</strong> 매일 07:30 → 방송예정 상품 읽기 → 네이버쇼핑 최저가 조회 → 최저가 비교 → 가격 열위만 → Claude 대응 소구점 → MD 가격진단 메일</p>
 <h4>Step 1 — <code>매일 07:30</code> 추가</h4>
 <ul>

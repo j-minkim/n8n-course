@@ -169,6 +169,9 @@
 - 완성되면 워크플로 JSON을 파일로 저장해줘 — 내가 n8n에서 ⋮ → Import from File 로 불러올게.
 - import 후엔 노드별 Test step으로 하나씩 검증할 거야(통째로 맞다고 가정하지 말 것).
 </code></pre>
+<blockquote>
+<p>🗂 프롬프트는 구글시트(보조) 버전 기준 — 기본(파일 버전)은 <a href="guide-file-version.html">파일 버전 가이드</a> §4 변환 단락을 덧붙이세요.</p>
+</blockquote>
 <h4>🔧 경로 B — 손으로 직접 만들기</h4>
 <p><strong>노드 순서 (총 7개):</strong> 매일 07:30 → 방송예정 상품 읽기 → 네이버쇼핑 최저가 조회 → 최저가 비교 → 가격 열위만 → Claude 대응 소구점 → MD 가격진단 메일</p>
 <h4>Step 1 — <code>매일 07:30</code> 추가</h4>
@@ -372,6 +375,9 @@ return [{json:{상품명:$(&#39;방송예정 상품 읽기&#39;).item.json[&#39;
 - 완성되면 워크플로 JSON을 파일로 저장해줘 — 내가 n8n에서 ⋮ → Import from File 로 불러올게.
 - import 후엔 노드별 Test step으로 하나씩 검증할 거야(통째로 맞다고 가정하지 말 것).
 </code></pre>
+<blockquote>
+<p>🗂 프롬프트는 구글시트(보조) 버전 기준 — 기본(파일 버전)은 <a href="guide-file-version.html">파일 버전 가이드</a> §4 변환 단락을 덧붙이세요.</p>
+</blockquote>
 <h4>🔧 경로 B — 손으로 직접 만들기</h4>
 <p><strong>노드 순서 (총 5개):</strong> 매일 08:00 → 경쟁사 편성 읽기 → 채널별 편성 묶기 → Claude 편성 브리핑 → MD 편성 브리핑</p>
 <h4>Step 1 — <code>매일 08:00</code> 추가</h4>
@@ -517,6 +523,9 @@ return [{json:{brief}}];
 - 완성되면 워크플로 JSON을 파일로 저장해줘 — 내가 n8n에서 ⋮ → Import from File 로 불러올게.
 - import 후엔 노드별 Test step으로 하나씩 검증할 거야(통째로 맞다고 가정하지 말 것).
 </code></pre>
+<blockquote>
+<p>🗂 프롬프트는 구글시트(보조) 버전 기준 — 기본(파일 버전)은 <a href="guide-file-version.html">파일 버전 가이드</a> §4 변환 단락을 덧붙이세요.</p>
+</blockquote>
 <h4>🔧 경로 B — 손으로 직접 만들기</h4>
 <p><strong>노드 순서 (총 6개):</strong> 매일 08:30 → 홈쇼핑 뉴스 RSS → 상위 뉴스 정리 → Claude 트렌드 브리핑 → MD 트렌드 브리핑 → 브리핑 아카이브</p>
 <h4>Step 1 — <code>매일 08:30</code> 추가</h4>
@@ -676,6 +685,9 @@ return [{json:{뉴스:list}}];
 - 완성되면 워크플로 JSON을 파일로 저장해줘 — 내가 n8n에서 ⋮ → Import from File 로 불러올게.
 - import 후엔 노드별 Test step으로 하나씩 검증할 거야(통째로 맞다고 가정하지 말 것).
 </code></pre>
+<blockquote>
+<p>🗂 프롬프트는 구글시트(보조) 버전 기준 — 기본(파일 버전)은 <a href="guide-file-version.html">파일 버전 가이드</a> §4 변환 단락을 덧붙이세요.</p>
+</blockquote>
 <h4>🔧 경로 B — 손으로 직접 만들기</h4>
 <p><strong>노드 순서 (총 6개):</strong> 방송 중 5분마다 → 현재 방송실적 읽기 → 목표 페이스 계산 → 저조할 때만 → Claude 실시간 대응멘트 → MD·PD 긴급 알림</p>
 <h4>Step 1 — <code>방송 중 5분마다</code> 추가</h4>
@@ -849,6 +861,9 @@ return [{json:{상품명:r[&#39;상품명&#39;],목표,누적,경과분:경과,�
 - 완성되면 워크플로 JSON을 파일로 저장해줘 — 내가 n8n에서 ⋮ → Import from File 로 불러올게.
 - import 후엔 노드별 Test step으로 하나씩 검증할 거야(통째로 맞다고 가정하지 말 것).
 </code></pre>
+<blockquote>
+<p>🗂 프롬프트는 구글시트(보조) 버전 기준 — 기본(파일 버전)은 <a href="guide-file-version.html">파일 버전 가이드</a> §4 변환 단락을 덧붙이세요.</p>
+</blockquote>
 <h4>🔧 경로 B — 손으로 직접 만들기</h4>
 <p><strong>노드 순서 (총 6개):</strong> 방송 종료 후 23:30 → 방송결과 지표 읽기 → 지표 정리 → Claude 리포트 작성 → MD 리포트 초안 → 리포트 아카이브</p>
 <h4>Step 1 — <code>방송 종료 후 23:30</code> 추가</h4>
@@ -1026,6 +1041,9 @@ return [{json:{방송명:r[&#39;방송명&#39;],달성률,metrics}}];
 - 완성되면 워크플로 JSON을 파일로 저장해줘 — 내가 n8n에서 ⋮ → Import from File 로 불러올게.
 - import 후엔 노드별 Test step으로 하나씩 검증할 거야(통째로 맞다고 가정하지 말 것).
 </code></pre>
+<blockquote>
+<p>🗂 프롬프트는 구글시트(보조) 버전 기준 — 기본(파일 버전)은 <a href="guide-file-version.html">파일 버전 가이드</a> §4 변환 단락을 덧붙이세요.</p>
+</blockquote>
 <h4>🔧 경로 B — 손으로 직접 만들기</h4>
 <p><strong>노드 순서 (총 6개):</strong> 매일 09:00 → 반품 데이터 읽기 → 상품별 반품 묶기 → Claude 사유분류·개선제안 → MD·품질팀 알림 → 개선이슈 로그</p>
 <h4>Step 1 — <code>매일 09:00</code> 추가</h4>
@@ -1201,6 +1219,9 @@ return [{json:{반품목록:text,건수:items.length}}];
 - 완성되면 워크플로 JSON을 파일로 저장해줘 — 내가 n8n에서 ⋮ → Import from File 로 불러올게.
 - import 후엔 노드별 Test step으로 하나씩 검증할 거야(통째로 맞다고 가정하지 말 것).
 </code></pre>
+<blockquote>
+<p>🗂 프롬프트는 구글시트(보조) 버전 기준 — 기본(파일 버전)은 <a href="guide-file-version.html">파일 버전 가이드</a> §4 변환 단락을 덧붙이세요.</p>
+</blockquote>
 <h4>🔧 경로 B — 손으로 직접 만들기</h4>
 <p><strong>노드 순서 (총 5개):</strong> 매일 10:00 → 발주현황 읽기 → 발주 필요만 → Claude 발주메일 작성 → 협력사 발송</p>
 <h4>Step 1 — <code>매일 10:00</code> 추가</h4>
@@ -1347,6 +1368,9 @@ return [{json:{반품목록:text,건수:items.length}}];
 - 완성되면 워크플로 JSON을 파일로 저장해줘 — 내가 n8n에서 ⋮ → Import from File 로 불러올게.
 - import 후엔 노드별 Test step으로 하나씩 검증할 거야(통째로 맞다고 가정하지 말 것).
 </code></pre>
+<blockquote>
+<p>🗂 프롬프트는 구글시트(보조) 버전 기준 — 기본(파일 버전)은 <a href="guide-file-version.html">파일 버전 가이드</a> §4 변환 단락을 덧붙이세요.</p>
+</blockquote>
 <h4>🔧 경로 B — 손으로 직접 만들기</h4>
 <p><strong>노드 순서 (총 6개):</strong> 매일 20:00 (방송 D-1) → 내일 편성 읽기 → 항목별 미비 판정 → 미비 있을 때만 → Claude 조치 안내 → 담당자 사고방지 알림</p>
 <h4>Step 1 — <code>매일 20:00 (방송 D-1)</code> 추가</h4>
@@ -1522,6 +1546,9 @@ return [{json:{방송명:r[&#39;방송명&#39;],미비수:miss.length,미비:mis
 - 완성되면 워크플로 JSON을 파일로 저장해줘 — 내가 n8n에서 ⋮ → Import from File 로 불러올게.
 - import 후엔 노드별 Test step으로 하나씩 검증할 거야(통째로 맞다고 가정하지 말 것).
 </code></pre>
+<blockquote>
+<p>🗂 프롬프트는 구글시트(보조) 버전 기준 — 기본(파일 버전)은 <a href="guide-file-version.html">파일 버전 가이드</a> §4 변환 단락을 덧붙이세요.</p>
+</blockquote>
 <h4>🔧 경로 B — 손으로 직접 만들기</h4>
 <p><strong>노드 순서 (총 6개):</strong> 피크시간 3분마다 → 콜 현황 읽기 → 폭주 임계 판정 → 폭주일 때만 → Claude 조치 제안 → 운영팀 긴급 경보</p>
 <h4>Step 1 — <code>피크시간 3분마다</code> 추가</h4>
@@ -1693,6 +1720,9 @@ return [{json:{진행방송:r[&#39;진행중방송&#39;]||&#39;-&#39;,현재대�
 - 완성되면 워크플로 JSON을 파일로 저장해줘 — 내가 n8n에서 ⋮ → Import from File 로 불러올게.
 - import 후엔 노드별 Test step으로 하나씩 검증할 거야(통째로 맞다고 가정하지 말 것).
 </code></pre>
+<blockquote>
+<p>🗂 프롬프트는 구글시트(보조) 버전 기준 — 기본(파일 버전)은 <a href="guide-file-version.html">파일 버전 가이드</a> §4 변환 단락을 덧붙이세요.</p>
+</blockquote>
 <h4>🔧 경로 B — 손으로 직접 만들기</h4>
 <p><strong>노드 순서 (총 5개):</strong> ▶ 실행 (수동) → 카피 요청 읽기 → Claude 카피 생성 → 결과 정리 → 카피 결과 저장</p>
 <h4>Step 1 — <code>▶ 실행 (수동)</code> 추가</h4>

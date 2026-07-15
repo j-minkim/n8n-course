@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
 <script>(function(){try{var p=localStorage.getItem("theme-pref")||"system";var d=p==="dark"||(p==="system"&&matchMedia("(prefers-color-scheme: dark)").matches);document.documentElement.setAttribute("data-theme",d?"dark":"light");}catch(e){document.documentElement.setAttribute("data-theme","dark");}})();</script>
-<title>실무 템플릿 — 구글시트 vs 파일 버전</title>
+<title>실무 템플릿 — 기본: 파일(CSV) · 보조: 구글시트</title>
 <style>
   /* ── theme tokens (dark default + light override) ── */
   :root{
@@ -78,69 +78,63 @@
 </head>
 <body>
 <button id="themeToggle" class="theme-toggle" type="button" aria-label="테마 전환" title="테마: 시스템"><span class="tt-ico" aria-hidden="true">🖥</span><span class="tt-label">시스템</span></button>
-<div class="topbar"><span class="badge">n8n 자동화 강의</span><span class="t">실무 템플릿 — 구글시트 vs 파일 버전</span><nav class="quicknav"><a href="index.html">🏠 홈</a><a href="day1.html">Day1</a><a href="day2.html">Day2</a><a href="assets.html">📦 실습파일</a><a href="guide-templates.html">📖 카탈로그</a><a href="guide-build-index.html">🧱 빌드가이드</a></nav></div>
+<div class="topbar"><span class="badge">n8n 자동화 강의</span><span class="t">실무 템플릿 — 기본: 파일(CSV) · 보조: 구글시트</span><nav class="quicknav"><a href="index.html">🏠 홈</a><a href="day1.html">Day1</a><a href="day2.html">Day2</a><a href="assets.html">📦 실습파일</a><a href="guide-templates.html">📖 카탈로그</a><a href="guide-build-index.html">🧱 빌드가이드</a></nav></div>
 <main class="doc">
-<h1>실무 템플릿, 두 가지 버전이 있어요</h1>
-<h3>구글시트 버전 vs 파일(CSV) 버전 — 같은 플로우, 데이터 저장소만 다릅니다</h3>
-<p>실무 10종 템플릿은 <strong>완전히 같은 자동화 로직</strong>을 두 벌로 제공합니다. 차이는 딱 하나 — 데이터를 <strong>구글 스프레드시트</strong>에서 읽느냐, <strong>내 컴퓨터의 CSV 파일</strong>에서 읽느냐.</p>
-<p><strong>📥 다운로드</strong>: <a href="%ED%99%88%EC%95%A4%EC%87%BC%ED%95%91-%EC%A0%84%EC%B2%B4%ED%85%9C%ED%94%8C%EB%A6%BF-20%EC%A2%85.zip">구글시트 버전 zip (경쟁사조사·방송운영·MD운영지원 통합은 전체 20종)</a> · <a href="%ED%99%88%EC%95%A4%EC%87%BC%ED%95%91-%EC%8B%A4%EB%AC%B4%ED%85%9C%ED%94%8C%EB%A6%BF-%ED%8C%8C%EC%9D%BC%EB%B2%84%EC%A0%84.zip">★파일 버전 zip (실무 10종)</a></p>
+<h1>실무 템플릿 — 기본은 파일(CSV) 버전이에요</h1>
+<h3>크리덴셜 0개로 바로 시작 · 구글시트 버전은 팀 공유가 필요할 때 보조로</h3>
+<p>실무 10종 템플릿은 <strong>완전히 같은 자동화 로직</strong>을 두 벌로 제공합니다. <strong>기본은 파일(CSV) 버전</strong> — 내 컴퓨터의 CSV를 읽어서 크리덴셜 없이 바로 돌아갑니다. 팀과 데이터를 공유·동시 수정해야 할 때만 <strong>구글시트 버전(보조)</strong> 으로 갈아타면 됩니다.</p>
+<p><strong>📥 다운로드</strong>: <a href="%ED%99%88%EC%95%A4%EC%87%BC%ED%95%91-%EC%8B%A4%EB%AC%B4%ED%85%9C%ED%94%8C%EB%A6%BF-%ED%8C%8C%EC%9D%BC%EB%B2%84%EC%A0%84.zip">★기본 — 파일 버전 zip (실무 10종)</a> · 보조 — <a href="%ED%99%88%EC%95%A4%EC%87%BC%ED%95%91-%EC%A0%84%EC%B2%B4%ED%85%9C%ED%94%8C%EB%A6%BF-20%EC%A2%85.zip">구글시트 버전 zip (전체 20종, 기본 L1~L4 포함)</a></p>
 <hr>
-<h2>1. 어느 버전을 쓰면 되나</h2>
+<h2>1. 왜 파일 버전이 기본인가</h2>
+<ul>
+<li><strong>크리덴셜 0개</strong> — Google OAuth(redirect URI 등)에서 막힐 일이 없음. import하고 CSV만 넣으면 바로 실행</li>
+<li><strong>사내 시스템 궁합</strong> — 콜시스템·BI가 주는 CSV export 폴더를 그대로 물릴 수 있음</li>
+<li><strong>보안</strong> — 회사 정책상 구글 계정 연동이 어려운 환경에서도 동작</li>
+</ul>
+<p><strong>구글시트 버전(보조)으로 갈아타야 할 때:</strong></p>
 <table>
 <thead>
 <tr>
 <th>상황</th>
-<th>추천</th>
+<th>이유</th>
 </tr>
 </thead>
 <tbody><tr>
-<td>팀원과 데이터를 공유·동시 수정해야 한다</td>
-<td><strong>구글시트 버전</strong></td>
+<td>팀원과 데이터를 공유·동시 수정</td>
+<td>시트는 여러 명이 한 표를 같이 봄</td>
 </tr>
 <tr>
-<td>회사 보안상 구글 계정 연동이 어렵다</td>
-<td><strong>파일 버전</strong></td>
+<td>폰·다른 PC에서 데이터를 고치고 싶다</td>
+<td>시트는 어디서든 접근</td>
 </tr>
 <tr>
-<td>Google OAuth 설정이 자꾸 막힌다 (redirect URI 등)</td>
-<td><strong>파일 버전</strong> — 크리덴셜 0개로 시작</td>
-</tr>
-<tr>
-<td>사내 시스템이 CSV export를 준다 (콜시스템·BI 등)</td>
-<td><strong>파일 버전</strong> — export 폴더를 그대로 사용</td>
-</tr>
-<tr>
-<td>어디서든(폰·다른 PC) 데이터를 고치고 싶다</td>
-<td><strong>구글시트 버전</strong></td>
-</tr>
-<tr>
-<td>일단 오늘 처음 돌려본다</td>
-<td><strong>파일 버전</strong>이 준비물이 적어 가장 빠릅니다</td>
+<td>아카이브를 한 표에 누적하고 싶다</td>
+<td>파일 버전 아카이브는 날짜별 파일로 쌓임</td>
 </tr>
 </tbody></table>
 <blockquote>
-<p>💡 로직(Code·IF·Claude 프롬프트)은 두 버전이 <strong>동일</strong>합니다. 파일 버전으로 배우고 나중에 시트 버전으로 갈아타도 바뀌는 건 읽기/쓰기 노드뿐이에요.</p>
+<p>💡 로직(Code·IF·Claude 프롬프트)은 두 버전이 <strong>동일</strong>합니다. 파일 버전(기본)으로 배우고 나중에 시트 버전으로 갈아타도 바뀌는 건 읽기/쓰기 노드뿐이에요.</p>
 </blockquote>
 <hr>
-<h2>2. 노드가 어떻게 바뀌나 (매핑)</h2>
-<p><strong>읽기</strong> — 시트에서 행 읽기 → 파일에서 행 읽기:</p>
-<pre><code>[구글시트 버전]  Google Sheets (Get Row(s), &#39;방송예정상품&#39; 탭)
-                        ↓ 같은 자리에서
-[파일 버전]      Read/Write Files from Disk (읽기: YOUR_DATA_DIR/방송예정상품.csv)
-                  → Extract from File (CSV → 행 데이터)
+<h2>2. 두 버전의 노드 차이 (매핑)</h2>
+<p><strong>읽기:</strong></p>
+<pre><code>[기본 · 파일 버전]   Read/Write Files from Disk (읽기: YOUR_DATA_DIR/방송예정상품.csv)
+                      → Extract from File (CSV → 행 데이터)
+                        ↕ 같은 자리를 서로 교체
+[보조 · 시트 버전]   Google Sheets (Get Row(s), &#39;방송예정상품&#39; 탭)
 </code></pre>
-<p><strong>쓰기(아카이브)</strong> — 시트에 행 추가 → 날짜별 CSV 파일 생성:</p>
-<pre><code>[구글시트 버전]  Google Sheets (Append Row, &#39;트렌드로그&#39; 탭)
-                        ↓ 같은 자리에서
-[파일 버전]      Convert to File (행 데이터 → CSV)
-                  → Read/Write Files from Disk (쓰기: 트렌드로그_2026-07-15_0930.csv)
+<p><strong>쓰기(아카이브):</strong></p>
+<pre><code>[기본 · 파일 버전]   Convert to File (행 데이터 → CSV)
+                      → Read/Write Files from Disk (쓰기: 트렌드로그_2026-07-15_0930.csv)
+                        ↕ 같은 자리를 서로 교체
+[보조 · 시트 버전]   Google Sheets (Append Row, &#39;트렌드로그&#39; 탭)
 </code></pre>
 <ul>
 <li>파일 버전의 아카이브는 <strong>실행할 때마다 날짜·시각이 붙은 새 CSV</strong>가 생깁니다(시트처럼 한 표에 누적되는 게 아니라 로그 폴더에 파일이 쌓이는 방식).</li>
 <li>Code 노드가 참조하는 노드 이름(<code>$(&#39;방송예정 상품 읽기&#39;)</code> 등)은 두 버전에서 <strong>동일하게 유지</strong>돼 있어서, 나머지 노드는 손댈 게 없습니다.</li>
 </ul>
 <hr>
-<h2>3. ★파일 버전 사용 전 꼭 알아야 할 한 가지 — <code>~/.n8n-files/</code></h2>
+<h2>3. ★기본(파일) 버전 사용 전 꼭 알아야 할 한 가지 — <code>~/.n8n-files/</code></h2>
 <p>self-host n8n은 보안상 <strong>홈 폴더의 <code>.n8n-files</code> 폴더 안에 있는 파일만</strong> 읽고 쓸 수 있습니다. (아무 경로나 접근하면 <code>Access to the file is not allowed</code> 에러 — 실제 실행으로 확인했습니다.)</p>
 <p><strong>준비 3단계:</strong></p>
 <ol>
@@ -169,8 +163,8 @@
 <p>💡 이 에러는 사실 <strong>미리 겪어볼 가치가 있는 에러</strong>예요 — &quot;빨간 에러 → 전문 복사 → Claude Code → 해법 검증&quot;이라는 M6 디버깅 루프를 파일 하나로 연습하게 됩니다.</p>
 </blockquote>
 <hr>
-<h2>4. 메타프롬프트로 변환하기 (Claude Code에게 시키기)</h2>
-<p>이미 만든 워크플로(또는 <a href="guide-build-index.html">빌드 가이드</a>의 메타프롬프트)에 아래 한 단락만 덧붙이면 Claude Code가 파일 버전으로 만들어줍니다:</p>
+<h2>4. 메타프롬프트로 기본(파일) 버전 생성하기</h2>
+<p><a href="guide-build-index.html">빌드 가이드</a>의 메타프롬프트는 시트 버전 기준으로 적혀 있어요. <strong>기본(파일) 버전으로 만들려면</strong> 프롬프트 끝에 아래 한 단락만 덧붙이면 됩니다:</p>
 <pre><code class="language-text">구글시트 노드 대신 파일 노드를 써줘:
 - 읽기는 Read/Write Files from Disk(read, YOUR_DATA_DIR/파일명.csv) → Extract from File(csv) 2단으로,
 - 쓰기(아카이브)는 Convert to File(csv) → Read/Write Files from Disk(write) 2단으로,

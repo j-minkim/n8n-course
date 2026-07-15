@@ -133,9 +133,9 @@
 <blockquote>
 <p>💡 <strong>다건 행 처리 팁</strong>: 시트에 여러 행을 매번 처리하려면 해당 Code 노드 설정을 <strong>Run Once for Each Item</strong>으로 바꾸고 <code>return</code>을 단일 객체(<code>return {json:{...}}</code>)로 수정하세요(기본값은 첫 행만 처리).</p>
 </blockquote>
-<p><strong>📥 바로 다운로드</strong> (n8n <code>⋮ → Import from File</code>로 불러오기): <a href="%ED%99%88%EC%95%A4%EC%87%BC%ED%95%91-%EC%A0%84%EC%B2%B4%ED%85%9C%ED%94%8C%EB%A6%BF-20%EC%A2%85.zip">전체 20종 zip</a> · <a href="%ED%99%88%EC%95%A4%EC%87%BC%ED%95%91-n8n-%ED%85%9C%ED%94%8C%EB%A6%BF.zip">기본 10종만</a> · 실무 10종은 <a href="%EA%B2%BD%EC%9F%81%EC%82%AC%EC%A1%B0%EC%82%AC-%ED%85%9C%ED%94%8C%EB%A6%BF.zip">경쟁사조사</a> · <a href="%EB%B0%A9%EC%86%A1%EC%9A%B4%EC%98%81-%ED%85%9C%ED%94%8C%EB%A6%BF.zip">방송운영</a> · <a href="MD%EC%9A%B4%EC%98%81%EC%A7%80%EC%9B%90-%ED%85%9C%ED%94%8C%EB%A6%BF.zip">MD운영지원</a> · ★구글 크리덴셜 없이 쓰려면 <a href="guide-file-version.html">파일(CSV) 버전</a> — 그 외 파일은 <a href="assets.html">실습 파일 전체 목록</a>
+<p><strong>📥 바로 다운로드</strong> (n8n <code>⋮ → Import from File</code>로 불러오기): ★실무 10종 기본 = <a href="%ED%99%88%EC%95%A4%EC%87%BC%ED%95%91-%EC%8B%A4%EB%AC%B4%ED%85%9C%ED%94%8C%EB%A6%BF-%ED%8C%8C%EC%9D%BC%EB%B2%84%EC%A0%84.zip">파일(CSV) 버전 zip</a> — 크리덴셜 0개, <a href="guide-file-version.html">사용법·CSV 준비</a> · 보조(구글시트 버전) = <a href="%ED%99%88%EC%95%A4%EC%87%BC%ED%95%91-%EC%A0%84%EC%B2%B4%ED%85%9C%ED%94%8C%EB%A6%BF-20%EC%A2%85.zip">전체 20종</a> / <a href="%ED%99%88%EC%95%A4%EC%87%BC%ED%95%91-n8n-%ED%85%9C%ED%94%8C%EB%A6%BF.zip">기본 10종만</a> / <a href="%EA%B2%BD%EC%9F%81%EC%82%AC%EC%A1%B0%EC%82%AC-%ED%85%9C%ED%94%8C%EB%A6%BF.zip">경쟁사조사</a>·<a href="%EB%B0%A9%EC%86%A1%EC%9A%B4%EC%98%81-%ED%85%9C%ED%94%8C%EB%A6%BF.zip">방송운영</a>·<a href="MD%EC%9A%B4%EC%98%81%EC%A7%80%EC%9B%90-%ED%85%9C%ED%94%8C%EB%A6%BF.zip">MD운영지원</a> — 그 외 파일은 <a href="assets.html">실습 파일 전체 목록</a>
 <strong>🧱 직접 만들어보기</strong>: import 대신 노드 하나씩 손으로 쌓아보려면 → <a href="guide-build-index.html">실무 10종 스텝바이스텝 빌드 가이드</a> (템플릿별 개별 페이지, 노드 검색어·속성값·연결법까지 상세)
-<strong>⚙️ 공통 준비</strong>: Google 크리덴셜(연결됨) · AI(★) 템플릿은 <strong>회사 Anthropic 키</strong>(Header Auth 이름 <code>x-api-key</code>) · <code>YOUR_...</code> 자리(시트 ID·수신자) 교체
+<strong>⚙️ 공통 준비</strong>: ★기본(파일 버전) = CSV를 <code>~/.n8n-files</code>에 넣기만(크리덴셜 불필요) · 보조(시트 버전)일 때만 Google 크리덴셜 · AI(★) 템플릿은 <strong>회사 Anthropic 키</strong>(Header Auth 이름 <code>x-api-key</code>) · <code>YOUR_...</code> 자리(경로/시트 ID·수신자) 교체
 <strong>🤖 AI 모델</strong>: 템플릿은 <code>claude-sonnet-5</code>(현행)로 설정 — 필요 시 최신 모델로 교체.
 <strong>✅ 검증 수준</strong>: 전 템플릿 <strong>n8n import·구조 검증</strong> 완료. 실제 실행은 <strong>자격증명 연결 후 재검증</strong>하세요.</p>
 <blockquote>
@@ -229,8 +229,8 @@
 <h2>어떻게 시작하나 (3단계)</h2>
 <ol>
 <li><strong>위에서 내 업무에 가까운 것 1개</strong> 고르기 (없으면 &quot;기본형&quot;에서)</li>
-<li>강의 사이트에서 해당 <strong>zip 다운로드 → n8n import</strong></li>
-<li><strong><code>YOUR_...</code> 교체</strong>(시트·수신자) + 자격증명 연결 → 노드별 <strong>Execute step</strong>로 검증 → 본인 업무에 맞게 확장</li>
+<li>★기본: <a href="%ED%99%88%EC%95%A4%EC%87%BC%ED%95%91-%EC%8B%A4%EB%AC%B4%ED%85%9C%ED%94%8C%EB%A6%BF-%ED%8C%8C%EC%9D%BC%EB%B2%84%EC%A0%84.zip">파일 버전 zip</a> 다운로드 → n8n import → CSV를 <code>~/.n8n-files</code>에 (팀 공유가 필요하면 시트 버전으로)</li>
+<li><strong><code>YOUR_...</code> 교체</strong>(데이터 경로·수신자) → 노드별 <strong>Execute step</strong>로 검증 → 본인 업무에 맞게 확장</li>
 </ol>
 <blockquote>
 <p>⭐ = 특히 추천 · ★AI = 회사 Anthropic 키 필요(그 외는 Google 크리덴셜만) · 전부 실제 n8n import 검증됨.</p>
