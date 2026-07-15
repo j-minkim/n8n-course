@@ -148,6 +148,13 @@ code, .mono, pre, kbd { word-break: normal; }
   text-align: center;
   margin-top: auto;
 }
+.sidebar-footer .home-nav {
+  display: flex; gap: 10px; margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px solid var(--border);
+}
+.sidebar-footer .home-link {
+  color: var(--text-dim); text-decoration: none; font-size: 11px; font-weight: 600;
+}
+.sidebar-footer .home-link:hover { color: var(--accent); }
 .sidebar-footer kbd {
   display: inline-block;
   padding: 2px 6px;
@@ -800,6 +807,7 @@ html.icons-ok i[data-lucide] .ico-fb { display: none; }
   <div class="sidebar-header">n8n + Claude Code · 2일차<br>복합·주간리포트·내업무 2/2</div>
   <div class="sidebar-nav" id="sidebarNav"></div>
   <div class="sidebar-footer">
+    <div class="home-nav"><a class="home-link" href="index.html">🏠 홈</a><a class="home-link" href="assets.html">📦 실습파일</a></div>
     <kbd>←</kbd> <kbd>→</kbd> 방향키 이동 · <kbd>F</kbd> 인쇄/PDF
   </div>
 </nav>

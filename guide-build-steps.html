@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
 <script>(function(){try{var p=localStorage.getItem("theme-pref")||"system";var d=p==="dark"||(p==="system"&&matchMedia("(prefers-color-scheme: dark)").matches);document.documentElement.setAttribute("data-theme",d?"dark":"light");}catch(e){document.documentElement.setAttribute("data-theme","dark");}})();</script>
-<title>홈앤쇼핑 실무 템플릿 스텝바이스텝 빌드 가이드</title>
+<title>실무 템플릿 빌드 가이드 — 한 번에 보기</title>
 <style>
   /* ── theme tokens (dark default + light override) ── */
   :root{
@@ -38,9 +38,16 @@
   @media print{.theme-toggle{display:none!important}}
   @media(max-width:760px){.theme-toggle .tt-label{display:none}}
   .topbar { position:sticky; top:0; z-index:10; background:var(--topbar-bg); backdrop-filter:blur(6px);
-    border-bottom:1px solid var(--line2); padding:12px 64px 12px 20px; display:flex; gap:10px; align-items:center; }
+    border-bottom:1px solid var(--line2); padding:10px 64px 10px 20px; display:flex; gap:10px; align-items:center; flex-wrap:wrap; row-gap:6px; }
   .topbar .badge { font-size:11px; color:var(--accent); border:1px solid var(--line); border-radius:999px; padding:3px 9px; }
-  .topbar .t { font-size:14px; font-weight:700; }
+  .topbar .t { font-size:14px; font-weight:700; margin-right:auto; }
+  .quicknav { display:flex; gap:6px; flex-wrap:wrap; }
+  .quicknav a { font-size:11.5px; font-weight:600; color:var(--fg); text-decoration:none; border:1px solid var(--line);
+    background:var(--card-bg); border-radius:999px; padding:5px 11px; white-space:nowrap; transition:border-color .15s,color .15s; }
+  .quicknav a:hover { border-color:var(--accent); color:var(--accent); }
+  .quicknav a.cur { color:var(--accent); border-color:var(--accent); }
+  @media(max-width:820px){ .topbar{padding:10px 56px 10px 14px;} .topbar .t{width:100%;margin-right:0;order:1;} .quicknav{order:2;width:100%;} }
+  @media print{ .topbar{display:none!important;} }
   main.doc { max-width:880px; margin:0 auto; padding:32px 22px 96px; }
   h1,h2,h3,h4 { line-height:1.35; font-weight:800; margin:1.6em 0 .6em; }
   h1 { font-size:26px; border-bottom:2px solid var(--line); padding-bottom:.3em; }
@@ -71,11 +78,11 @@
 </head>
 <body>
 <button id="themeToggle" class="theme-toggle" type="button" aria-label="테마 전환" title="테마: 시스템"><span class="tt-ico" aria-hidden="true">🖥</span><span class="tt-label">시스템</span></button>
-<div class="topbar"><span class="badge">n8n 자동화 강의</span><span class="t">홈앤쇼핑 실무 템플릿 스텝바이스텝 빌드 가이드</span></div>
+<div class="topbar"><span class="badge">n8n 자동화 강의</span><span class="t">실무 템플릿 빌드 가이드 — 한 번에 보기</span><nav class="quicknav"><a href="index.html">🏠 홈</a><a href="day1.html">Day1</a><a href="day2.html">Day2</a><a href="assets.html">📦 실습파일</a><a href="guide-templates.html">📖 카탈로그</a><a href="guide-build-index.html">🧱 빌드가이드</a></nav></div>
 <main class="doc">
 <h1>홈앤쇼핑 실무 템플릿 10종 — 스텝바이스텝 빌드 가이드</h1>
 <h3>&quot;import 버튼 말고, 노드 하나씩 직접 쌓아보기&quot;</h3>
-<p>이 문서는 <a href="49-%ED%99%88%EC%95%A4%EC%87%BC%ED%95%91-%ED%85%9C%ED%94%8C%EB%A6%BF-%EC%B9%B4%ED%83%88%EB%A1%9C%EA%B7%B8.md">실무 템플릿 카탈로그</a>의 <strong>L5 실무 10종</strong>을 <strong>빈 캔버스에서부터 노드 하나씩</strong> 만드는 방법입니다. <code>⋮ → Import from File</code>로 한 번에 불러오는 대신, <strong>어떤 노드를 검색해서 추가하고, 어떤 속성을 채우고, 어떻게 연결하는지</strong> 전부 순서대로 보여줍니다. 완성된 JSON은 <a href="assets/%ED%99%88%EC%95%A4%EC%87%BC%ED%95%91-%EC%8B%A4%EB%AC%B4%ED%85%9C%ED%94%8C%EB%A6%BF/">assets/홈앤쇼핑-실무템플릿/</a>에서 언제든 열어 정답을 대조할 수 있어요.</p>
+<p>이 문서는 <a href="guide-templates.html">실무 템플릿 카탈로그</a>의 <strong>L5 실무 10종</strong>을 <strong>빈 캔버스에서부터 노드 하나씩</strong> 만드는 방법입니다. <code>⋮ → Import from File</code>로 한 번에 불러오는 대신, <strong>어떤 노드를 검색해서 추가하고, 어떤 속성을 채우고, 어떻게 연결하는지</strong> 전부 순서대로 보여줍니다. 완성된 JSON은 각 템플릿 zip(실습 파일 페이지에서 다운로드)을 열어 정답을 대조할 수 있어요.</p>
 <blockquote>
 <p>💡 <strong>왜 손으로 만들어보나요?</strong> import는 &quot;동작하는 걸 보는 것&quot;이고, 직접 만들기는 &quot;왜 이 노드가 이 자리에 있는지 이해하는 것&quot;입니다. 본인 업무로 확장하려면 후자가 필요합니다.</p>
 </blockquote>
@@ -546,7 +553,7 @@ return [{json:{뉴스:list}}];
 </ul>
 <p><strong>⚠️ 가지 나뉘는 지점(fan-out):</strong></p>
 <ul>
-<li><code>Claude 트렌드 브리핑</code>의 출력(●)에서 <strong>드래그를 두 번</strong> 해서 <code>MD 트렌드 브리핑</code> · <code>브리핑 아카이브</code> <strong>둘 다</strong>에 연결하세요(같은 출력에서 두 갈래로 나갑니다 — 다중출력).</li>
+<li><code>Claude 트렌드 브리핑</code>의 출력(●)에서 <strong>드래그를 두 번</strong> 해서 <code>MD 트렌드 브리핑</code>와(과) <code>브리핑 아카이브</code> <strong>둘 다</strong>에 연결하세요(같은 출력에서 두 갈래로 나갑니다 — 다중출력).</li>
 </ul>
 <p><strong>✅ 완성 후 테스트:</strong> 트리거 노드에서 <strong>Test step</strong>(또는 Execute Workflow) → 마지막 노드까지 전부 초록불이 뜨는지 확인. 안 뜨면 그 노드를 더블클릭해 에러 메시지를 읽고, 표현식 토글(=)이 켜져 있는지부터 확인하세요.</p>
 <p><strong>🔍 정답 대조:</strong> <code>assets/홈앤쇼핑-실무템플릿/경쟁사조사/L5-03-업계트렌드-신상품브리핑.json</code>를 에디터에 import해서 본인이 만든 것과 비교할 수 있습니다.</p>
@@ -841,7 +848,7 @@ return [{json:{방송명:r[&#39;방송명&#39;],달성률,metrics}}];
 </ul>
 <p><strong>⚠️ 가지 나뉘는 지점(fan-out):</strong></p>
 <ul>
-<li><code>Claude 리포트 작성</code>의 출력(●)에서 <strong>드래그를 두 번</strong> 해서 <code>MD 리포트 초안</code> · <code>리포트 아카이브</code> <strong>둘 다</strong>에 연결하세요(같은 출력에서 두 갈래로 나갑니다 — 다중출력).</li>
+<li><code>Claude 리포트 작성</code>의 출력(●)에서 <strong>드래그를 두 번</strong> 해서 <code>MD 리포트 초안</code>와(과) <code>리포트 아카이브</code> <strong>둘 다</strong>에 연결하세요(같은 출력에서 두 갈래로 나갑니다 — 다중출력).</li>
 </ul>
 <p><strong>✅ 완성 후 테스트:</strong> 트리거 노드에서 <strong>Test step</strong>(또는 Execute Workflow) → 마지막 노드까지 전부 초록불이 뜨는지 확인. 안 뜨면 그 노드를 더블클릭해 에러 메시지를 읽고, 표현식 토글(=)이 켜져 있는지부터 확인하세요.</p>
 <p><strong>🔍 정답 대조:</strong> <code>assets/홈앤쇼핑-실무템플릿/방송운영/L5-02-방송결과-리포트초안.json</code>를 에디터에 import해서 본인이 만든 것과 비교할 수 있습니다.</p>
@@ -986,7 +993,7 @@ return [{json:{반품목록:text,건수:items.length}}];
 </ul>
 <p><strong>⚠️ 가지 나뉘는 지점(fan-out):</strong></p>
 <ul>
-<li><code>Claude 사유분류·개선제안</code>의 출력(●)에서 <strong>드래그를 두 번</strong> 해서 <code>MD·품질팀 알림</code> · <code>개선이슈 로그</code> <strong>둘 다</strong>에 연결하세요(같은 출력에서 두 갈래로 나갑니다 — 다중출력).</li>
+<li><code>Claude 사유분류·개선제안</code>의 출력(●)에서 <strong>드래그를 두 번</strong> 해서 <code>MD·품질팀 알림</code>와(과) <code>개선이슈 로그</code> <strong>둘 다</strong>에 연결하세요(같은 출력에서 두 갈래로 나갑니다 — 다중출력).</li>
 </ul>
 <p><strong>✅ 완성 후 테스트:</strong> 트리거 노드에서 <strong>Test step</strong>(또는 Execute Workflow) → 마지막 노드까지 전부 초록불이 뜨는지 확인. 안 뜨면 그 노드를 더블클릭해 에러 메시지를 읽고, 표현식 토글(=)이 켜져 있는지부터 확인하세요.</p>
 <p><strong>🔍 정답 대조:</strong> <code>assets/홈앤쇼핑-실무템플릿/방송운영/L5-03-반품사유-AI분류-개선루프.json</code>를 에디터에 import해서 본인이 만든 것과 비교할 수 있습니다.</p>
