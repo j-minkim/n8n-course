@@ -82,7 +82,7 @@
 <main class="doc">
 <h1>홈앤쇼핑 실무 템플릿 10종 — 스텝바이스텝 빌드 가이드</h1>
 <h3>&quot;import 버튼 말고, 노드 하나씩 직접 쌓아보기&quot;</h3>
-<p>이 문서는 <a href="guide-templates.html">실무 템플릿 카탈로그</a>의 <strong>L5 실무 10종</strong>을 <strong>빈 캔버스에서부터 노드 하나씩</strong> 만드는 방법입니다. <code>⋮ → Import from File</code>로 한 번에 불러오는 대신, <strong>어떤 노드를 검색해서 추가하고, 어떤 속성을 채우고, 어떻게 연결하는지</strong> 전부 순서대로 보여줍니다. 완성된 JSON은 각 템플릿 zip(실습 파일 페이지에서 다운로드)을 열어 정답을 대조할 수 있어요.</p>
+<p>이 문서는 <a href="guide-templates.html">실무 템플릿 카탈로그</a>의 <strong>L5 실무 11종</strong>을 <strong>빈 캔버스에서부터 노드 하나씩</strong> 만드는 방법입니다. <code>⋮ → Import from File</code>로 한 번에 불러오는 대신, <strong>어떤 노드를 검색해서 추가하고, 어떤 속성을 채우고, 어떻게 연결하는지</strong> 전부 순서대로 보여줍니다. 완성된 JSON은 각 템플릿 zip(실습 파일 페이지에서 다운로드)을 열어 정답을 대조할 수 있어요.</p>
 <blockquote>
 <p>💡 <strong>왜 손으로 만들어보나요?</strong> import는 &quot;동작하는 걸 보는 것&quot;이고, 직접 만들기는 &quot;왜 이 노드가 이 자리에 있는지 이해하는 것&quot;입니다. 본인 업무로 확장하려면 후자가 필요합니다.</p>
 </blockquote>
@@ -1193,7 +1193,7 @@ return [{json:{반품목록:text,건수:items.length}}];
 <p><strong>✅ 완성 후 테스트:</strong> 트리거 노드에서 <strong>Test step</strong>(또는 Execute Workflow) → 마지막 노드까지 전부 초록불이 뜨는지 확인. 안 뜨면 그 노드를 더블클릭해 에러 메시지를 읽고, 표현식 토글(=)이 켜져 있는지부터 확인하세요.</p>
 <p><strong>🔍 정답 대조:</strong> <a href="%ED%99%88%EC%95%A4%EC%87%BC%ED%95%91-%EC%8B%A4%EB%AC%B4%ED%85%9C%ED%94%8C%EB%A6%BF-%ED%8C%8C%EC%9D%BC%EB%B2%84%EC%A0%84.zip">★파일 버전 zip(기본)</a> 안의 <code>L5-03-반품사유-AI분류-개선루프.json</code>를 import해서 비교하세요.</p>
 <hr>
-<h2>🧑‍💼 MD·운영 지원 (4종)</h2>
+<h2>🧑‍💼 MD·운영 지원 (5종)</h2>
 <h3>01. 협력사 발주 개인화 메일</h3>
 <blockquote>
 <p>재고 부족한 협력사마다 Claude가 벤더별 맞춤 발주확인 메일을 써서 담당자에게 개별 발송합니다.</p>
@@ -1858,6 +1858,139 @@ return [{json:{진행방송:r[&#39;진행중방송&#39;]||&#39;-&#39;,현재대�
 </ul>
 <p><strong>✅ 완성 후 테스트:</strong> 트리거 노드에서 <strong>Test step</strong>(또는 Execute Workflow) → 마지막 노드까지 전부 초록불이 뜨는지 확인. 안 뜨면 그 노드를 더블클릭해 에러 메시지를 읽고, 표현식 토글(=)이 켜져 있는지부터 확인하세요.</p>
 <p><strong>🔍 정답 대조:</strong> <a href="%ED%99%88%EC%95%A4%EC%87%BC%ED%95%91-%EC%8B%A4%EB%AC%B4%ED%85%9C%ED%94%8C%EB%A6%BF-%ED%8C%8C%EC%9D%BC%EB%B2%84%EC%A0%84.zip">★파일 버전 zip(기본)</a> 안의 <code>L5-04-방송자막-카피생성기.json</code>를 import해서 비교하세요.</p>
+<hr>
+<h3>05. 💬 CS 문의 AI 분류·요약</h3>
+<blockquote>
+<p>고객 문의(웹훅 수신)를 Claude가 카테고리 분류·요약해 날짜별 CSV로 기록합니다.</p>
+</blockquote>
+<p><strong>받는 사람:</strong> CS팀 · <strong>데이터 파일:</strong> 웹훅 입력(JSON 필드 <code>message</code>) → 결과는 <code>CS로그_날짜시각.csv</code>로 자동 저장 — <code>~/.n8n-files</code>에 넣기</p>
+<ul>
+<li>★웹훅에 <strong>Header Auth 인증</strong>이 걸려 있어요(공개 URL 보호) — 호출 측도 같은 헤더를 보내야 합니다. 사내 테스트만이면 웹훅 노드 Authentication을 None으로 바꿔도 됩니다.</li>
+</ul>
+<h4>🤖 경로 A — Claude Code에게 시키기 (메타프롬프트)</h4>
+<p>아래 프롬프트를 Claude Code에 그대로 붙여넣으면 이 워크플로 JSON을 만들어줍니다(n8n-MCP 연결 시 더 정확). import 후 노드별 Test step 검증 필수.</p>
+<pre><code class="language-text">n8n 워크플로 JSON을 만들어줘: &quot;CS 문의 AI 분류·요약&quot; 자동화야. (기록은 CSV 파일 기준)
+
+[목표] 고객 문의가 웹훅으로 들어오면 Claude가 카테고리 분류·요약하고, 결과를 날짜별 CSV로 기록.
+
+[노드 체인 — 5개, 순서대로]
+1. Webhook — POST, Path `cs-inquiry`, Options→Response Data `firstEntryJson`.
+   ★Authentication = Header Auth(공개 웹훅 보호) — 호출 측도 같은 헤더 전송(사내 테스트만이면 None 가능).
+2. HTTP Request(POST) — Claude에게 &quot;고객 문의를 카테고리(배송/교환/환불/상품문의/기타) 분류하고 2줄 요약&quot; 요청.
+   문의 본문은 웹훅 body의 `message` 필드에서. (max_tokens 300)
+3. Code — 결과 정리(노드 이름 &#39;결과 정리&#39;): $(&#39;CS 문의 수신 (Webhook)&#39;)의 body.message + Claude 응답(content[0].text)을 {문의, 분석}으로.
+4. Convert to File — CSV 변환 (노드 이름 &#39;CS로그 CSV 변환&#39;)
+5. Read/Write Files from Disk — 쓰기: YOUR_DATA_DIR/CS로그_{{ $now.format(&#39;yyyy-LL-dd_HHmm&#39;) }}.csv
+
+★테스트: Active 켠 뒤 `curl -X POST .../webhook/cs-inquiry -H &quot;Content-Type: application/json&quot; -H &quot;&lt;인증헤더&gt;&quot; -d &#39;{&quot;message&quot;:&quot;배송이 늦어요&quot;}&#39;`
+
+[공통 규칙 — 그대로 지켜줘]
+- n8n-MCP가 연결돼 있으면 각 노드의 정확한 파라미터를 조회해서 만들고, 없으면 표준 노드 구조로.
+- 데이터는 CSV 파일 기준: 경로는 YOUR_DATA_DIR/… 플레이스홀더로.
+  (self-host n8n은 ~/.n8n-files 안의 파일만 접근 가능 — 사용자가 절대경로로 교체할 것)
+- Claude 호출은 HTTP Request 노드로: POST https://api.anthropic.com/v1/messages,
+  인증은 Header Auth 크리덴셜(이름 x-api-key), 추가 헤더 anthropic-version: 2023-06-01,
+  모델 claude-sonnet-5, 응답 본문은 content[0].text 로 파싱.
+- 수신자 이메일은 YOUR_...@example.com 플레이스홀더로.
+- connections의 타입은 전부 &quot;main&quot;. IF 노드는 true 출력만 다음 노드로.
+- 완성되면 워크플로 JSON을 파일로 저장해줘 — 내가 n8n에서 ⋮ → Import from File 로 불러올게.
+- import 후엔 노드별 Test step으로 하나씩 검증할 거야(통째로 맞다고 가정하지 말 것).
+</code></pre>
+<blockquote>
+<p>🗂 프롬프트·스텝 모두 <strong>기본(파일 버전)</strong> 기준 — 구글시트 버전(보조)은 <a href="guide-file-version.html">파일 버전 가이드</a> §4 시트 변환 단락을 덧붙이세요.</p>
+</blockquote>
+<h4>🔧 경로 B — 손으로 직접 만들기</h4>
+<p><strong>노드 순서 (총 5개):</strong> CS 문의 수신 (Webhook) → Claude 분류·요약 → 결과 정리 → CS로그 CSV 변환 → 시트에 기록</p>
+<h4>Step 1 — <code>CS 문의 수신 (Webhook)</code> 추가</h4>
+<ul>
+<li><p><strong>검색어:</strong> <code>Webhook</code></p>
+</li>
+<li><p><strong>속성 설정:</strong> HTTP Method = <strong><code>POST</code></strong> · Path = <code>cs-inquiry</code> · Options→Response Data = <code>firstEntryJson</code></p>
+<ul>
+<li>Authentication = <strong><code>Header Auth</code></strong>(호출 측도 같은 헤더 전송 · 사내 테스트만이면 None 가능)</li>
+</ul>
+</li>
+<li><p><strong>연결:</strong> 이 노드가 시작점입니다(Test URL로 curl 테스트).</p>
+</li>
+</ul>
+<h4>Step 2 — <code>Claude 분류·요약</code> 추가</h4>
+<ul>
+<li><p><strong>검색어:</strong> <code>HTTP Request</code></p>
+</li>
+<li><p><strong>속성 설정:</strong></p>
+<ul>
+<li><p>Method = <strong><code>POST</code></strong></p>
+</li>
+<li><p>URL = <code>https://api.anthropic.com/v1/messages</code></p>
+</li>
+<li><p>Authentication = <strong><code>Generic Credential Type</code></strong> → Generic Auth Type = <strong><code>Header Auth</code></strong> → Credential = 0-6에서 만든 <code>x-api-key</code> 크리덴셜 선택</p>
+</li>
+<li><p>Send Headers = <strong>On</strong> → Add Header 2번:</p>
+<ul>
+<li><p><code>anthropic-version</code> = <code>2023-06-01</code></p>
+</li>
+<li><p><code>content-type</code> = <code>application/json</code></p>
+</li>
+</ul>
+</li>
+<li><p>Send Body = <strong>On</strong> → Body Content Type = <strong><code>JSON</code></strong> → Specify Body = <strong><code>Using JSON</code></strong> → 필드의 표현식 토글(=) 켜고 아래를 그대로 붙여넣기:</p>
+</li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-text">{{ JSON.stringify({ model: &#39;claude-sonnet-5&#39;, max_tokens: 300, thinking: { type: &#39;disabled&#39; }, messages: [{ role: &#39;user&#39;, content: &#39;다음 고객 문의를 카테고리(배송/환불/상품/기타) 중 하나로 분류하고 한 줄 요약해줘. \&#39;카테고리: X / 요약: Y\&#39; 형식.\n문의: &#39; + ($json.body?.[&#39;message&#39;]||$json[&#39;문의&#39;]||&#39;&#39;) }] }) }}
+</code></pre>
+<ul>
+<li><p><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</p>
+</li>
+<li><p><strong>테스트 포인트:</strong> Test step에서 <code>content[0].text</code>에 Claude의 응답 문장이 들어있는지 확인. <code>invalid x-api-key</code> 에러면 크리덴셜 값을 다시 확인하세요.</p>
+</li>
+</ul>
+<h4>Step 3 — <code>결과 정리</code> 추가</h4>
+<ul>
+<li><p><strong>검색어:</strong> <code>Code</code></p>
+</li>
+<li><p><strong>속성 설정:</strong> Mode = <strong><code>Run Once for All Items</code></strong> (기본값, 바꾸지 않음) → JavaScript 편집창에 아래 코드를 그대로 붙여넣기:</p>
+</li>
+</ul>
+<pre><code class="language-javascript">return [{json:{문의:(($(&#39;CS 문의 수신 (Webhook)&#39;).item.json.body||{}).message)||&#39;&#39;, 분석:$json.content[0].text}}];
+</code></pre>
+<ul>
+<li><p><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</p>
+</li>
+<li><p><strong>테스트 포인트:</strong> Test step 눌러서 출력 JSON에 기대한 필드(위 코드의 <code>return</code>에 있는 키들)가 정확히 나오는지 확인하세요. 여기서 필드명 오타가 나면 다음 노드부터 전부 빈 값이 됩니다.</p>
+</li>
+</ul>
+<h4>Step 4 — <code>CS로그 CSV 변환</code> 추가</h4>
+<ul>
+<li><p><strong>검색어:</strong> <code>Convert to File</code></p>
+</li>
+<li><p><strong>속성 설정:</strong> Operation = <strong><code>Convert to CSV</code></strong> (엑셀 저장은 <code>Convert to XLSX</code>)</p>
+</li>
+<li><p><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</p>
+</li>
+</ul>
+<h4>Step 5 — <code>시트에 기록</code> 추가</h4>
+<ul>
+<li><p><strong>검색어:</strong> <code>Read/Write Files from Disk</code></p>
+</li>
+<li><p><strong>속성 설정:</strong></p>
+<ul>
+<li><p>Operation = <strong><code>Write File to Disk</code></strong></p>
+</li>
+<li><p>File Path and Name: 표현식 토글(=) 켜고 → <code>YOUR_DATA_DIR/CS로그_{{ $now.format(&#39;yyyy-LL-dd_HHmm&#39;) }}.csv</code></p>
+</li>
+<li><p>Input Binary Field = <code>data</code> (기본값) · <code>YOUR_DATA_DIR</code>는 본인 <code>~/.n8n-files</code> 절대경로로 교체</p>
+</li>
+</ul>
+</li>
+<li><p><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</p>
+</li>
+<li><p><strong>테스트 포인트:</strong> 실행 후 폴더에 날짜 파일 생성 확인. <code>Access to the file is not allowed</code>면 경로가 <code>~/.n8n-files</code> 밖(에러 전문을 Claude Code에).</p>
+</li>
+</ul>
+<p><strong>✅ 완성 후 테스트:</strong> 트리거 노드에서 <strong>Test step</strong>(또는 Execute Workflow) → 마지막 노드까지 전부 초록불이 뜨는지 확인. 안 뜨면 그 노드를 더블클릭해 에러 메시지를 읽고, 표현식 토글(=)이 켜져 있는지부터 확인하세요.</p>
+<p><strong>🔍 정답 대조:</strong> <a href="%ED%99%88%EC%95%A4%EC%87%BC%ED%95%91-%EC%8B%A4%EB%AC%B4%ED%85%9C%ED%94%8C%EB%A6%BF-%ED%8C%8C%EC%9D%BC%EB%B2%84%EC%A0%84.zip">★파일 버전 zip(기본)</a> 안의 <code>L4-05-CS문의-AI분류.json</code>를 import해서 비교하세요.</p>
 <hr>
 
 </main>

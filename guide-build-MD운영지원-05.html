@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
 <script>(function(){try{var p=localStorage.getItem("theme-pref")||"system";var d=p==="dark"||(p==="system"&&matchMedia("(prefers-color-scheme: dark)").matches);document.documentElement.setAttribute("data-theme",d?"dark":"light");}catch(e){document.documentElement.setAttribute("data-theme","dark");}})();</script>
-<title>MD운영지원-04 — 빌드 가이드</title>
+<title>MD운영지원-05 — 빌드 가이드</title>
 <style>
   /* ── theme tokens (dark default + light override) ── */
   :root{
@@ -78,34 +78,35 @@
 </head>
 <body>
 <button id="themeToggle" class="theme-toggle" type="button" aria-label="테마 전환" title="테마: 시스템"><span class="tt-ico" aria-hidden="true">🖥</span><span class="tt-label">시스템</span></button>
-<div class="topbar"><span class="badge">n8n 자동화 강의</span><span class="t">MD운영지원-04 — 빌드 가이드</span><nav class="quicknav"><a href="index.html">🏠 홈</a><a href="day1.html">Day1</a><a href="day2.html">Day2</a><a href="assets.html">📦 실습파일</a><a href="guide-templates.html">📖 카탈로그</a><a href="guide-build-index.html">🧱 빌드가이드</a></nav></div>
+<div class="topbar"><span class="badge">n8n 자동화 강의</span><span class="t">MD운영지원-05 — 빌드 가이드</span><nav class="quicknav"><a href="index.html">🏠 홈</a><a href="day1.html">Day1</a><a href="day2.html">Day2</a><a href="assets.html">📦 실습파일</a><a href="guide-templates.html">📖 카탈로그</a><a href="guide-build-index.html">🧱 빌드가이드</a></nav></div>
 <main class="doc">
-<h1>04. ✍️ 방송 자막·상세 카피 생성기</h1>
+<h1>05. 💬 CS 문의 AI 분류·요약</h1>
 <blockquote>
-<p>상품 정보를 넣으면 Claude가 방송 자막 3안 + 상세페이지 문구 + 채팅 응대 멘트를 만들어 날짜별 CSV로 저장합니다.</p>
+<p>고객 문의(웹훅 수신)를 Claude가 카테고리 분류·요약해 날짜별 CSV로 기록합니다.</p>
 </blockquote>
-<p><strong>받는 사람:</strong> 본인(수동 실행) · <strong>분류:</strong> MD·운영 지원 · <strong>데이터 파일:</strong> <code>카피요청.csv</code> 헤더: <code>상품명 · 핵심특징 · 가격</code> → 결과는 <code>카피결과_날짜시각.csv</code>로 자동 저장 — <code>~/.n8n-files</code>에 넣기</p>
+<p><strong>받는 사람:</strong> CS팀 · <strong>분류:</strong> MD·운영 지원 · <strong>데이터 파일:</strong> 웹훅 입력(JSON 필드 <code>message</code>) → 결과는 <code>CS로그_날짜시각.csv</code>로 자동 저장 — <code>~/.n8n-files</code>에 넣기</p>
+<ul>
+<li>★웹훅에 <strong>Header Auth 인증</strong>이 걸려 있어요(공개 URL 보호) — 호출 측도 같은 헤더를 보내야 합니다. 사내 테스트만이면 웹훅 노드 Authentication을 None으로 바꿔도 됩니다.</li>
+</ul>
 <blockquote>
 <p>처음 만드는 필드 종류(노드 추가·연결·표현식 토글·크리덴셜)는 <a href="guide-build-common.html">공통 조작법</a>을 먼저 보세요.</p>
 </blockquote>
 <h2>🤖 경로 A — Claude Code에게 시키기 (메타프롬프트)</h2>
 <p>이 강의의 방식대로, 아래 프롬프트를 <strong>Claude Code에 그대로 붙여넣으면</strong> 이 워크플로 JSON을 만들어줍니다(n8n-MCP 연결 시 더 정확). 받은 JSON을 <code>⋮ → Import from File</code>로 불러온 뒤 <strong>노드별 Test step으로 검증</strong>하세요 — AI 초안은 가설, 진실은 에디터 실행 결과입니다.</p>
-<pre><code class="language-text">n8n 워크플로 JSON을 만들어줘: &quot;방송 자막·상세 카피 생성기&quot; 자동화야. (데이터는 CSV 파일 기준)
+<pre><code class="language-text">n8n 워크플로 JSON을 만들어줘: &quot;CS 문의 AI 분류·요약&quot; 자동화야. (기록은 CSV 파일 기준)
 
-[목표] CSV의 상품 정보로 Claude가 방송 자막 3안 + 상세페이지 문구 + 채팅 응대 멘트를 만들어 날짜별 결과 CSV로 저장. (수동 실행형)
+[목표] 고객 문의가 웹훅으로 들어오면 Claude가 카테고리 분류·요약하고, 결과를 날짜별 CSV로 기록.
 
-[노드 체인 — 7개]
-1. Manual Trigger — ▶ 수동 실행
-2. Read/Write Files from Disk — 읽기: YOUR_DATA_DIR/카피요청.csv (헤더: 상품명·핵심특징·가격)
-3. Extract from File — CSV 파싱. ★노드 이름 &#39;카피 요청 읽기&#39;(뒤 Code가 $()로 참조)
-4. HTTP Request(POST) — Claude에게 &quot;(1) 방송 자막 문구 3안(각 20자 내외, 자극적이지 않게)
-   (2) 상세페이지 소개 문구 3문장 (3) 실시간 채팅 응대 멘트 2개.
-   ★과장·허위·의료효능 표현 금지&quot;를 요청. 상품명·핵심특징·가격 포함. (max_tokens 900)
-5. Code — $(&#39;카피 요청 읽기&#39;)의 상품명 + Claude 응답(content[0].text)을 {상품명, 생성카피}로 정리.
-6. Convert to File — CSV 변환 (노드 이름 &#39;카피결과 CSV 변환&#39;)
-7. Read/Write Files from Disk — 쓰기: YOUR_DATA_DIR/카피결과_{{ $now.format(&#39;yyyy-LL-dd_HHmm&#39;) }}.csv (노드 이름 &#39;카피 결과 저장&#39;)
+[노드 체인 — 5개, 순서대로]
+1. Webhook — POST, Path `cs-inquiry`, Options→Response Data `firstEntryJson`.
+   ★Authentication = Header Auth(공개 웹훅 보호) — 호출 측도 같은 헤더 전송(사내 테스트만이면 None 가능).
+2. HTTP Request(POST) — Claude에게 &quot;고객 문의를 카테고리(배송/교환/환불/상품문의/기타) 분류하고 2줄 요약&quot; 요청.
+   문의 본문은 웹훅 body의 `message` 필드에서. (max_tokens 300)
+3. Code — 결과 정리(노드 이름 &#39;결과 정리&#39;): $(&#39;CS 문의 수신 (Webhook)&#39;)의 body.message + Claude 응답(content[0].text)을 {문의, 분석}으로.
+4. Convert to File — CSV 변환 (노드 이름 &#39;CS로그 CSV 변환&#39;)
+5. Read/Write Files from Disk — 쓰기: YOUR_DATA_DIR/CS로그_{{ $now.format(&#39;yyyy-LL-dd_HHmm&#39;) }}.csv
 
-★주의: 생성된 카피는 송출 전 반드시 사람이 최종 검수(방송 심의).
+★테스트: Active 켠 뒤 `curl -X POST .../webhook/cs-inquiry -H &quot;Content-Type: application/json&quot; -H &quot;&lt;인증헤더&gt;&quot; -d &#39;{&quot;message&quot;:&quot;배송이 늦어요&quot;}&#39;`
 
 [공통 규칙 — 그대로 지켜줘]
 - n8n-MCP가 연결돼 있으면 각 노드의 정확한 파라미터를 조회해서 만들고, 없으면 표준 노드 구조로.
@@ -124,32 +125,20 @@
 </blockquote>
 <h2>🔧 경로 B — 손으로 직접 만들기 (스텝바이스텝)</h2>
 <p>노드가 왜 이 순서로 놓이는지 이해하려면 이 경로로. 아래 Step은 <strong>기본(파일 버전)</strong> 기준입니다 — 구글시트 버전(보조)은 파일 노드 2단 자리에 Google Sheets 노드 1개가 들어갑니다: <a href="guide-file-version.html">차이 보기</a></p>
-<p><strong>노드 순서 (총 7개):</strong> ▶ 실행 (수동) → 카피요청 파일 읽기 → 카피 요청 읽기 → Claude 카피 생성 → 결과 정리 → 카피결과 CSV 변환 → 카피 결과 저장</p>
-<h4>Step 1 — <code>▶ 실행 (수동)</code> 추가</h4>
+<p><strong>노드 순서 (총 5개):</strong> CS 문의 수신 (Webhook) → Claude 분류·요약 → 결과 정리 → CS로그 CSV 변환 → 시트에 기록</p>
+<h4>Step 1 — <code>CS 문의 수신 (Webhook)</code> 추가</h4>
 <ul>
-<li><strong>검색어:</strong> 없음 — 빈 캔버스를 열면 기본 제공되는 <strong>&quot;Trigger manually&quot;</strong> 노드를 그대로 사용(또는 노드 패널에서 <code>Manual Trigger</code> 검색)</li>
-<li><strong>속성 설정:</strong> 없음(설정할 필드 없음)</li>
-<li><strong>연결:</strong> 이 노드가 시작점입니다.</li>
-</ul>
-<h4>Step 2 — <code>카피요청 파일 읽기</code> 추가</h4>
-<ul>
-<li><strong>검색어:</strong> <code>Read/Write Files from Disk</code></li>
+<li><strong>검색어:</strong> <code>Webhook</code></li>
 <li><strong>속성 설정:</strong><ul>
-<li>Operation = <strong><code>Read File(s) From Disk</code></strong> (기본값)</li>
-<li>File(s) Selector = <code>YOUR_DATA_DIR/카피요청.csv</code> → <code>YOUR_DATA_DIR</code>를 본인 <code>~/.n8n-files</code> 절대경로로 교체</li>
+<li>HTTP Method = <strong><code>POST</code></strong></li>
+<li>Path = <code>cs-inquiry</code></li>
+<li>Options → Response Data = <code>firstEntryJson</code></li>
+<li>Authentication = <strong><code>Header Auth</code></strong> → 크리덴셜 생성(임의의 헤더 이름/값) — <strong>호출하는 쪽도 같은 헤더를 보내야</strong> 합니다(사내 테스트만이면 <code>None</code>으로 둬도 됨)</li>
 </ul>
 </li>
-<li><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</li>
-<li><strong>테스트 포인트:</strong> Test step 출력에 파일이 바이너리(<code>data</code>)로 잡히는지 확인. 파일이 없거나 허용 폴더 밖이면 여기서 에러.</li>
+<li><strong>연결:</strong> 이 노드가 시작점입니다. 테스트는 에디터의 <strong>Test URL</strong>로 curl POST → Active 켠 뒤엔 <code>/webhook/</code> 경로 사용.</li>
 </ul>
-<h4>Step 3 — <code>카피 요청 읽기</code> 추가</h4>
-<ul>
-<li><strong>검색어:</strong> <code>Extract from File</code></li>
-<li><strong>속성 설정:</strong> Operation = <strong><code>Extract From CSV</code></strong> → Options → <strong><code>Exclude Byte Order Mark (BOM)</code> 켜기</strong>(엑셀이 저장한 CSV 대응 · 엑셀 파일 자체면 <code>Extract From XLSX</code>)</li>
-<li><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</li>
-<li><strong>테스트 포인트:</strong> Test step에서 CSV 각 행이 JSON 아이템으로 나오는지(헤더 = 필드명) 확인 — 여기서부터는 시트 버전과 데이터 모양이 완전히 같습니다.</li>
-</ul>
-<h4>Step 4 — <code>Claude 카피 생성</code> 추가</h4>
+<h4>Step 2 — <code>Claude 분류·요약</code> 추가</h4>
 <ul>
 <li><strong>검색어:</strong> <code>HTTP Request</code></li>
 <li><strong>속성 설정:</strong><ul>
@@ -165,35 +154,35 @@
 </ul>
 </li>
 </ul>
-<pre><code class="language-text">{{ JSON.stringify({ model: &#39;claude-sonnet-5&#39;, max_tokens: 900, thinking: { type: &#39;disabled&#39; }, messages: [{ role: &#39;user&#39;, content: &#39;홈쇼핑 방송/상세페이지 카피라이터다. 아래 상품 정보로 (1) 방송 자막 문구 3안(각 20자 내외, 자극적이지 않게) (2) 상세페이지 소개 문구 3문장 (3) 실시간 채팅 응대 멘트 2개 를 한국어로 만들어줘. 과장·허위·의료효능 표현 금지.\n상품: &#39; + $json[&#39;상품명&#39;] + &#39; / 핵심특징: &#39; + ($json[&#39;핵심특징&#39;]||&#39;&#39;) + &#39; / 가격: &#39; + ($json[&#39;가격&#39;]||&#39;&#39;) }] }) }}
+<pre><code class="language-text">{{ JSON.stringify({ model: &#39;claude-sonnet-5&#39;, max_tokens: 300, thinking: { type: &#39;disabled&#39; }, messages: [{ role: &#39;user&#39;, content: &#39;다음 고객 문의를 카테고리(배송/환불/상품/기타) 중 하나로 분류하고 한 줄 요약해줘. \&#39;카테고리: X / 요약: Y\&#39; 형식.\n문의: &#39; + ($json.body?.[&#39;message&#39;]||$json[&#39;문의&#39;]||&#39;&#39;) }] }) }}
 </code></pre>
 <ul>
 <li><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</li>
 <li><strong>테스트 포인트:</strong> Test step에서 <code>content[0].text</code>에 Claude의 응답 문장이 들어있는지 확인. <code>invalid x-api-key</code> 에러면 크리덴셜 값을 다시 확인하세요.</li>
 </ul>
-<h4>Step 5 — <code>결과 정리</code> 추가</h4>
+<h4>Step 3 — <code>결과 정리</code> 추가</h4>
 <ul>
 <li><strong>검색어:</strong> <code>Code</code></li>
 <li><strong>속성 설정:</strong> Mode = <strong><code>Run Once for All Items</code></strong> (기본값, 바꾸지 않음) → JavaScript 편집창에 아래 코드를 그대로 붙여넣기:</li>
 </ul>
-<pre><code class="language-javascript">return [{json:{상품명:$(&#39;카피 요청 읽기&#39;).item.json[&#39;상품명&#39;], 생성카피:$json.content[0].text}}];
+<pre><code class="language-javascript">return [{json:{문의:(($(&#39;CS 문의 수신 (Webhook)&#39;).item.json.body||{}).message)||&#39;&#39;, 분석:$json.content[0].text}}];
 </code></pre>
 <ul>
 <li><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</li>
 <li><strong>테스트 포인트:</strong> Test step 눌러서 출력 JSON에 기대한 필드(위 코드의 <code>return</code>에 있는 키들)가 정확히 나오는지 확인하세요. 여기서 필드명 오타가 나면 다음 노드부터 전부 빈 값이 됩니다.</li>
 </ul>
-<h4>Step 6 — <code>카피결과 CSV 변환</code> 추가</h4>
+<h4>Step 4 — <code>CS로그 CSV 변환</code> 추가</h4>
 <ul>
 <li><strong>검색어:</strong> <code>Convert to File</code></li>
 <li><strong>속성 설정:</strong> Operation = <strong><code>Convert to CSV</code></strong> (엑셀로 저장하려면 <code>Convert to XLSX</code>)</li>
 <li><strong>연결:</strong> 이전 노드 출력(●) → 이 노드 입력(●)</li>
 </ul>
-<h4>Step 7 — <code>카피 결과 저장</code> 추가</h4>
+<h4>Step 5 — <code>시트에 기록</code> 추가</h4>
 <ul>
 <li><strong>검색어:</strong> <code>Read/Write Files from Disk</code></li>
 <li><strong>속성 설정:</strong><ul>
 <li>Operation = <strong><code>Write File to Disk</code></strong></li>
-<li>File Path and Name: 표현식 토글(=) 켜고 → <code>YOUR_DATA_DIR/카피결과_{{ $now.format(&#39;yyyy-LL-dd_HHmm&#39;) }}.csv</code></li>
+<li>File Path and Name: 표현식 토글(=) 켜고 → <code>YOUR_DATA_DIR/CS로그_{{ $now.format(&#39;yyyy-LL-dd_HHmm&#39;) }}.csv</code></li>
 <li>Input Binary Field = <code>data</code> (기본값)</li>
 <li><code>YOUR_DATA_DIR</code>는 본인 <code>~/.n8n-files</code> 절대경로로 교체 (macOS <code>/Users/계정/.n8n-files</code> · 윈도우 <code>C:\Users\계정\.n8n-files</code>)</li>
 </ul>
@@ -202,9 +191,9 @@
 <li><strong>테스트 포인트:</strong> 실행 후 폴더에 날짜가 붙은 파일이 생겼는지 확인. <code>Access to the file is not allowed</code> 에러면 경로가 <code>~/.n8n-files</code> 밖입니다(에러 전문을 Claude Code에 붙여넣으면 해결).</li>
 </ul>
 <p><strong>✅ 완성 후 테스트:</strong> 트리거 노드에서 <strong>Test step</strong>(또는 Execute Workflow) → 마지막 노드까지 전부 초록불이 뜨는지 확인. 안 뜨면 그 노드를 더블클릭해 에러 메시지를 읽고, 표현식 토글(=)이 켜져 있는지부터 확인하세요.</p>
-<p><strong>🔍 정답 대조 / 막히면 대신 받기:</strong> <a href="%ED%99%88%EC%95%A4%EC%87%BC%ED%95%91-%EC%8B%A4%EB%AC%B4%ED%85%9C%ED%94%8C%EB%A6%BF-%ED%8C%8C%EC%9D%BC%EB%B2%84%EC%A0%84.zip">★파일 버전 zip(기본)</a> 안의 <code>L5-04-방송자막-카피생성기.json</code>를 import해서 본인이 만든 것과 비교하세요. (구글시트 버전이 필요하면 <a href="MD%EC%9A%B4%EC%98%81%EC%A7%80%EC%9B%90-%ED%85%9C%ED%94%8C%EB%A6%BF.zip">MD·운영 지원 zip</a>)</p>
+<p><strong>🔍 정답 대조 / 막히면 대신 받기:</strong> <a href="%ED%99%88%EC%95%A4%EC%87%BC%ED%95%91-%EC%8B%A4%EB%AC%B4%ED%85%9C%ED%94%8C%EB%A6%BF-%ED%8C%8C%EC%9D%BC%EB%B2%84%EC%A0%84.zip">★파일 버전 zip(기본)</a> 안의 <code>L4-05-CS문의-AI분류.json</code>를 import해서 본인이 만든 것과 비교하세요. (구글시트 버전이 필요하면 <a href="MD%EC%9A%B4%EC%98%81%EC%A7%80%EC%9B%90-%ED%85%9C%ED%94%8C%EB%A6%BF.zip">MD·운영 지원 zip</a>)</p>
 <hr>
-<div style="display:flex;gap:10px;margin:18px 0;align-items:stretch"><a href="guide-build-MD운영지원-03.html" style="flex:1;text-decoration:none;padding:10px 14px;border:1px solid var(--line);border-radius:8px;color:var(--fg);background:var(--card-bg)">← 📞 콜센터 폭주 조기경보</a><a href="guide-build-index.html" style="padding:10px 16px;border:1px solid var(--accent);border-radius:8px;color:var(--accent);text-decoration:none;white-space:nowrap">☰ 전체 목록</a><a href="guide-build-MD운영지원-05.html" style="flex:1;text-align:right;text-decoration:none;padding:10px 14px;border:1px solid var(--line);border-radius:8px;color:var(--fg);background:var(--card-bg)">💬 CS 문의 AI 분류·요약 →</a></div>
+<div style="display:flex;gap:10px;margin:18px 0;align-items:stretch"><a href="guide-build-MD운영지원-04.html" style="flex:1;text-decoration:none;padding:10px 14px;border:1px solid var(--line);border-radius:8px;color:var(--fg);background:var(--card-bg)">← ✍️ 방송 자막·상세 카피 생성기</a><a href="guide-build-index.html" style="padding:10px 16px;border:1px solid var(--accent);border-radius:8px;color:var(--accent);text-decoration:none;white-space:nowrap">☰ 전체 목록</a><span style="flex:1"></span></div>
 </main>
 <script>
 (function(){
