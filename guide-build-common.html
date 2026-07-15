@@ -93,7 +93,7 @@
 <h2><code>$(&#39;노드명&#39;)</code> 문법</h2>
 <p>표현식 안에서 <strong>바로 이전 노드가 아닌, 더 앞선 노드의 값</strong>을 가져올 때 씁니다. 예: <code>$(&#39;발주 필요만&#39;).item.json[&#39;상품명&#39;]</code> = &quot;발주 필요만&quot; 노드가 넘긴 데이터에서 상품명 필드를 가져옴. 노드 이름은 <strong>정확히 일치</strong>해야 합니다(오타 나면 빨간 에러).</p>
 <h2>자격증명 미리 만들어두기 (템플릿마다 반복 사용)</h2>
-<p><strong>Google Sheets / Gmail</strong> — 노드 설정에서 Credential 드롭다운 → <strong>Create New Credential</strong> → <strong>Sign in with Google</strong> → 팝업에서 로그인·권한 승인. 한 번 만들면 이후 모든 템플릿에서 재사용.</p>
+<p><strong>Gmail</strong> — 노드 설정에서 Credential 드롭다운 → <strong>Create New Credential</strong> → <strong>Sign in with Google</strong> → 팝업에서 로그인·권한 승인. 한 번 만들면 이후 모든 템플릿에서 재사용. (Google Sheets 크리덴셜은 <strong>보조·시트 버전을 쓸 때만</strong> 필요 — 기본·파일 버전은 데이터 쪽 크리덴셜이 없습니다)</p>
 <p><strong>Claude(HTTP Request) — Header Auth</strong> — HTTP Request 노드에서 Authentication을 <strong>Generic Credential Type</strong> → <strong>Header Auth</strong>로 설정 → Credential 드롭다운 → <strong>Create New Credential</strong>:</p>
 <table>
 <thead>

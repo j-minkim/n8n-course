@@ -133,6 +133,11 @@
 <li>파일 버전의 아카이브는 <strong>실행할 때마다 날짜·시각이 붙은 새 CSV</strong>가 생깁니다(시트처럼 한 표에 누적되는 게 아니라 로그 폴더에 파일이 쌓이는 방식).</li>
 <li>Code 노드가 참조하는 노드 이름(<code>$(&#39;방송예정 상품 읽기&#39;)</code> 등)은 두 버전에서 <strong>동일하게 유지</strong>돼 있어서, 나머지 노드는 손댈 게 없습니다.</li>
 </ul>
+<h3>📊 엑셀(xlsx)도 됩니다 — CSV만이 아니에요</h3>
+<p>읽기 2단 중 <strong>Extract from File의 Operation을 <code>Extract From XLSX</code>로</strong> 바꾸면 엑셀 파일을 그대로 읽습니다(구형 <code>.xls</code>도 같은 노드에 옵션 제공). 쓰기도 <strong>Convert to File → <code>Convert to XLSX</code></strong> 로 바꾸면 엑셀로 저장돼요.</p>
+<blockquote>
+<p>✅ xlsx는 <strong>실제 실행으로 검증</strong> — 쓰기→읽기 라운드트립에서 진짜 <code>.xlsx</code>(Excel 2007+) 파일이 만들어지고 한글 헤더 2행이 정확히 파싱됐습니다. <code>.xls</code>(구형)는 옵션으로 제공되니 쓰기 전 Test step으로 확인하세요.</p>
+</blockquote>
 <hr>
 <h2>3. ★기본(파일) 버전 사용 전 꼭 알아야 할 한 가지 — <code>~/.n8n-files/</code></h2>
 <p>self-host n8n은 보안상 <strong>홈 폴더의 <code>.n8n-files</code> 폴더 안에 있는 파일만</strong> 읽고 쓸 수 있습니다. (아무 경로나 접근하면 <code>Access to the file is not allowed</code> 에러 — 실제 실행으로 확인했습니다.)</p>
@@ -163,14 +168,15 @@
 <p>💡 이 에러는 사실 <strong>미리 겪어볼 가치가 있는 에러</strong>예요 — &quot;빨간 에러 → 전문 복사 → Claude Code → 해법 검증&quot;이라는 M6 디버깅 루프를 파일 하나로 연습하게 됩니다.</p>
 </blockquote>
 <hr>
-<h2>4. 메타프롬프트로 기본(파일) 버전 생성하기</h2>
-<p><a href="guide-build-index.html">빌드 가이드</a>의 메타프롬프트는 시트 버전 기준으로 적혀 있어요. <strong>기본(파일) 버전으로 만들려면</strong> 프롬프트 끝에 아래 한 단락만 덧붙이면 됩니다:</p>
-<pre><code class="language-text">구글시트 노드 대신 파일 노드를 써줘:
-- 읽기는 Read/Write Files from Disk(read, YOUR_DATA_DIR/파일명.csv) → Extract from File(csv) 2단으로,
-- 쓰기(아카이브)는 Convert to File(csv) → Read/Write Files from Disk(write) 2단으로,
-  쓰기 파일명은 &quot;이름_{{ $now.format(&#39;yyyy-LL-dd_HHmm&#39;) }}.csv&quot; 표현식으로.
-- Code 노드가 $(&#39;노드명&#39;)으로 참조하는 이름은 Extract from File 노드가 그대로 물려받게 해줘.
-- 참고: self-host n8n은 ~/.n8n-files 안의 파일만 접근 가능.
+<h2>4. 메타프롬프트로 보조(시트) 버전 생성하기</h2>
+<p><a href="guide-build-index.html">빌드 가이드</a>의 스텝과 메타프롬프트는 <strong>기본(파일 버전) 기준</strong>입니다. 팀 공유용으로 <strong>구글시트 버전(보조)</strong> 이 필요하면 프롬프트 끝에 아래 한 단락만 덧붙이세요:</p>
+<pre><code class="language-text">파일 노드 대신 구글시트 노드를 써줘:
+- 읽기의 Read/Write Files from Disk + Extract from File 2단은
+  Google Sheets(Get Row(s), documentId=YOUR_GOOGLE_SHEET_ID, 같은 이름의 탭) 1개로,
+- 쓰기의 Convert to File + Read/Write Files from Disk 2단은
+  Google Sheets(Append Row, autoMapInputData) 1개로.
+- Code 노드가 $(&#39;노드명&#39;)으로 참조하는 이름은 Google Sheets 노드가 그대로 물려받게 해줘.
+- Google 크리덴셜(OAuth) 연결이 필요해지는 점 참고.
 </code></pre>
 <hr>
 <h2>5. 검증 수준</h2>
