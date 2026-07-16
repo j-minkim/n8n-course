@@ -63,6 +63,12 @@
   code { background:var(--code-bg); border:1px solid var(--line); border-radius:5px; padding:.1em .4em; font-size:.9em;
     font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; }
   pre { background:var(--pre-bg); border:1px solid var(--line); border-radius:10px; padding:14px 16px; overflow:auto; }
+  .pre-wrap { position:relative; }
+  .pre-wrap .copy-btn { position:absolute; top:8px; right:8px; font-size:11.5px; font-weight:600; padding:4px 10px;
+    border-radius:7px; border:1px solid var(--line); background:var(--card-bg); color:var(--accent); cursor:pointer; opacity:.85; }
+  .pre-wrap .copy-btn:hover { opacity:1; border-color:var(--accent); }
+  .pre-wrap .copy-btn.done { color:#34d399; border-color:#34d399; }
+  @media print { .pre-wrap .copy-btn { display:none !important; } }
   pre code { background:none; border:0; padding:0; font-size:13px; line-height:1.6; }
   table { border-collapse:collapse; width:100%; margin:1.1em 0; font-size:14px; display:block; overflow-x:auto; }
   th, td { border:1px solid var(--cell); padding:8px 10px; text-align:left; vertical-align:top; }
@@ -236,6 +242,26 @@ return [{json:{뉴스:list}}];
     apply();
   });
   if(mq.addEventListener)mq.addEventListener("change",function(){if(cur==="system")apply();});
+})();
+// ── 코드블록 복사 버튼 (모든 <pre>에 자동 부착) ──
+(function(){
+  document.querySelectorAll("main.doc pre").forEach(function(pre){
+    var wrap=document.createElement("div");
+    wrap.className="pre-wrap";
+    pre.parentNode.insertBefore(wrap,pre);
+    wrap.appendChild(pre);
+    var btn=document.createElement("button");
+    btn.type="button"; btn.className="copy-btn"; btn.textContent="⧉ 복사";
+    btn.setAttribute("aria-label","코드 복사");
+    btn.addEventListener("click",function(){
+      var text=pre.innerText;
+      function ok(){btn.textContent="✓ 복사됨";btn.classList.add("done");setTimeout(function(){btn.textContent="⧉ 복사";btn.classList.remove("done");},1500);}
+      function fail(){btn.textContent="복사 실패";setTimeout(function(){btn.textContent="⧉ 복사";},1500);}
+      if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(ok,fail);}
+      else{try{var ta=document.createElement("textarea");ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand("copy");document.body.removeChild(ta);ok();}catch(e){fail();}}
+    });
+    wrap.appendChild(btn);
+  });
 })();
 </script>
 </body>
