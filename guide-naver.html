@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<script>(function(){try{var p=localStorage.getItem("theme-pref")||"system";var d=p==="dark"||(p==="system"&&matchMedia("(prefers-color-scheme: dark)").matches);document.documentElement.setAttribute("data-theme",d?"dark":"light");}catch(e){document.documentElement.setAttribute("data-theme","dark");}})();</script>
+<title>네이버 검색 API — 필요 없음 (+발급 부록)</title>
+<style>
+  /* ── theme tokens (dark default + light override) ── */
+  :root{
+    color-scheme:dark;
+    --bg:#0b0f17; --fg:#e6edf3; --card-bg:#121826;
+    --topbar-bg:rgba(11,15,23,.92); --line:#233047; --line2:#1f2a3c; --cell:#2a3850;
+    --accent:#60a5fa; --h2:#dbeafe; --h3:#bfdbfe; --h4:#93c5fd;
+    --code-bg:#111827; --pre-bg:#0e1420; --quote-bg:#101826; --quote-fg:#cbd5e1; --quote-bd:#3b82f6;
+    --th-bg:#152032; --th-fg:#dbeafe; --tr-even:#0f1827; --strong:#fde68a;
+  }
+  :root[data-theme="light"]{
+    color-scheme:light;
+    --bg:#f7f8fa; --fg:#1f2533; --card-bg:#ffffff;
+    --topbar-bg:rgba(247,248,250,.92); --line:#d7dce6; --line2:#e3e7ef; --cell:#cfd6e2;
+    --accent:#2563eb; --h2:#1e3a8a; --h3:#2456b8; --h4:#3b6fd4;
+    --code-bg:#eef1f6; --pre-bg:#f1f4f9; --quote-bg:#eef3fb; --quote-fg:#44506a; --quote-bd:#2563eb;
+    --th-bg:#e9eef6; --th-fg:#1e3a8a; --tr-even:#f3f6fb; --strong:#b45309;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body { background:var(--bg); color:var(--fg); line-height:1.75; word-break:keep-all; overflow-wrap:anywhere;
+    transition:background-color .25s,color .25s;
+    font-family:-apple-system,BlinkMacSystemFont,"Pretendard","Apple SD Gothic Neo","Segoe UI",Roboto,sans-serif; }
+  /* ── theme toggle (system/light/dark) ── */
+  .theme-toggle{position:fixed;top:10px;right:14px;z-index:2000;display:inline-flex;align-items:center;gap:6px;
+    padding:7px 11px;border-radius:999px;border:1px solid var(--line);background:var(--card-bg);color:var(--fg);
+    font:600 12px/1 inherit;cursor:pointer;opacity:.85;transition:opacity .2s,border-color .2s,background-color .25s,color .25s}
+  .theme-toggle:hover{opacity:1;border-color:var(--accent)}
+  .theme-toggle .tt-ico{font-size:14px;line-height:1}
+  @media print{.theme-toggle{display:none!important}}
+  @media(max-width:760px){.theme-toggle .tt-label{display:none}}
+  .topbar { position:sticky; top:0; z-index:10; background:var(--topbar-bg); backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line2); padding:10px 64px 10px 20px; display:flex; gap:10px; align-items:center; flex-wrap:wrap; row-gap:6px; }
+  .topbar .badge { font-size:11px; color:var(--accent); border:1px solid var(--line); border-radius:999px; padding:3px 9px; }
+  .topbar .t { font-size:14px; font-weight:700; margin-right:auto; }
+  .quicknav { display:flex; gap:6px; flex-wrap:wrap; }
+  .quicknav a { font-size:11.5px; font-weight:600; color:var(--fg); text-decoration:none; border:1px solid var(--line);
+    background:var(--card-bg); border-radius:999px; padding:5px 11px; white-space:nowrap; transition:border-color .15s,color .15s; }
+  .quicknav a:hover { border-color:var(--accent); color:var(--accent); }
+  .quicknav a.cur { color:var(--accent); border-color:var(--accent); }
+  @media(max-width:820px){ .topbar{padding:10px 56px 10px 14px;} .topbar .t{width:100%;margin-right:0;order:1;} .quicknav{order:2;width:100%;} }
+  @media print{ .topbar{display:none!important;} }
+  main.doc { max-width:880px; margin:0 auto; padding:32px 22px 96px; }
+  h1,h2,h3,h4 { line-height:1.35; font-weight:800; margin:1.6em 0 .6em; }
+  h1 { font-size:26px; border-bottom:2px solid var(--line); padding-bottom:.3em; }
+  h2 { font-size:21px; color:var(--h2); border-bottom:1px solid var(--line2); padding-bottom:.25em; }
+  h3 { font-size:17px; color:var(--h3); }
+  h4 { font-size:15px; color:var(--h4); }
+  p, li { font-size:15px; }
+  a { color:var(--accent); }
+  hr { border:0; border-top:1px solid var(--line); margin:2em 0; }
+  blockquote { margin:1em 0; padding:.6em 1em; border-left:3px solid var(--quote-bd); background:var(--quote-bg);
+    border-radius:0 8px 8px 0; color:var(--quote-fg); }
+  blockquote p { margin:.3em 0; }
+  code { background:var(--code-bg); border:1px solid var(--line); border-radius:5px; padding:.1em .4em; font-size:.9em;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; }
+  pre { background:var(--pre-bg); border:1px solid var(--line); border-radius:10px; padding:14px 16px; overflow:auto; }
+  pre code { background:none; border:0; padding:0; font-size:13px; line-height:1.6; }
+  table { border-collapse:collapse; width:100%; margin:1.1em 0; font-size:14px; display:block; overflow-x:auto; }
+  th, td { border:1px solid var(--cell); padding:8px 10px; text-align:left; vertical-align:top; }
+  th { background:var(--th-bg); font-weight:700; color:var(--th-fg); }
+  tr:nth-child(even) td { background:var(--tr-even); }
+  ul, ol { padding-left:1.4em; }
+  li { margin:.3em 0; }
+  li input[type=checkbox] { transform:scale(1.15); margin-right:.5em; accent-color:var(--accent); }
+  ul:has(li input[type=checkbox]) { list-style:none; padding-left:.2em; }
+  strong { color:var(--strong); }
+  img { max-width:100%; }
+</style>
+</head>
+<body>
+<button id="themeToggle" class="theme-toggle" type="button" aria-label="테마 전환" title="테마: 시스템"><span class="tt-ico" aria-hidden="true">🖥</span><span class="tt-label">시스템</span></button>
+<div class="topbar"><span class="badge">n8n 자동화 강의</span><span class="t">네이버 검색 API — 필요 없음 (+발급 부록)</span><nav class="quicknav"><a href="index.html">🏠 홈</a><a href="day1.html">Day1</a><a href="day2.html">Day2</a><a href="assets.html">📦 실습파일</a><a href="guide-templates.html">📖 카탈로그</a><a href="guide-build-index.html">🧱 빌드가이드</a></nav></div>
+<main class="doc">
+<h1>네이버 검색 API, 발급해야 하나요?</h1>
+<h3>결론: <strong>아니요 — 이 강의 템플릿 20종 전부 네이버 키 없이 돌아갑니다</strong></h3>
+<h2>1. 왜 필요 없나</h2>
+<p>원래 「가격경쟁력 진단」이 네이버쇼핑 검색 API로 인터넷 최저가를 자동 조회했지만, <strong>네이버 검색 API가 2026-07-31 종료 예고</strong>됐고 후속 플랫폼(NAVER API HUB)에 같은 상품검색 대체 API가 없어서 — 템플릿을 <strong>외부 조회 없이 동작하도록 개정</strong>했습니다:</p>
+<ul>
+<li><strong>파일버전(기본)·시트버전(보조) 모두</strong>: 본인이 허용된 비교몰에서 확인한 <code>비교가격</code>·<code>비교몰</code>을 CSV/시트에 입력 → 워크플로가 우리방송가와 비교해 열위 판정 → Claude 대응 소구점</li>
+<li>자동 조회가 빠진 대신 <strong>곧 죽을 외부 의존이 없고</strong>, 비교 기준(어느 몰과 비교할지)을 본인이 통제합니다</li>
+</ul>
+<blockquote>
+<p>즉 <strong>크리덴셜 준비물은 그대로 3개뿐</strong>: Google(Gmail) · 회사 Anthropic 키 · 그리고 파일버전이면 그마저 Gmail+Anthropic 2개.</p>
+</blockquote>
+<hr>
+<h2>2. (부록) 그래도 외부 API 연동을 배워보고 싶다면</h2>
+<p>&quot;HTTP Request로 외부 API를 물리는 법&quot;은 그 자체로 좋은 연습입니다. 종료일(2026-07-31) 전까지는 네이버 검색 API가 정상 동작하니, 원하면 이렇게:</p>
+<h3>2-1. 발급 (무료 · 5분 · 개인 계정 OK)</h3>
+<ol>
+<li><a href="https://developers.naver.com">developers.naver.com</a> 로그인 → <strong>Products → 서비스 API → 검색</strong></li>
+<li><strong>&quot;오픈 API 이용 신청&quot;</strong> 클릭 → 애플리케이션 등록:</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>필드</th>
+<th>입력값</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>애플리케이션 이름</td>
+<td>자유 (예: <code>n8n-price-check</code>)</td>
+</tr>
+<tr>
+<td>사용 API</td>
+<td><strong>검색</strong></td>
+</tr>
+<tr>
+<td>비로그인 오픈 API 서비스 환경</td>
+<td><strong>WEB 설정</strong></td>
+</tr>
+<tr>
+<td>웹 서비스 URL</td>
+<td><code>http://localhost:5678</code></td>
+</tr>
+</tbody></table>
+<ol start="3">
+<li>내 애플리케이션에서 <strong>Client ID</strong> 확인 · <strong>Client Secret</strong>은 [보기]로 확인</li>
+</ol>
+<blockquote>
+<p>🔒 개인 인증정보 — 워크북·단톡방 공유 금지.</p>
+</blockquote>
+<h3>2-2. n8n에서 호출 (HTTP Request 노드)</h3>
+<ul>
+<li>Method <code>GET</code> · URL: <code>https://openapi.naver.com/v1/search/shop.json?query={{ encodeURIComponent($json[&#39;상품명&#39;]) }}&amp;display=20&amp;sort=sim</code></li>
+<li>Send Headers → <code>X-Naver-Client-Id</code> / <code>X-Naver-Client-Secret</code> = 본인 값 (비로그인 API라 이 헤더 2개가 전부 — OAuth 없음)</li>
+<li>Test step → <code>items[]</code>에 <code>title</code>·<code>lprice</code>·<code>mallName</code> 보이면 성공</li>
+</ul>
+<p>터미널 확인:</p>
+<pre><code class="language-bash">curl &quot;https://openapi.naver.com/v1/search/shop.json?query=%EC%95%95%EB%A0%A5%EB%B0%A5%EC%86%A5&amp;display=5&quot; \
+  -H &quot;X-Naver-Client-Id: 본인ID&quot; -H &quot;X-Naver-Client-Secret: 본인Secret&quot;
+</code></pre>
+<h3>2-3. 한도·막힘</h3>
+<ul>
+<li><strong>무료 일 25,000회</strong>(앱 기준, 전 검색 카테고리 합산) · 호출당 최대 100건 — 실습으론 여유</li>
+<li><code>401</code> = 헤더 이름/값 오타(대소문자·공백) · <code>429</code>(errorCode 010) = 일 쿼터 소진, 다음 날 리셋</li>
+<li>⚠️ 검색결과엔 부품·액세서리가 섞입니다 — 구 템플릿은 &quot;가격 중앙값의 40% 미만 버림&quot; 휴리스틱으로 걸렀어요(같은 로직을 Code 노드에 넣으면 됨)</li>
+<li>막히면 에러 전문을 <strong>Claude Code에 붙여넣기</strong></li>
+</ul>
+<h3>2-4. 종료 이후</h3>
+<p>2026-07-31 이후엔 이 API가 중단됩니다. 후속은 <a href="https://www.ncloud.com/product/applicationService/naverApiHub">NAVER API HUB</a>(종량제·통합 키)지만 현재 동일한 상품검색 API는 없어요 — 그래서 커리큘럼 기본은 <code>비교가격</code> 입력 방식입니다.</p>
+
+</main>
+<script>
+(function(){
+  var root=document.documentElement, btn=document.getElementById("themeToggle");
+  var mq=window.matchMedia("(prefers-color-scheme: dark)");
+  var ICON={system:"🖥",light:"☀️",dark:"🌙"}, LABEL={system:"시스템",light:"라이트",dark:"다크"};
+  var cur="system"; try{cur=localStorage.getItem("theme-pref")||"system";}catch(e){}
+  function apply(){
+    var d=cur==="dark"||(cur==="system"&&mq.matches);
+    root.setAttribute("data-theme",d?"dark":"light");
+    if(btn){var i=btn.querySelector(".tt-ico"),l=btn.querySelector(".tt-label");
+      if(i)i.textContent=ICON[cur]; if(l)l.textContent=LABEL[cur]; btn.title="테마: "+LABEL[cur];}
+  }
+  apply();
+  if(btn)btn.addEventListener("click",function(){
+    var o=["system","light","dark"]; cur=o[(o.indexOf(cur)+1)%o.length];
+    try{localStorage.setItem("theme-pref",cur);}catch(e){}
+    apply();
+  });
+  if(mq.addEventListener)mq.addEventListener("change",function(){if(cur==="system")apply();});
+})();
+</script>
+</body>
+</html>
